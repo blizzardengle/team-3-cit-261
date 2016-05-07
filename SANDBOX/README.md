@@ -1,0 +1,2 @@
+# Sandbox Area
+This is the directory for your sandbox code. This includes code you made just to learn concepts as well as code you made to teach coding concepts to your team. You should put all your code into your own sandbox directory and each example in its own directory as well; see Christopher-Keers directory for examples.
