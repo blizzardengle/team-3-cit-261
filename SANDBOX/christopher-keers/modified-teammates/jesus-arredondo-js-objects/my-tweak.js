@@ -1,34 +1,7 @@
-// NOT FINISHED YET 95%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * 
+ * I WILL ADD COMMENTS TO EXPLAIN ALL OF THIS LATER JUST WAIT
+ */
 
 function addNewItem(){
 	var firstName = document.getElementById('firstName').value;
@@ -37,9 +10,17 @@ function addNewItem(){
 	var result = list.add(firstName,lastName,age);
 	if (result){
 		document.getElementById('msg').innerHTML = "New entry has been added to the list";
+		document.getElementById('firstName').value = "";
+		document.getElementById('lastName').value = "";
+		document.getElementById('age').value = "";
+		updateList();
 	} else {
 		document.getElementById('msg').innerHTML = "This user exists already nothing was done.";
 	}
+}
+
+function removeItem(id){
+	return list.remove(id);
 }
 
 function updateList(){
@@ -53,8 +34,13 @@ function signUpList(name){
 }
 
 signUpList.prototype.add = function(firstName,lastName,age){
+	// Catch incomplete forms
+	if (firstName==""||lastName==""||age==""){
+		return false;
+	}
+	//
 	var current = this.pointer;
-	var id = firstName+"-"+lastName+"-"+age;
+	var id = firstName.replace(/[^0-9a-z]/gi,"")+"-"+lastName.replace(/[^0-9a-z]/gi,"")+"-"+age.replace(/[^0-9a-z]/gi,"");
 	var newEntry;
 	if(this.count>0){
 		while(current!=null){
@@ -63,14 +49,14 @@ signUpList.prototype.add = function(firstName,lastName,age){
 			}
 			current = current.nextRecord;
 		}
-		newEntry = new entryInList(firstName,lastName,age,id);
-		newEntry.nextRecord = current;
+		newEntry = new entryInList(firstName.replace(/[^0-9a-z\ ]/gi,""),lastName.replace(/[^0-9a-z\ ]/gi,""),age.replace(/[^0-9a-z\ ]/gi,""),id);
+		newEntry.nextRecord = this.pointer;
 		this.pointer = newEntry;
 		this.count += 1;
 		updateList();
 		return true;
 	} else {
-		this.pointer = new entryInList(firstName,lastName,age,id);
+		this.pointer = new entryInList(firstName.replace(/[^0-9a-z\ ]/gi,""),lastName.replace(/[^0-9a-z\ ]/gi,""),age.replace(/[^0-9a-z\ ]/gi,""),id);
 		this.count += 1;
 		return true;
 	}
@@ -91,7 +77,7 @@ signUpList.prototype.remove = function(id){
 			} else {
 				this.pointer = current.nextRecord;
 				current.nextRecord = null;
-				this.count = 0;
+				this.count -= 1;
 				updateList();
 				return true;
 			}
@@ -109,9 +95,9 @@ signUpList.prototype.print = function(){
 		html += "<div id='"+current.id+"' class='entryInList'>";
 		html += "<div class='firstName'>"+current.firstName+"</div>";
 		html += "<div class='lastName'>"+current.lastName+"</div>";
-		html += "<div class='ageName'>"+current.age+"</div>";
-		html += "<div class='buttons'><input type='button' value='Delete' onclick='"+this.name+".remove("+current.id+");'></div>";
-		html += "</div><br>";
+		html += "<div class='age'>"+current.age+"</div>";
+		html += '<div class="buttons"><input type="button" value="Delete" onclick="removeItem(\''+current.id+'\')"></div>';
+		html += "</div>";
 		current = current.nextRecord;
 	}
 	return html;
