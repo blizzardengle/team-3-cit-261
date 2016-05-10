@@ -8,6 +8,7 @@ body, html {
 	min-height: 100%;
 }
 .sidebar {
+	z-index: 100;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -43,17 +44,22 @@ body, html {
 	text-decoration: underline;
 }
 .content {
-	position: absolute;
-	top: 0;
-	left: 0;
+	z-index: 50;
 	padding: 15px 15px 15px 350px;
 }
-.content .des {
-	font-size: 130%;
-}
 #output {
-	border-top: 3px double #146AB3;
-	padding-top: 15px;
+	z-index: 75;
+	padding-top: 10px;
+}
+#breadcrumbs {
+	display: block;
+	width: 100%;
+	padding-bottom: 15px;
+	margin: 15px 0;
+	border-bottom: 3px double #146AB3;
+	font-weight: bold;
+	font-size: 110%;
+	text-transform: capitalize;
 }
 #output .sandboxTitle {
 	text-transform: uppercase;

@@ -5,8 +5,14 @@ loadLinks();
 
 function loadSandbox(elem,page){
 	event.preventDefault();
-	ajax("cache/"+page+".html","output");
-	return true;
+	document.getElementById("breadcrumbs").innerHTML = "";
+	document.getElementById("output").innerHTML = "";
+	var navigation = '<div id="breadcrumbs"><img src="home-logo.png" alt="Home Page"> &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; Sandbox &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; '+page.replace("-"," ")+'</div><br><img src="loading.gif" alt="Loading">';
+	document.getElementById("output").innerHTML = navigation;
+	setTimeout(function () {
+		document.getElementById("breadcrumbs").innerHTML = '<div class="breadcrumbs"><a href="index.html"><img src="home-logo.png" alt="Home Page"></a> &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; Sandbox &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; '+page.replace("-"," ")+'</div>';
+        ajax("cache/"+page+".html","output",true);
+    },800);
 }
 
 function ajax(page,id){	
