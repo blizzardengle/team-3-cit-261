@@ -1,0 +1,42 @@
+#================================================================================
+# COMMANDS TO RUN EACH TIME YOU SIT DOWN TO WORK
+# FETCH / MERGE / PULL CHANGES DOWN FROM GITHUB
+#================================================================================
+
+# Copy down any changes like new files
+git fetch origin
+
+# This command is the same as the one above but is specifies a branch
+# You will most likely not need this unless your comfortable updating the projects
+# GitHub website
+git diff origin/master
+
+# Copy down any changes and approve major changes to your local repo
+# You usually need this when teammates are deleting or renaming files
+git merge origin/master
+
+# If you really don't care to remeber all the above commands so far just use this
+# It does a fetch and merge in one
+git pull
+
+#================================================================================
+# PUSH LOCAL CHANGES UP TO GITHUB
+#================================================================================
+
+# First add any local changes
+git add .
+
+# Or this command (I am 99% sure they do the same thing)
+git add -A
+
+# Make a commit message so we know what is in these chnages
+git commit -m "Delete this text and write your own message here"
+
+# Push changes up to GitHub
+git push
+
+# Force push! Did you run into an error where it wont accept your changes?
+# This will force GitHub to take them but be VERY CAREFUL with this
+# Try the push again you may have just lost internet connection for a bit
+# Try looking up the error first and seeing if you did something wrong
+git push -f
