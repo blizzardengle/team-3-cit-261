@@ -41,7 +41,7 @@ function ajax(page,id){
 	/**
 	 * Initiate an ajax connection
 	 */
-	ajaxCon.open("post",page); //	<=== This whole part could be changed or added to
+	ajaxCon.open("get",page); //	<=== This whole part could be changed or added to
 	ajaxCon.send("");
 }
 
