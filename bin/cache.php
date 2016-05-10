@@ -12,10 +12,22 @@ fwrite($file,createTeamateLinks($teamates));
 fclose($file);
 
 /**
+ * Make teamate portfolio links
+ */
+$results = "<ul>";
+foreach ($teamates as $member){
+	$results .= createPortfolioLinks($member);	
+}
+$results .= "</ul>";
+$file = fopen("../cache/portfolioLinks.html","w");
+fwrite($file,$results);
+fclose($file);
+
+/**
  * Make each memebers sandbox (projects) links
  */
 foreach ($teamates as $member){
-	$file = fopen("../cache/".$member.".html","w");
+	$file = fopen("../cache/s-".$member.".html","w");
 	fwrite($file,createSandboxLinks($member));
 	fclose($file);
 }

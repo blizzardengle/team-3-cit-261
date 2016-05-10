@@ -24,12 +24,21 @@ function createTeamateLinks($teamArray){
 	return $list;
 }
 
-function getSandboxLinks($teamArray){
-	$result = "";
-	foreach ($teamArray as $member){
-		$result = createSandboxLinks($member);
+function createPortfolioLinks($member){
+	$list = "";
+	$root = "../SANDBOX/".$member;
+	$dirArray = scandir($root);
+	foreach($dirArray as $file){
+		if ($file=="portfolio.txt"||$file=="portfolio.html"){
+			$url = file_get_contents($root."/".$file);
+			if (strlen($url)>1){
+				$list = '<li class="teamateLinks"><a href="'.$url.'" target="_blank">'.str_replace("-"," ",$member).'</a></li>';
+			} else {
+				$list = '<li class="teamateLinks">'.str_replace("-"," ",$member).'</li>';
+			}
+		}
 	}
-	return $result;
+	return $list;
 }
 
 function createSandboxLinks($member){

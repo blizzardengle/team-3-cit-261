@@ -3,6 +3,15 @@ body, html {
 	padding: 0;
 	height: 100%;
 }
+body a {
+	color: #146AB3;
+	text-decoration: none;
+}
+body a:hover {
+	color: #125287;
+	text-decoration: underline;
+	cursor: pointer;
+}
 #wrapper {
 	position: relative;
 	min-height: 100%;
@@ -71,17 +80,20 @@ body, html {
 }
 #output .title {
 	display: block;
-	width: 100%;
 	text-transform: capitalize;
 	font-size: 115%;
 	font-weight: bold;
+	margin-right: 15px;
+	margin-left: -6px;
 }
 #output .title a {
 	display: block;
 	width: 100%;
 	padding: 5px;
+	border: 1px solid transparent;
 }
 #output .title a:hover {
 	cursor: pointer;
-	background-color: #ccffcc;
+	background-color: #BAE0FF;
+	border: 1px solid #146AB3;
 }

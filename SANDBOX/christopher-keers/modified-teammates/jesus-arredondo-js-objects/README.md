@@ -1,2 +1,2 @@
-# Place holder
-This is only here to show you the correct directory structure.
+# Modified list with objects (Programming level: Moderate)
+This is a modified version of Jesus Arredondo's teaching topic where he demonstrated DOM manipulation and Javascript objects. This uses a stack to store the list.

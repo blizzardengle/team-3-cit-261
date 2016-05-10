@@ -1,18 +1,24 @@
 function loadLinks(){
-	ajax("cache/sandboxLinks.html","sandboxLinks");
+	// Little pause to show user the links are loading
+	setTimeout(function () {
+       ajax("cache/sandboxLinks.html","sandboxLinks");
+       ajax("cache/portfolioLinks.html","portfolioLinks");
+    },500);
 }
 loadLinks();
 
 function loadSandbox(elem,page){
 	event.preventDefault();
+	// Clear old information
 	document.getElementById("breadcrumbs").innerHTML = "";
 	document.getElementById("output").innerHTML = "";
-	var navigation = '<div id="breadcrumbs"><img src="home-logo.png" alt="Home Page"> &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; Sandbox &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; '+page.replace("-"," ")+'</div><br><img src="loading.gif" alt="Loading">';
-	document.getElementById("output").innerHTML = navigation;
+	// Show new navigation and load sandbox
+	document.getElementById("breadcrumbs").innerHTML = '<a href="index.html"><img src="home-logo.png" alt="Home Page" title="Go to home page."></a> &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; Sandbox &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; '+page.replace("-"," ")+'</div>';
+	document.getElementById("output").innerHTML = '<br><img src="loading.gif" alt="Loading">';
+	// Little pause to show user the page is loading
 	setTimeout(function () {
-		document.getElementById("breadcrumbs").innerHTML = '<div class="breadcrumbs"><a href="index.html"><img src="home-logo.png" alt="Home Page"></a> &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; Sandbox &nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp; '+page.replace("-"," ")+'</div>';
-        ajax("cache/"+page+".html","output",true);
-    },800);
+        ajax("cache/s-"+page+".html","output",true);
+    },500);
 }
 
 function ajax(page,id){	
@@ -35,7 +41,7 @@ function ajax(page,id){
 	/**
 	 * Initiate an ajax connection
 	 */
-	ajaxCon.open("get",page); //	<=== This whole part could be changed or added to
+	ajaxCon.open("post",page); //	<=== This whole part could be changed or added to
 	ajaxCon.send("");
 }
 
