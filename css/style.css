@@ -1,0 +1,81 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+#wrapper {
+	position: relative;
+	min-height: 100%;
+}
+.sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 300px;
+	padding: 15px;
+	border-right: 3px double #146AB3;
+	height: 100%;
+}
+.sidebar .logo {
+	text-align: center;
+}
+.sidebar .logo img {
+	margin: 0 auto;
+}
+.sidebar .secTitle {
+	text-transform: uppercase;
+	font-size: 120%;
+	font-weight: bold;
+}
+.sidebar ul {
+	list-style-type: none;
+}
+.sidebar .teamateLinks {
+	text-transform: capitalize;
+	font-size: 115%;
+	margin-bottom: 4px;
+}
+.sidebar .teamateLinks a {
+	text-decoration: none;
+}
+.sidebar .teamateLinks a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+.content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 15px 15px 15px 350px;
+}
+.content .des {
+	font-size: 130%;
+}
+#output {
+	border-top: 3px double #146AB3;
+	padding-top: 15px;
+}
+#output .sandboxTitle {
+	text-transform: uppercase;
+	font-size: 120%;
+	font-weight: bold;
+}
+#output .sandboxProject {
+	margin-left: 15px;
+}
+#output .title {
+	display: block;
+	width: 100%;
+	text-transform: capitalize;
+	font-size: 115%;
+	font-weight: bold;
+}
+#output .title a {
+	display: block;
+	width: 100%;
+	padding: 5px;
+}
+#output .title a:hover {
+	cursor: pointer;
+	background-color: #ccffcc;
+}
