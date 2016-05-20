@@ -1,0 +1,68 @@
+body{
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	/*background: url("White-Smoke-On-Blue-Velvet-Graphite-Background.jpg");*/ 
+}
+form{
+	margin 0;
+	width: 200px;
+	height: 200px;
+	padding:0;
+	text-align: center;
+	clear: both;
+	display: inline-block;
+}
+.firstName{
+	background: white;
+}
+
+h1{
+	margin: 0;
+	text-align: center;
+
+}
+div{
+	display: inline-block;
+	margin:0% 0% 0% 5%;
+	padding: 0;
+	width: 91%;
+	float: left;
+	clear: both;
+}
+
+input[type="submit"]{
+	padding:1% 10%;
+	margin: 5% 1%;
+}
+
+input[type="text"]{
+	margin: 5% 1%;	
+	float: center;
+}
+
+
+li {
+	float: center;
+	display: inline-block;
+	padding: 0 10%;
+	margin: 0;
+	width: 5%;
+	margin:0;
+	background-color: #eee326;
+	font-size: 90%;
+	color:black;
+}
+
+ul{
+	float: right;
+	width: 100%;
+	padding: .5%;
+	margin: 0;
+	clear: both;
+}
+
+#titlePage{
+	visibility: hidden;
+	font-family: arial;
+}
