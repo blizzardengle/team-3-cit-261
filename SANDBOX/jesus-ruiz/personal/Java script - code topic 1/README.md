@@ -1,0 +1,2 @@
+# Java Script - Teaching topic 1 (Programming level: Moderate)
+This is a simple example that shows how to use javascript to manipulate the different elements in an HTML and create new nodes on the HTLM code dynamically.
