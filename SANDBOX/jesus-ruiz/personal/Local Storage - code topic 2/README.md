@@ -1,2 +1,2 @@
 # Modified list with objects (Programming level: Moderate)
-This is a modified version of Jesus Arredondo's teaching topic where he demonstrated DOM manipulation and Javascript objects. This uses a stack to store the list.
+This is the example using local storage to store the list of name generated - I have used Christopher Keer's code and included local storage
