@@ -31,4 +31,6 @@ foreach ($teamates as $member){
 	fwrite($file,createSandboxLinks($member));
 	fclose($file);
 }
+
+echo "Done."
 ?>

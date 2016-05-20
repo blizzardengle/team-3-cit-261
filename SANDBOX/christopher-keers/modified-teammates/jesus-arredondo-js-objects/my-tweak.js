@@ -23,7 +23,7 @@ function addNewItem(){
 		updateList();
 	} else {
 		/**
-		 * If adding the item failed clear do nothing and notify the user
+		 * If adding the item failed do nothing and notify the user
 		 */
 		document.getElementById('msg').innerHTML = "This user exists already nothing was done.";
 	}

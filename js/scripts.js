@@ -39,9 +39,14 @@ function ajax(page,id){
 	}
 	
 	/**
+	 * SALT - We need random data in the url or you will always get a cached old version of the pages
+	 */
+	var salt = new Date().getTime();
+	
+	/**
 	 * Initiate an ajax connection
 	 */
-	ajaxCon.open("get",page); //	<=== This whole part could be changed or added to
+	ajaxCon.open("get",page+"?salt="+salt); //	<=== This whole part could be changed or added to
 	ajaxCon.send("");
 }
 
