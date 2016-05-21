@@ -1,0 +1,179 @@
+
+
+div {
+    width:200px;
+    height:200px;
+    background-color:green;
+    margin:100px;
+    color:white;
+    padding:10px;
+    -webkit-transition: -webkit-transform 2s; /* Safari */
+    transition: transform 2s;
+}
+
+#one:hover {
+    -ms-transform: translate(100px,100px); /* IE 9 */
+    -webkit-transform: translate(100px,100px); /* Safari */
+    transform: translate(100px,100px);
+}
+
+#two:hover {
+    -ms-transform: scale(2,2); /* IE 9 */
+    -webkit-transform: scale(2,2); /* Safari */
+    transform: scale(2,2); /* Standard syntax */
+}
+
+#three:hover {
+    -ms-transform: skewX(20deg); /* IE 9 */
+    -webkit-transform: skewX(20deg); /* Safari */
+    transform: skewX(20deg);
+}
+
+#four:hover {
+    -ms-transform: skewY(20deg); /* IE 9 */
+    -webkit-transform: skewY(20deg); /* Safari */
+    transform: skewY(20deg);
+}
+
+#five:hover {
+    -ms-transform: skew(20deg, 10deg); /* IE 9 */
+    -webkit-transform: skew(20deg, 10deg); /* Safari */
+    transform: skew(20deg, 10deg);
+}
+
+#six:hover {
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Safari */
+    transform: rotate(90deg);
+}
+
+#seven:hover {
+    -webkit-transform: rotateX(180deg); /* Safari */
+    transform: rotateX(180deg);
+}
+
+#eight:hover {
+    -webkit-transform: rotateY(180deg); /* Safari */
+    transform: rotateY(180deg);
+}
+
+.tran {
+    
+    transition: transform 3s; 
+    -webkit-transition: -webkit-transform 3s; /* Safari */
+}
+
+#nine:hover {
+    
+     -webkit-transition-delay: 3s; /* Safari */
+    transition-delay: 3s;
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+}
+
+#ten:hover {
+    transition-timing-function: ease;
+     -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.film {
+
+  width: 560px;
+  overflow: hidden;
+  transition: all .5s;
+  margin:auto;
+  
+}
+
+.film:hover {
+  width: 600px;
+  height:200px;
+  
+}
+
+.film:hover ul {
+width: 600px;
+  
+    
+}
+
+.film:hover ul li {
+  -webkit-transform: translatex(20px);
+  -moz-transform: translatex(20px);
+  transform: translatex(20px);
+  transition: all 0.5s;
+  
+}
+
+.film ul li img {
+    margin-left:auto;
+    margin-right:auto;
+    vertical-align: middle;
+    padding:5px;
+}
+
+.film ul {
+
+  
+  
+
+  transition: all .5s;
+  width: 560px;
+  height: 166px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-style: solid;
+  border-width: 17px 0px;
+  -moz-border-image: url(filmedge.png) 27 repeat stretch;
+  -webkit-border-image: url(filmedge.png) 27 repeat stretch;
+  -o-border-image: url(filmedge.png) 27 repeat stretch;
+  border-image: url(filmedge.png) 27 fill repeat stretch;
+}
+
+.film ul li {
+  display: block;
+  width: 160px;
+  height: 160px;
+  margin: 3px 0px 20px 20px;
+  
+  background: #000;
+  float: left;
+  transition: all .5s;
+}
+
+.film ul li:hover {
+    -ms-transform: scale(1.2,1.2); /* IE 9 */
+    -webkit-transform: scale(1.2,1.2); /* Safari */
+    transform: scale(1.2,1.2); /* Standard syntax */
+//    -webkit-transform: translatex(16px);
+//  -moz-transform: translatex(16px);
+//  transform: translatex(16px);
+    background-color:#f0ece2;
+}
+
+.film ul li a {
+  display: block;
+
+  background-size: contain;
+}
+
+.film ul li:nth-child(1) a {
+ color:black;
+}
+
+.film ul li:nth-child(2) a {
+  color:black;
+}
+
+.film ul li:nth-child(3) a {
+  color:black;
+}
