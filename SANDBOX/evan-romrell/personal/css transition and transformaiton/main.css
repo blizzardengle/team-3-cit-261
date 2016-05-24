@@ -121,10 +121,6 @@ width: 600px;
 }
 
 .film ul {
-
-  
-  
-
   transition: all .5s;
   width: 560px;
   height: 166px;
@@ -154,9 +150,10 @@ width: 600px;
     -ms-transform: scale(1.2,1.2); /* IE 9 */
     -webkit-transform: scale(1.2,1.2); /* Safari */
     transform: scale(1.2,1.2); /* Standard syntax */
-//    -webkit-transform: translatex(16px);
-//  -moz-transform: translatex(16px);
-//  transform: translatex(16px);
+/*  NOTE: // is not a CSS comment
+	-webkit-transform: translatex(16px);
+    -moz-transform: translatex(16px);
+    transform: translatex(16px); */
     background-color:#f0ece2;
 }
 
