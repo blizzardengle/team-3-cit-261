@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Example - Simple list with objects</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Example page that demonstrates a list application using objects.">
+		<meta name="keywords" content="Example,Form,Submit,objects,link lists,,HTML,CSS,JavaScript">
+		<meta name="author" content="Chris Keers">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<!-- Include Javascript File -->
+		<script src="my-tweak.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			list = new signUpList("list");
+		</script>
+		
+		<!-- Form to add new list entries -->
+		<form>
+			<p><a href="https://plus.google.com/105508425619969439695/posts/g2BRdY2AqST">Click here to watch the video explaining how this works.</a></p>
+			<label>
+				First Name:<br>
+				<input type="text" id="firstName" name="firstName">
+			</label>
+			<label>
+				Last Name:<br>
+				<input type="text" id="lastName" name="lastName">
+			</label>
+			<label>
+				Age:<br>
+				<input type="text" id="age" name="age">
+			</label>
+			<input class="addButton" type="button" value="Add to list" onclick="addNewItem()"><br>
+			<!-- Tell the user what happened -->
+			<div id="msg"></div>
+		</form>
+		
+		<!-- Where the list will display -->
+		<div id="output"></div>
+		
+	</body>
+</html>

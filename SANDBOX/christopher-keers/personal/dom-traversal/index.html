@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Example - Submit forms with Ajax</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Example page that demonstrates advanced dom traversal">
+		<meta name="keywords" content="example,demo,html,javascript,dom traversal">
+		<meta name="author" content="Chris Keers">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="dom-traversal.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<div id="wrapper">
+			<div class="row">
+				Row 1
+			</div>
+			<div class="row">
+				Row 2
+			</div>
+			<div class="row">
+				Row 3
+			</div>
+			<div class="row">
+				Row 4
+				<table class="contact">
+					<tr>
+						<td>First Name</td>
+						<td>Last Name</td>
+						<td>Age</td>
+					</tr>
+					<tr class="record">
+						<td>Chris</td>
+						<td>Keers</td>
+						<td>24</td>
+					</tr>
+					<tr class="record">
+						<td>Amber</td>
+						<td>C.</td>
+						<td>28</td>
+					</tr>
+					<tr class="record">
+						<td>Matthew</td>
+						<td>M.</td>
+						<td>19</td>
+					</tr>
+					<tr>
+						<td><input type="button" value="Get closest class: record" onclick="manager(this,'.record','closest');"></td>
+						<td></td>
+						<td><input type="button" value="Get all parents class: record" onclick="manager(this,'.record','getParents');"></td>
+					</tr>
+				</table>
+				<br>
+				<input type="button" value="Get all parents class: row" onclick="manager(this,'.row','getParents');"><br>
+				This will find all the div's with a class of row.<br><br>
+				<input type="button" value="Get closet div with id: wrapper" onclick="manager(this,'#wrapper','closest');"><br>
+				This will climb the DOM and search for a div with the ID of wrapper.
+			</div>
+			<div class="row">
+				Row 5 - Notice nothing but searching for the page wrapper div ever effect this row because its lower in the DOM tree.
+			</div>
+		</div>
+	</body>
+</html>

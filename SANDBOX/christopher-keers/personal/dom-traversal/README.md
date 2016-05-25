@@ -1,0 +1,2 @@
+# DOM Traversal - Teaching topic 2 (Programming level: Moderate)
+This example uses cross browser compatible Javascript that can climb up, down, and around the DOM. This is a vanilla Javascript implementation of Jquery's parent() and closest() function.
