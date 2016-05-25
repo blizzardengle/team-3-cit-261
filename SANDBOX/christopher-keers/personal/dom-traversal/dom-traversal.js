@@ -189,7 +189,7 @@ function manager(btn,search,handler){
 	if (btn!=null&&search!=null&&handler!=null){
 		// Determine which funciton we should run
 		if(handler=="closest"){
-			// Only ine  item was requested if its found highlight it
+			// Only one item was requested if its found highlight it
 			var elem = closest(btn,search);
 			if(elem!=null){
 				elem.style.backgroundColor = "#F9FF9A";
