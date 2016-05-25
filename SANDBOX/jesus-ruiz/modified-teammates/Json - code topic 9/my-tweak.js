@@ -147,7 +147,7 @@ function removeInfo(id){
 
 // This funciton goes and checks the server for the JSON file and reteives the information from that file
 function getData(){
-  var url = "http://creatingux.com/byui/cit261/ajax/data.json";
+  var url = "https://github.com/blizzardengle/team-3-cit-261/blob/master/SANDBOX/jesus-ruiz/modified-teammates/Json%20-%20code%20topic%209/data.json";
 
   if (window.XMLHttpRequest) {
     // code for IE7+, Firefox, Chrome, Opera, Safari
