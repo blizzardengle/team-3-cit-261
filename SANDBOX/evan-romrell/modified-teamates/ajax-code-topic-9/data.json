@@ -1,0 +1,7 @@
+{ 
+  "people" : [
+          { "firstName":"Jesus" , "lastName":"Arredondo", "age": 32},
+         { "firstName":"Alicia" , "lastName":"Arredondo", "age": 30 },
+         { "firstName":"Didiane" , "lastName":"Arredondo", "age": 0 }
+      ]
+}
