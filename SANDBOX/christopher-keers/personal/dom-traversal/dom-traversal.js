@@ -105,7 +105,7 @@ var closest = function ( elem, selector ) {
 var getParents = function (elem, selector) {
 
     var parents = [];
-    var firstChar, value; // <=== ADDED VALUE
+    var firstChar, value, previous; // <=== ADDED VALUE
     if ( selector ) {
         firstChar = selector.charAt(0);
     }
@@ -150,7 +150,6 @@ var getParents = function (elem, selector) {
 						}
 					} else {
 						if ( elem.hasAttribute( selector.substr(0, selector.length - 1) ) ) {
-						
 							parents.push( elem );
 						}
 					}
@@ -158,9 +157,12 @@ var getParents = function (elem, selector) {
             }
 			
             // If selector is a tag
-            if ( elem.tagName.toLowerCase() === selector ) {
-                parents.push( elem );
-            }
+			console.log("Node type: "+elem.nodeType);
+			if (elem.nodeType===1){
+				if ( elem.tagName.toLowerCase() === selector ) {
+					parents.push( elem );
+				}
+			}
 
         } else {
             parents.push( elem );
