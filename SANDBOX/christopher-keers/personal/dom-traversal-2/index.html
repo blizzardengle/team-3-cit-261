@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DOM</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<div class="row">
+			Row 1
+		</div>
+		<div class="row" id="two">
+			Row 2
+		</div>
+		<div class="row">
+			Row 3
+		</div>
+		<div class="row">
+			Row 4
+			<table class="contact">
+				<tr>
+					<td>First Name</td>
+					<td>Last Name</td>
+					<td>Age</td>
+				</tr>
+				<tr class="record" data-record="pointlessValue">
+					<td>Chris</td>
+					<td>Keers</td>
+					<td>24</td>
+				</tr>
+				<tr class="record" data-record="pointlessValue">
+					<td>Amber</td>
+					<td>C.</td>
+					<td>28</td>
+				</tr>
+				<tr class="record" data-record="pointlessValue">
+					<td>Matthew</td>
+					<td>M.</td>
+					<td>19</td>
+				</tr>
+			</table>
+		</div>
+		<div class="row">
+			Search by HTML tags: &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('div')" value="Search for all DIV's"> &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('tr')" value="Search for all TR's (Table Rows)"> &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('td')" value="Search for all TD's (Table Data)"> &nbsp;&nbsp;&nbsp;
+			<br><br>
+			Search by data attributes: &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('[data-record]')" value="Search for all data-attributes called: data-record"> &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('[data-record=pointlessValue]')" value="Search for all data-attributes exactly matching: data-record=pointlessValue"> &nbsp;&nbsp;&nbsp;
+			<br><br>
+			Search by HTML ID: &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('#wrapper')" value="Search for ID: #wrapper"> &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('#two')" value="Search for ID: #two"> &nbsp;&nbsp;&nbsp;
+			<br><br>
+			Search by Class: &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('.row')" value="Search for Class: .row"> &nbsp;&nbsp;&nbsp; 
+			<input type="button" onclick="manager('.record')" value="Search for Class: .record"> &nbsp;&nbsp;&nbsp;
+		</div>
+	</div>
+</body>
+</html>

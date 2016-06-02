@@ -1,0 +1,2 @@
+# DOM Traversal going down - Teaching topic 3 (Programming level: Moderate)
+This example uses cross browser compatible Javascript that can climb up the DOM. This is a vanilla Javascript implementation of Jquery's find() function with an additional feature. It supports just supplying a selector to search for as well as an element to start at instead of at the top of the DOM tree.

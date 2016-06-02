@@ -1,0 +1,22 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	max-width: 100%;
+}
+#wrapper {
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+.row {
+	padding: 20px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #000;
+}
+table, tr, td {
+	margin: 0 auto;
+	border: 1px solid #000;
+	border-collapse: collapse;
+	padding: 10px;
+}

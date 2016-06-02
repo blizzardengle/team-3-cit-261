@@ -29,15 +29,15 @@ var closest = function ( elem, selector ) {
 	var attribute, value, previous; // <=== ADDED PREVIOUS
 	
 	// If selector is a data attribute attempt to split the attribute from the value, there may not be a value
-	if ( firstChar === '[' ) {
-		selector = selector.substr( 1, selector.length - 1 ); // <=== -2 was changed to -1 so the value does not get chopped if there is a value
+	// FIXED A BUG CODE IS ALL NEW
+	if (firstChar==="[") {
+		selector = selector.substr( 0, selector.length - 1 );
 		attribute = selector.split( '=' );
 		if ( attribute.length > 1 ) {
 			value = true;
 			attribute[1] = attribute[1].replace( /"/g, '' ).replace( /'/g, '' );
 		}
-		attribute[0] = attribute[0].substr( 0,attribute[0].length - 1 ); // <=== CHANGED from the code I originaly commented on your site, this is better
-		// <=== This removes the ] left on the attribute, we had to leave it on in case there was a value
+		attribute[0] = attribute[0].substr( 1,attribute[0].length );
 	}
 
 	// Get closest match
@@ -77,7 +77,7 @@ var closest = function ( elem, selector ) {
 		}
 
 		// If selector is a tag
-		if ( elem.tagName.toLowerCase() === selector ) {
+		if ( elem.nodeName.toLowerCase() === selector ) { // <=== Changed to nodeName from tagName
 			return elem;
 		}
 		
@@ -157,11 +157,11 @@ var getParents = function (elem, selector) {
             }
 			
             // If selector is a tag
-			console.log("Node type: "+elem.nodeType);
-			if (elem.nodeType===1){
-				if ( elem.tagName.toLowerCase() === selector ) {
-					parents.push( elem );
-				}
+			// MAJOR POINT: Changing tagName to nodeName fixes a bug but do we need to search all clear text? #text
+			// If not we should wrap all this code in the while loop in an if statment that skips #text
+			// This could speed up the code even further
+			if ( elem.nodeName.toLowerCase() === selector ) {
+				parents.push( elem );
 			}
 
         } else {
