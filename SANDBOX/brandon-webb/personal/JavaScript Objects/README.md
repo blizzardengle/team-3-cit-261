@@ -1,2 +1,1 @@
-# JavaScript Object - Teaching topic 2 (Programming level: Beginner)
-This is an example of some simple tools that are used for understand how JavaScript Objects work
+#JavaScript Objects June 3, 2016 - This is how you work with JS Objects

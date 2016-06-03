@@ -1,2 +1,1 @@
-# Ajax - Teaching topic 1 (Programming level: Moderate)
-This is an example of Ajax being used to return something from a server and display it back to the user. It is a bit overkill but meant to demonstrate Ajax's potential.
+#CSS3 - June 3, 2016 This is how CSS# Animation works.
