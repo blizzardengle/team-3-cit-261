@@ -1,2 +1,2 @@
-# Ajax - Teaching topic 1 (Programming level: Moderate)
-This is an example of Ajax being used to return something from a server and display it back to the user. It is a bit overkill but meant to demonstrate Ajax's potential.
+# JavaScript Object - Teaching topic 2 (Programming level: Beginner)
+This is an example of some simple tools that are used for understand how JavaScript Objects work
