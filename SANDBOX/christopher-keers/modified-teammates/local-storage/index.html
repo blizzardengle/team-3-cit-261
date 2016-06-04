@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Example - Simple list with objects</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Example page that demonstrates a list application using objects.">
+		<meta name="keywords" content="Example,Form,Submit,objects,link lists,,HTML,CSS,JavaScript">
+		<meta name="author" content="Chris Keers">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<!-- Form to add new list entries -->
+		<form>
+			<label>
+				First Name:<br>
+				<input type="text" id="firstName" name="firstName">
+			</label>
+			<label>
+				Last Name:<br>
+				<input type="text" id="lastName" name="lastName">
+			</label>
+			<label>
+				Age:<br>
+				<input type="text" id="age" name="age">
+			</label>
+			<input class="deleteButton" type="button" value="Empty List (Deletes local storage)" onclick="deleteList()">
+			<input class="addButton" type="button" value="Add to List" onclick="addNewItem()">
+			<!-- Tell the user what happened -->
+			<div id="msg"></div>
+		</form>
+		
+		<!-- Where the list will display -->
+		<div id="output"></div>
+		
+		<!-- Include Javascript File -->
+		<script src="script	.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			/**
+			 * Make a new list for this page and attempt to load it with any saved data
+			 */
+			list = new signUpList("list","signUpList");
+			list.deserialize();
+		</script>
+	</body>
+</html>

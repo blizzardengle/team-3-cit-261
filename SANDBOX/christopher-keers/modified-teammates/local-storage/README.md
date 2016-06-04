@@ -1,0 +1,2 @@
+# Re-modified list with objects only
+This is an example using local storage to store a signup list. Jesus Ruiz modified my object code and added local storage and now I revamped the code to work completely with objects. I removed almost all of Jesus' code and instead added a deseralization method to my original code to handle everything Jesus added in his modified code.
