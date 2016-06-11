@@ -1,0 +1,7 @@
+{
+    "employee" : [
+          { "name":"mario" , "title":"plumber", "salary":"56,000"},
+         { "name":"Luigi" , "title":"plumber", "salary":"49,000"},
+         { "name":"Peach" , "title":"princess", "salary":"875,000"}
+      ]
+}
