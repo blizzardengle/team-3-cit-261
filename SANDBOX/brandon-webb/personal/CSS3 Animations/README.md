@@ -1,1 +1,1 @@
-#CSS3 - June 3, 2016 This is how CSS# Animation works.
+#CSS3 - June 3, 2016 This is how CSS3 Animation works.

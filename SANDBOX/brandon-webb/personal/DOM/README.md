@@ -1,1 +1,1 @@
-#JavaScript Objects June 7, 2016 - This is how you work with the DOM
+#DOM June 7, 2016 - This is how you work with the DOM

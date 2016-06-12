@@ -1,43 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style> 
-div {
-    width: 100px;
-    height: 100px;
-    background-color: red;
-    -webkit-animation-name: example; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 4s; /* Chrome, Safari, Opera */
-    animation-name: example;
-    animation-duration: 10s;
-    animation-delay: 2s; /*Delay before the animation starts to run*/
-    animation-iteration-count: 3; /*Amount of times you want the animation to run*/
-    animation-iteration-count: infinite; /*Makes the animation run infinitely*/
-
-}
-
-/* Chrome, Safari, Opera */
-@-webkit-keyframes example {
-    from {background-color: red;}
-    to {background-color: yellow;}
-}
-
-/* Standard syntax */
-@keyframes example {
-    0% {background-color: red;}
-    50% {background-color: yellow;}
-}
-</style>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
+
 <body>
+<h1>It's a Box-y World out There</h1>
 
-<h1>BOX COLOR TRANSITION</h1>
-
-<p><b>Note:</b> This example does not work in Internet Explorer 9 and earlier versions.</p>
-
-<div></div>
+	<div id="div"></div>
 
 <p><b>Note:</b> When an animation is finished, it changes back to its original style.</p>
+
+
+
+<div id="div1"><p><b>LINEAR</p></div>
+<p></p>
+<div id="div2">EASE</div>
+<p></p>
+<div id="div3">EASE-IN</div>
+<p></p>
+<div id="div4">EASE-OUT</div>
+<p></p>
+<div id="div5">EASE-IN-OUT</div>
+
+
+
+<br>
+<br>
+
+
 
 </body>
 </html>

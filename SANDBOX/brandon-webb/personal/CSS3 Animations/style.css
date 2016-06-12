@@ -1,0 +1,78 @@
+/*This is the external style sheet*/
+
+#div { 
+    width: 100px; /*Size of the Box*/
+    height: 100px;
+    background-color: red;
+    -webkit-animation-name: colors; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 4s; /* Chrome, Safari, Opera */
+    animation-name: colors;
+    animation-duration: 10s;
+    animation-delay: 1s; /*Delay before the animation starts to run*/
+    animation-iteration-count: 3; /*Amount of times you want the animation to run*/
+    animation-iteration-count: infinite; /*Makes the animation run infinitely*/
+}
+/* This is the standard syntax for changing colors */
+@keyframes colors {
+    0% {background-color: red;}
+    50% {background-color: yellow;}
+}
+
+/* This is for the moving blocks */
+#div1 {
+	text-align:center;
+   	width: 200px;
+    height: 50px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite; 
+    -webkit-animation-timing-function: linear;}
+#div2 {
+	text-align:center
+	width: 200px;
+    height: 50px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite; 
+    -webkit-animation-timing-function: ease;}
+#div3 {
+	text-align:center
+	width: 200px;
+    height: 50px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite; 
+    -webkit-animation-timing-function: ease-in;}
+#div4 {
+	text-align:center
+	width: 200px;
+    height: 50px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite;
+    animation-timing-function: ease-out;}
+#div5 {
+	text-align:center
+	width: 200px;
+    height: 50px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite;
+    animation-timing-function: ease-in-out;}
+
+
+/* Move the blocks */
+@keyframes moveblocks {
+    0%  {left: 0px;}
+    50%  {left: 300px;}
+}
