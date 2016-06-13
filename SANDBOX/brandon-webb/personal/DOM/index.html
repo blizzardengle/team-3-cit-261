@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+
+</head>
+<body>
+<h1> What Team Are You On? </h1>
+<p>
+<span id="team">ARE YOU A UTES! OR A BYU! FAN?</span>
+<button id="b1">RED</button>
+<button id="b2">BLUE</button>
+</p>
+
+<script>
+//The following code stores the elements in the html into variables
+var xx = document.getElementById("team"); 
+var button1 = document.getElementById("b1"); 
+var button2 = document.getElementById("b2");
+
+//The following code lets us listen to the buttons and add a listener
+document.getElementById("b2").addEventListener("click", f1, false);
+document.getElementById("b1").addEventListener("click", f2 , false);
+
+//These are the functions mention in the above code
+function f1() {document.getElementById("team").innerHTML="Go Cougars!";};
+function f2() {document.getElementById("team").innerHTML="Go Utes!";};
+
+//This is hardcoded function that you don't have to create a separate function
+button1.addEventListener("click", function () {xx.style.color="red";} , false);
+button2.addEventListener("click", function () {xx.style.color="blue";} , false);
+</script>
+
+<h1>Do You Follow Instructions?</h1>
+<!--<input type="button" value="Click Me!" onclick="popup()"><br />-->
+<a href="#" onmouseover="" onMouseout="popup()">
+Don't Hover Over Me!</a>
+
+<p id="team">Be Careful</p>
+<script type="text/javascript">
+function popup() {
+	alert("If you got this message you didn't listen to instructions");
+}
+</script>
+
+<h1>What do you think?</h1>
+<div id="war">
+<button id="3">What does this button do?</button><br>
+<button id="4">This is it's brother.</button>
+</div>
+
+<script>
+function f3 (evt) {
+var newNode = document.createElement("p" );
+newNode.appendChild(document.createTextNode("Hi"));
+var refNode = evt.target;
+refNode.parentNode.insertBefore(newNode, refNode.nextSibling);
+}
+function f4() {
+var x = document.getElementById("3");
+x.removeChild(x.childNodes);
+}
+
+document.getElementById("3").addEventListener("click",f3,false);
+document.getElementById("4").addEventListener("click",f4,false);
+
+</script>
+
+
+<button id="5">
+<script>
+document.getElementById("5").addEventListener("click", function(){
+    this.style.backgroundColor = "red";
+});
+</script>
+
+
+
+</body>
+</html>

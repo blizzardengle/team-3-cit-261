@@ -1,0 +1,7 @@
+/*.entryInList{
+	transition: transform 1s;
+}
+
+.entryInList:hover{
+	 transform: translate(0, 40px);
+}*/

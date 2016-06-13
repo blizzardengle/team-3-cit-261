@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<header>
+		<link rel="stylesheet" type="text/css" href="main.css">
+	</header>
+	<head>
+		<title>Example - Simple list with objects</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Example page that demonstrates a list application using objects.">
+		<meta name="keywords" content="Example,Form,Submit,objects,link lists,,HTML,CSS,JavaScript">
+		<meta name="author" content="Chris Keers">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style type="text/css">
+			form {
+				margin: 10px auto;
+				padding: 10px;
+				width: 500px;
+				border: 1px solid #000;
+			}
+			form input {
+				display: block;
+				width: 80%;
+				height: 25px;
+				clear: both;
+			}
+			form label {
+				display: block;
+				width: 100%;
+				clear: both;
+				padding-bottom: 10px;
+			}
+			form .addButton {
+				display: block;
+				margin: 0 auto;
+				width: 100px;
+				height: 30px;
+			}
+			#output {
+				margin: 10px auto;
+				width: 520px;
+				border: 1px solid #000;
+			}
+			#output .entryInList {
+				width: 100%;
+				display: block;
+				clear: both;
+				border-bottom: 1px solid #000;
+			}
+			#output .clicked {
+				width: 100%;
+				display: block;
+				clear: both;
+				border:none;
+			}
+			#output .firstName {
+				padding: 10px;
+				display: inline-block;
+				min-width: 125px;
+			}
+			#output .lastName {
+				padding: 10px;
+				display: inline-block;
+				min-width: 125px;
+			}
+			#output .age {
+				padding: 10px;
+				display: inline-block;
+			}
+			#output .buttons {
+				padding: 10px;
+				display: inline-block;
+				float: right;
+				text-align: center;
+			}
+			#output .entryInList:last-child {
+				border-bottom: 0px transparent;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="my-tweak.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			list = new signUpList("list");
+		</script>
+		<!-- Form to add new list entries -->
+		<form>
+			<label>
+				First Name:<br>
+				<input type="text" id="firstName" name="firstName">
+			</label>
+			<label>
+				Last Name:<br>
+				<input type="text" id="lastName" name="lastName">
+			</label>
+			<label>
+				Age:<br>
+				<input type="text" id="age" name="age">
+			</label>
+			<input class="addButton" type="button" value="Add to list" onclick="addNewItem()">
+			<input class="addButton" type="button" value="External File" onclick="getData()">
+			<input class="addButton" type="button" value="Order By Name" onclick="orderByName()">
+			<!-- Tell the user what happened -->
+			<div id="msg"></div>
+		</form>
+		
+		<!-- Where the list will display -->
+		<div id="output"></div>
+		
+		<!-- Include Javascript File -->
+		
+	</body>
+</html>

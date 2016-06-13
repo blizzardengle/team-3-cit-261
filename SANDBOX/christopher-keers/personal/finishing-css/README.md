@@ -1,0 +1,2 @@
+# CSS3 Overkill - I just want the rest of my points
+This is a project that I need to finsih for work but I figured I would use it to pass off all my CSS3 requierments. Click around on the navigation bar and you will see all the CSS at work. All the Javascript in this is 100% my own code except the function at the bottom that I noted.
