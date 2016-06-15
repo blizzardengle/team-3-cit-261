@@ -1,0 +1,86 @@
+form {
+	margin: 10px auto;
+	padding: 10px;
+	width: 500px;
+	border: 1px solid #000;
+	text-align: center;
+}
+form input {
+	display: inline-block;
+	width: 150px;
+	height: 25px;
+	clear: both;
+}
+form label {
+	text-align: left;
+	display: inline-block;
+	clear: both;
+	padding-bottom: 10px;
+}
+form .addButton {
+	display: inline-block;
+	margin: 0 20px 0 15px;
+	width: 110px;
+	height: 35px;
+	background-color: #4CAF50;
+	color: white;
+	font-size: 100%;
+	border: 1px solid #000;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+form .addButton:hover {
+	cursor: pointer;
+	background-color: #439e46;
+}
+form .deleteButton {
+	display: inline-block;
+	margin: 0 auto;
+	width: 260px;
+	height: 35px;
+	background-color: #CA3C3C;
+	color: white;
+	font-size: 100%;
+	border: 1px solid #000;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+form .deleteButton:hover {
+	cursor: pointer;
+	background-color: #b53636;
+}
+#output {
+	margin: 10px auto;
+	width: 520px;
+	min-height: 25px;
+	border: 1px solid #000;
+}
+#output .entryInList {
+	width: 100%;
+	display: block;
+	clear: both;
+	border-bottom: 1px solid #000;
+}
+#output .firstName {
+	padding: 10px;
+	display: inline-block;
+	min-width: 125px;
+}
+#output .lastName {
+	padding: 10px;
+	display: inline-block;
+	min-width: 125px;
+}
+#output .age {
+	padding: 10px;
+	display: inline-block;
+}
+#output .buttons {
+	padding: 10px;
+	display: inline-block;
+	float: right;
+	text-align: center;
+}
+#output .entryInList:last-child {
+	border-bottom: 0px transparent;
+}

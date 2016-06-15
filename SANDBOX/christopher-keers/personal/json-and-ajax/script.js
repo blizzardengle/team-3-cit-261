@@ -136,9 +136,13 @@ signUpList.prototype.print = function(){
  * by adding the values back into our object. For true object serialization and deserialization look up those terms
  * for JAVA. That programming language has true serialization and deserialization.
  */
-signUpList.prototype.deserialize = function(){
-	// Load in values from local storage if any exists
-	var storage =  localStorage.getItem(this.key); // <===== RETRIEVING FROM LOCAL STORAGE
+signUpList.prototype.deserialize = function(obj){
+	// Load in values from the sever and local storage if any exists
+	if (obj==null){
+		var storage =  localStorage.getItem(this.key); // <===== RETRIEVING FROM LOCAL STORAGE
+	} else {
+		var storage = obj; // <===== USE THE DATA RETRIEVED FROM THE SERVER BY AJAX
+	}
 	if (storage!=null){
 		var current = JSON.parse(storage).pointer;
 		while(current!=null){
@@ -163,4 +167,95 @@ function entryInList(firstName,lastName,age,id){
 	this.lastName = lastName;
 	this.age = age;
 	this.nextRecord = null;
+}
+
+/**
+ * [ NEW - VERY IMPORTANT ]
+ * When you get a JSON Object back from the server it is just like using JSON.stringify to 
+ * store an object in local storage you can bring its structure back with JSON.parse but it 
+ * will lose any methods it had.
+ * 
+ * This is a callback funtion. What you do with callback funcitons is pass them into another
+ * funciton and then you can have the funciton call this one. This is very important with Ajax
+ * because we never know when the response will be sent back.
+ * @param {JSON Object|Null} response this is a JSON object retrived from the server or null
+ */
+function handleAjaxResponse(response){
+	/**
+	 * Call the deserialize() method and give it the  JSON object we got from the server
+	 */
+	list.deserialize(response);
+	/**
+	 * Run the normal deserialize() method which is programmed to look for a local storage file
+	 */
+	list.deserialize();
+}
+
+/**
+ * Ajax
+ * @param {string} url the url of the page we should load
+ * @param {funciton} callback this is the function to call when a result is returned from the server
+ */
+function ajax(url,callback){
+	/**
+	 * Call xhr() to get the correct XMLHttpRequest for the users browsers
+	 * have the function ajaxRequest handle communication once a request is called
+	 * and return false now if no connection could be made
+	 */
+	var ajaxCon = xhr();
+	ajaxCon.onreadystatechange = ajaxRequest;
+	if(ajaxCon==false){ return false; }
+	
+	/**
+	 * Handle the actual communications return or display back to the user based on the HTTP status code
+	 */
+	function ajaxRequest(){
+		
+		/**
+		 * Once the connections transaction is complete
+		 */
+		if(ajaxCon.readyState==XMLHttpRequest.DONE){
+			/**
+			 * Send the correct result based on the responses status
+			 */
+			if (ajaxCon.status=="OK"||ajaxCon.status==200){
+				callback(ajaxCon.responseText); // <=== Send back the JSON Object
+			} else {
+				callback(null); // <=== Send back null so nothing gets broken
+			}
+		}
+	}
+	
+	/**
+	 * Initiate an ajax connection
+	 */
+	ajaxCon.open("GET",url);
+	ajaxCon.send();
+}
+
+/**
+ * Get correct XMLHttpRequest for the users browser
+ * COPIED FROM: http://stackoverflow.com/a/15339941/3193156
+ * @returns {XMLHttpRequest|ActiveXObject|Boolean} correct XMLHttpRequest or false is none was found
+ */
+function xhr(){
+    try {
+        return new XMLHttpRequest();
+    }catch(e){}
+    try {
+        return new ActiveXObject("Msxml3.XMLHTTP");
+    }catch(e){}
+    try {
+        return new ActiveXObject("Msxml2.XMLHTTP.6.0");
+    }catch(e){}
+    try {
+        return new ActiveXObject("Msxml2.XMLHTTP.3.0");
+    }catch(e){}
+    try {
+        return new ActiveXObject("Msxml2.XMLHTTP");
+    }catch(e){}
+    try {
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }catch(e){}
+    return false;
 }

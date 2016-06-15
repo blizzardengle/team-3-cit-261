@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Example - JSON, Ajax, and Serialization</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Example page that demonstrates JSON, Ajax, and Serialization">
+		<meta name="keywords" content="Example,Form,Submit,objects,link lists,,HTML,CSS,JavaScript">
+		<meta name="author" content="Chris Keers">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<!-- Form to add new list entries -->
+		<form>
+			<p style="text-align: left;">This form works exactly the same as previous examples except it uses an Ajax request to check the server for any entries that should be in the list first. A JSON object is returned and added to the list using the deserialization method.</p>
+			<label>
+				<input type="text" id="firstName" name="firstName" placeholder="First Name">
+			</label>
+			<label>
+				<input type="text" id="lastName" name="lastName" placeholder="Last Name">
+			</label>
+			<label>
+				<input type="text" id="age" name="age" placeholder="Age">
+			</label>
+			<input class="deleteButton" type="button" value="Empty List (Deletes local storage)" onclick="deleteList()">
+			<input class="addButton" type="button" value="Add to List" onclick="addNewItem()">
+			<!-- Tell the user what happened -->
+			<div id="msg"></div>
+		</form>
+		
+		<!-- Where the list will display -->
+		<div id="output">
+			<p style="text-align: center;"><i>Empty</i></p>
+		</div>
+		
+		<!-- Include Javascript File -->
+		<script src="script	.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			/**
+			 * Make a new list for this page, notice that it is a global variable
+			 */
+			list = new signUpList("list","signUpList");
+			/**
+			 * First make an Ajax request and populate the list with a returned JSON object
+			 * This step requires deserialize() becasse no methods are saved in JSON objects
+			 */
+			ajax("JSON-object.json",handleAjaxResponse);
+			/**
+			 * Now run the normal deserialize() method which in this case is programmed to
+			 * read local stroage for any more values that should be in the list
+			 * 
+			 * ===> This step is done in the handleAjaxResponse() fucntion go there to see why
+			 */
+		</script>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+{
+	"name":"list"
+,	"key":"signUpList"
+,	"pointer":	{
+					"id":"Amber-Ct-28"
+				,	"firstName":"Amber"
+				,	"lastName":"C"
+				,	"age":"28"
+				,	"nextRecord":
+					{
+						"id":"Chris-Keers-24"
+					,	"firstName":"Chris"
+					,	"lastName":"Keers"
+					,	"age":"24"
+					,	"nextRecord":null
+					}
+				}
+,	"count":2
+}
