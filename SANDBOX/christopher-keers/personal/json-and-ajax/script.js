@@ -150,6 +150,7 @@ signUpList.prototype.deserialize = function(obj){
 			current = current.nextRecord;
 		}
 		updateList();
+		localStorage.setItem(this.key,JSON.stringify(list)); // <===== SAVING TO LOCAL STORAGE
 		storage = null;
 	}
 };
