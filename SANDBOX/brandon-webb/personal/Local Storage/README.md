@@ -1,0 +1,1 @@
+#Local Storage - June 14, 2016 - This is how Local Storage works.
