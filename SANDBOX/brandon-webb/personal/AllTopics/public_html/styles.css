@@ -1,11 +1,90 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Jun 11, 2016, 5:53:25 PM
-    Author     : brandonmichaelwebb
-*/
+/*This is the external style sheet*/
+
+#div { 
+    width: 100px; /*Size of the Box*/
+    height: 100px;
+    background-color: red;
+    -webkit-animation-name: colors; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 4s; /* Chrome, Safari, Opera */
+    animation-name: colors;
+    animation-duration: 10s;
+    animation-delay: 1s; /*Delay before the animation starts to run*/
+    animation-iteration-count: 3; /*Amount of times you want the animation to run*/
+    animation-iteration-count: infinite; /*Makes the animation run infinitely*/
+}
+/* This is the standard syntax for changing colors */
+@keyframes colors {
+    0% {background-color: red;}
+    50% {background-color: yellow;}
+}
+
+/* This is for the moving blocks */
+#div1 {
+	text-align:center;
+   	width: 500px;
+        margin: 10px;
+    height: 90px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite; 
+    -webkit-animation-timing-function: linear;}
+#div1:hover {
+    width: 300px;
+    height: 300px;
+    -webkit-transform: rotate(720deg); /* Safari */
+    transform: rotate(720deg);
+    transition: width 2s, height 2s, transform 2s;
+}
+#div2 {
+	text-align:center;
+   	width: 500px;
+        margin: 10px;
+    height: 90px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite; 
+    -webkit-animation-timing-function: ease;}
+#div3 {
+	text-align:center;
+   	width: 500px;
+        margin: 10px;
+    height: 90px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite; 
+    -webkit-animation-timing-function: ease-in;}
+#div4 {
+	text-align:center;
+   	width: 500px;
+        margin: 10px;
+    height: 90px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite;
+    animation-timing-function: ease-out;}
+#div5 {
+	text-align:center;
+   	width: 500px;
+        margin: 10px;
+    height: 90px;
+    background-color: red;
+    font-weight: bold;
+    position: relative;
+    animation: moveblocks 5s infinite;
+    -webkit-animation: moveblocks 5s infinite;
+    animation-timing-function: ease-in-out;}
 
 
+/* Move the blocks */
+@keyframes moveblocks {
+    0%  {left: 0px;}
+    50%  {left: 300px;}
+}

@@ -1,21 +1,59 @@
- <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+<!DOCTYPE html>
 <html>
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="myscripts.js"></script>
-    </head>
-    <body>
-        <div>TODO write content</div>
-        <script>
-            
-        </script>
-    </body>
+<head>
+  
+<link rel="stylesheet" type="text/css" href="styles.css">
+<title>CIT261 Application</title>
+</head>
+
+
+<body>
+<h1>It's a Box World out There</h1>
+
+<p id="div"></p>
+
+<p><b>Note:</b> When an animation is finished, it changes back to its original style.</p>
+
+<h2>JSON Object Creation in Java Script</h2>
+
+<p id="demo"></p>
+
+<div id="div1"><p>LINEAR</p><div id="Person1" onmouseover="showinfo()"></div></div>
+<div id="div2">EASE<div id="Person2"></div></div>
+<div id="div3">EASE-IN<div id="Person3"></div></div>
+<div id="div4">EASE-OUT<div id="Person4"></div></div>
+<div id="div5">EASE-IN-OUT<div id="Person5"></div></div>
+
+<script>
+var person1 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
+var obj1 = JSON.parse(person1);
+document.getElementById("Person1").innerHTML =
+"Name: " + obj1.name + " Nickname " + obj1.nickname + " Email: " + obj1.email;
+
+var person2 = '{"name":"Brenton","nickname":"MormonMonkey","email":"brentonmarcuswebb@gmail.com"}';
+var obj2 = JSON.parse(person2);
+document.getElementById("Person2").innerHTML =
+"Name: " + obj2.name + " Nickname " + obj2.nickname + " Email: " + obj2.email;
+
+var person3 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
+var obj3 = JSON.parse(person3);
+document.getElementById("Person3").innerHTML =
+"Name: " + obj3.name + " Nickname " + obj3.nickname + " Email: " + obj3.email;
+
+var person4 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
+var obj4 = JSON.parse(person4);
+document.getElementById("Person4").innerHTML =
+"Name: " + obj4.name + " Nickname " + obj4.nickname + " Email: " + obj4.email;
+
+var person5 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
+var obj5 = JSON.parse(person5);
+document.getElementById("Person5").innerHTML =
+"Name: " + obj5.name + " Nickname " + obj5.nickname + " Email: " + obj5.email;
+
+function showinfo(){
     
+}
+
+</script>
+</body>
 </html>
