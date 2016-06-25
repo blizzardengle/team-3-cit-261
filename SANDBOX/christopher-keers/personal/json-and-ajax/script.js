@@ -144,6 +144,7 @@ signUpList.prototype.deserialize = function(obj){
 		var storage = obj; // <===== USE THE DATA RETRIEVED FROM THE SERVER BY AJAX
 	}
 	if (storage!=null){
+		console.log(JSON.parse(storage));
 		var current = JSON.parse(storage).pointer;
 		while(current!=null){
 			this.add(current.firstName,current.lastName,current.age);
