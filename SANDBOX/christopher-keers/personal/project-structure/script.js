@@ -1,3 +1,8 @@
+/**
+ * Load main page. If no subjects exist then the object is created and stored
+ * empty until the user adds subjects (Records)
+ * @author Christopher Keers
+ */
 function loadSubjects(){
 	var errorFlag = false;
 	
@@ -34,16 +39,26 @@ function loadSubjects(){
 	}
 }
 
+/**
+ * Loop through the subjects object (Collection) and display its
+ * records on the page. These are clickable and allow loading the
+ * subject or deleting it from the list.
+ * @author Christopher Keers
+ */
 function genSubjectTiles(){
 	var html = "";
 	var current = subjects.head;
 	while (current!==null){
-		html += '<div class="tile" id="'+current.filename+'">'+current.name+'</div>';
+		html += '<div class="tile" id="'+current.filename+'" onclick="loadChoosenSubject(this.id)">'+current.name+'</div>';
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
 }
 
+/**
+ * Add a subject to the users collection
+ * @author Christopher Keers
+ */
 function addSubject(){
 	var name = document.getElementById("form-subject").value;
 	document.getElementById("form-subject").value = "";
@@ -66,6 +81,134 @@ function addSubject(){
 }
 
 /**
+ * Load the selected subject and change controls to the controls for topics
+ * @author Christopher Keers
+ * @param {String} id unique id that is used to pull the object from local storage
+ */
+function loadChoosenSubject(id){
+	var flatObj = storage.open(id);
+	
+	/**
+	 * If the file loaded deserialize the object, show any records to the
+	 * user and wait for the user to add, remove, or select a record
+	 */
+	if(flatObj!==false){
+		choosenSubject = new collection(flatObj.name);
+		choosenSubject.deserialize(flatObj);
+		choosenSubject.id = id; // THIS IS NEW. We tack on an ID value here because we need it 2nd level and lower
+		genTopicTiles();
+	} else {
+		// Error out
+	}
+}
+
+/**
+ * Loop through the topic object (Collection) and display its
+ * records on the page. These are clickable and allow loading the
+ * topic or deleting it from the list.
+ * @author Christopher Keers
+ */
+function genTopicTiles(){
+	var html = "";
+	var current = choosenSubject.head;
+	while (current!==null){
+		html += '<div class="tile" id="'+current.filename+'" onclick="loadFlashCards(this.id)">'+current.name+'</div>';
+		current = current.next;
+	}
+	document.getElementById("content").innerHTML = html;
+}
+
+function addTopic(){
+	var name = document.getElementById("form-topic").value;
+	document.getElementById("form-topic").value = "";
+	var newFile = choosenSubject.add(name);
+	if(newFile!==false){
+		// Save an empty flashcard set object into this new topic
+		if(storage.update(newFile,new flashCardSet(name,newFile))){
+			// Save new subjects structure
+			if(storage.update(choosenSubject.id,choosenSubject.serialize())){
+				genTopicTiles();
+			} else {
+				// Error out
+			}
+		} else {
+			// Error out
+		}
+	} else {
+		// Error out
+	}
+}
+
+function loadFlashCards(id){
+	var flatObj = storage.open(id);
+	
+	/**
+	 * If the file loaded deserialize the object, show any records to the
+	 * user and wait for the user to add, remove, or select a record
+	 */
+	if(flatObj!==false){
+		choosenTopic = new flashCardSet(flatObj.name,id);
+		choosenTopic.deserialize(flatObj);
+		genFlashCards();
+	} else {
+		// Error out
+	}
+}
+
+/**
+ * Loop through the choosen flash card list and display them on
+ * on the page. These are clickable and allow editing or loading
+ * a study game to play with them.
+ * @author Christopher Keers
+ */
+function genFlashCards(){
+	var html = "";
+	var current = choosenTopic.head;
+	while (current!==null){
+		html += '<div class="flashcard-set" id="'+choosenTopic.filename+'" onclick="alert(\'Clicked!\')"><div class="term">'+current.term+'</div><div class="definition">'+current.definition+'</div></div>';
+		current = current.next;
+	}
+	document.getElementById("content").innerHTML = html;
+}
+
+function addFlashCard(){
+	/**
+	 * THIS WILL CHANGE DRASTICALLY LATER SO WE CAN ADD MULTIPLE CARDS AT A TIME
+	 */
+	var term = document.getElementById("form-card-term").value;
+	var definition = document.getElementById("form-card-definition").value;
+	var type = document.getElementById("form-card-type").value;
+	document.getElementById("form-card-term").value = "";
+	document.getElementById("form-card-definition").value = "";
+	document.getElementById("form-card-type").value = "";
+	
+	// CHECK THAT THESE ARE NOT EMPTY
+	choosenTopic.add(term,definition,type);
+	
+	// Save new subjects structure
+	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
+		genFlashCards();
+	} else {
+		// Error out
+	}
+}
+
+// ==========================
+
+function chooseSubject(){
+	choosenSubject = null;
+	choosenTopic = null; // This allows us to jump from a flash card set back to the main menu
+	genSubjectTiles();
+}
+
+function chooseTopic(){
+	choosenTopic = null;
+	genTopicTiles();
+} 
+
+// ==========================
+
+/**
  * An Immediately Invoked Funtion (IFFE) to wrap our core objects in.
  * This is not exactly needed but I did it anyways.
  * @link http://benalman.com/news/2010/11/immediately-invoked-function-expression/
@@ -74,7 +217,7 @@ function addSubject(){
 (function(window) {
 	
 	/**
-	 * Force us to use correct Javascript
+	 * Force us to use correct (strict) Javascript inside this IFFE
 	 */
 	'use strict';
 	
@@ -86,11 +229,10 @@ function addSubject(){
 	 * @param {String} name user defined name to call this list
 	 */
 	function collection(name){
-		this.name = name;
+		this.name = name;	
 		this.head = null;
 		this.tail = null;
 		this.length = 0;
-		this.storage = new storage(); // We have to pass this into our collection
 	}
 	collection.prototype = {
 		
@@ -105,7 +247,7 @@ function addSubject(){
 			/**
 			 * Attempt to create new local storage file with new ID
 			 */
-			if (this.storage.create(newRecord.filename,null)){
+			if (internalStorage.create(newRecord.filename,null)){
 				if(this.head===null){
 					this.head = newRecord;
 				} else if (this.tail===null) {
@@ -125,7 +267,10 @@ function addSubject(){
 		},
 		
 		/**
-		 * Recreate a collection objects structure. Used by deserialize DO NOT ACCESS DIRECTLY
+		 * Recreate a collection objects structure. Used by deserialize DO NOT ACCESS DIRECTLY.
+		 * This is a special add method becuase our normal add method above creates a new
+		 * local storage file when you add a record and we don't want to do that when rebuilding
+		 * this object or well destroy local storage with fragmentation
 		 * @param {Object} flatObj the parsed now flat object pulled from local storage
 		 */
 		recreate: function(flatObj){
@@ -185,6 +330,22 @@ function addSubject(){
 					} else {
 						return false;
 					}
+				}
+				current = current.next;
+			}
+			return false;
+		},
+		
+		/**
+		 * Method to get the human readable name from a files unique ID
+		 * @param {String} filename the filename (ID) to get the human readable name from
+		 * @returns {String|Boolean} string of the human readable name on success or false on error
+		 */
+		getName: function(filename){
+			var current = this.head;
+			while(current!==null){
+				if(current.filename===filename){
+					return current.name;
 				}
 				current = current.next;
 			}
@@ -271,7 +432,6 @@ function addSubject(){
 				clone.head = obj.head;
 				clone.tail = obj.tail;
 				clone.length = obj.length;
-				clone.storage = null;
 				return clone;
 			}
 		}
@@ -279,10 +439,99 @@ function addSubject(){
 	
 	/**
 	 * Collection Record object for the Collection list.
+	 * @param {String} name what the user called this subject
 	 */
 	function collectionRecord(name){
 		this.name = name;
 		this.filename = generateId();
+		this.next = null;
+		this.previous = null;
+	}
+	
+	function flashCardSet(name,filename){
+		this.name = name;
+		this.filename = filename;
+		this.head = null;
+		this.tail = null;
+		this.length = 0;
+	}
+	flashCardSet.prototype = {
+		
+		add: function(term,definition,type){
+			// Prep type and make card
+			if(type!==null){ type = parseInt(type); } else {  type = 0; }
+			var newCard = new flashCards(term,definition,type);
+			
+			if(this.head===null){
+				this.head = newCard;
+			} else if (this.tail===null) {
+				newCard.previous = this.head;
+				this.tail = newCard;
+				this.head.next = this.tail;
+			} else {
+				newCard.previous = this.tail;
+				newCard.previous.next = newCard;
+				this.tail = newCard;
+			}
+			this.length += 1;
+		},
+		
+		/**
+		 * Put a flat object that was serialized back together
+		 * @param {Object} flatObj the parsed now flat object pulled from local storage
+		 * @returns {Flash Card Set object} send back the restored flash card set object
+		 */
+		deserialize: function(flatObj){
+			this.name = flatObj.name;
+			this.filename = flatObj.filename;
+			var current = flatObj.head;
+			while(current!==null){
+				this.add(current.term,current.definition,current.type);
+				current = current.next;
+			}
+		},
+		
+		/**
+		 * Javascript can not handle circular refrences. Basicly by having a head pointer
+		 * and a tail pointer if there is only 2 things in the collection the collection
+		 * does infinite pointing back and forth between the records and breaks JSON.
+		 * @returns {Flash Card object} a copy of the flash card set object with all previous pointers removed
+		 */
+		serialize: function(){
+			var copyCollection = clone(this);
+			var current = copyCollection.head;
+			while(current!==null){
+				current.previous = null;
+				current = current.next;
+			}
+			copyCollection.tail = null;
+			return copyCollection;
+			
+			/**
+			 * Private internal function that clones our flash card object
+			 * @param {Flash Card object} obj the current flash card object
+			 * @returns {Flash Card object} a cloned and trimed flash card object
+			 */
+			function clone(obj){
+				var clone = new flashCardSet(obj.name,obj.filename);
+				clone.head = obj.head;
+				clone.tail = obj.tail;
+				clone.length = obj.length;
+				return clone;
+			}
+		}
+	};
+	
+	/**
+	 * Flash Card objects for a Flash Card Set object
+	 * @param {String} term the term (question) for this flash card
+	 * @param {String} definition the definition (answer) for this flash card
+	 * @param {Number} type a number used to determine what type of question this so we create test properly
+	 */
+	function flashCards(term,definition,type){
+		this.term = term;
+		this.definition = definition;
+		this.type = type | 0;
 		this.next = null;
 		this.previous = null;
 	}
@@ -444,7 +693,9 @@ function addSubject(){
 		},
 		
 		/**
-		 * Not really needed used for debuging mainly
+		 * Not really needed used for debuging mainly. You can use this
+		 * to get a unique ID to use elsewhere in the APP. Just call
+		 * storage.id() and you'll get an ID to use
 		 * @returns {String} unique ID
 		 */
 		id: function(){
@@ -466,6 +717,12 @@ function addSubject(){
 	 */
 	window.storage = storage;
 	window.collection = collection;
+	window.flashCardSet = flashCardSet;
+	
+	/**
+	 * Create an internal storage object that the IIFE functions can use
+	 */
+	var internalStorage = new storage();
 	
 }(window));
 
@@ -1178,7 +1435,7 @@ function addSubject(){
 }));
 
 /**
- * DOM read cross-browser compatible vanilla javascript function
+ * DOM ready cross-browser compatible vanilla javascript function
  * @author Timo Huovinen
  * @link http://stackoverflow.com/a/7053197/3193156
  */
@@ -1422,4 +1679,15 @@ ready(function(){
 	 * Load the first page or create an empty object so we're ready for the user to add subjects
 	 */
 	loadSubjects();
+	
+	/**
+	 * Global variable to track which subject we are in
+	 */
+	choosenSubject = null;
+	
+	/**
+	 * Global variable to track which topic we are in. This is when a user clicks
+	 * on a topic from the choosen subject
+	 */
+	choosenTopic = null;
 });
