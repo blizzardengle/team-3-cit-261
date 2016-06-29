@@ -9,20 +9,7 @@
 	<div id="wrapper">
 		<div class="row">
 			This is the header to our application. This is where the menu and things that need to stay for every page should go. Right now it just has these buttons that allow you to navigate back to where you came from and add a new subject list.<br><br>
-			<input type="text" name="subject" id="form-subject" placeholder="Subject / Class"> <input type="button" value="Add" onclick="addSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="text" name="topic" id="form-topic" placeholder="Topic / Name of Study List"> <input type="button" value="Add" onclick="addTopic();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="text" name="card-term" id="form-card-term" placeholder="Term"> <input type="text" name="card-definition" id="form-card-definition" placeholder="Definition"> 
-			<select name="card-type" id="form-card-type">
-				<option value="0"></option>
-				<option value="1">True or False</option>
-				<option value="2">Multiple Choice</option>
-				<option value="3">Fill in the Blank</option>
-				<option value="4">Mathematic</option>
-				<option value="5">Scientific</option>
-				<option value="6">Vocabulary</option>
-				<option value="7">Group 1</option>
-				<option value="8">Group 2</option>
-				<option value="9">Group 3</option>
-			</select>
-			<input type="button" value="Add" onclick="addFlashCard();">
+			<input type="text" name="subject" id="form-subject" placeholder="Subject / Class"> <input type="button" value="Add" onclick="addSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="text" name="topic" id="form-topic" placeholder="Topic / Name of Study List"> <input type="button" value="Add" onclick="addTopic();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="button" value="Add Card" onclick="addCard();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="button" value="Save Cards" onclick="saveCards();">
 			<br>
 			<br>
 			<input type="button" value="Go Back (LEAVE SUBEJCT)" onclick="chooseSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;

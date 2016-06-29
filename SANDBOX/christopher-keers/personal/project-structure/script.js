@@ -1,6 +1,6 @@
 /**
  * Load main page. If no subjects exist then the object is created and stored
- * empty until the user adds subjects (Records)
+ * empty until the user adds subjects (collectionRecords)
  * @author Christopher Keers
  */
 function loadSubjects(){
@@ -25,17 +25,15 @@ function loadSubjects(){
 			storage.save("SUBJECTS",subjects);
 		} else {
 			errorFlag = true;
-			console.log("We were unable to create a required file please re-load the page and try again");
+			console.log("We were unable to create a required file please re-load the page and try again.");
 		}
 	}
 	
 	/**
-	 * Create subject tiles
+	 * Create subject tiles if there were no errors earlier
 	 */
 	if(!errorFlag){
 		genSubjectTiles();
-	} else {
-		// Error out
 	}
 }
 
@@ -71,12 +69,15 @@ function addSubject(){
 				genSubjectTiles();
 			} else {
 				// Error out
+				console.log("We were unable to update a required file please re-load the page and try again.");
 			}
 		} else {
 			// Error out
+			console.log("We were unable to update a required file please re-load the page and try again.");
 		}
 	} else {
 		// Error out
+		console.log("We were unable to create a required file please re-load the page and try again.");
 	}
 }
 
@@ -98,7 +99,8 @@ function loadChoosenSubject(id){
 		choosenSubject.id = id; // THIS IS NEW. We tack on an ID value here because we need it 2nd level and lower
 		genTopicTiles();
 	} else {
-		// Error out
+		// Error 
+		console.log("We were unable to load a required file please re-load the page and try again.");
 	}
 }
 
@@ -118,6 +120,10 @@ function genTopicTiles(){
 	document.getElementById("content").innerHTML = html;
 }
 
+/**
+ * Add a topic (study list) to the users currently selected subject (class)
+ * @author Christopher Keers
+ */
 function addTopic(){
 	var name = document.getElementById("form-topic").value;
 	document.getElementById("form-topic").value = "";
@@ -130,15 +136,22 @@ function addTopic(){
 				genTopicTiles();
 			} else {
 				// Error out
+				console.log("We were unable to update a required file please re-load the page and try again.");
 			}
 		} else {
 			// Error out
+			console.log("We were unable to update a required file please re-load the page and try again.");
 		}
 	} else {
 		// Error out
+		console.log("We were unable to create a required file please re-load the page and try again.");
 	}
 }
 
+/**
+ * Load the selected topic's flash cards
+ * @param {String} id the unique ID used as the local storage file name
+ */
 function loadFlashCards(id){
 	var flatObj = storage.open(id);
 	
@@ -152,61 +165,97 @@ function loadFlashCards(id){
 		genFlashCards();
 	} else {
 		// Error out
+		console.log("We were unable to load a required file please re-load the page and try again.");
 	}
 }
 
 /**
  * Loop through the choosen flash card list and display them on
- * on the page. These are clickable and allow editing or loading
- * a study game to play with them.
+ * on the page. These are clickable and allow editing or deleting
  * @author Christopher Keers
  */
 function genFlashCards(){
 	var html = "";
 	var current = choosenTopic.head;
 	while (current!==null){
-		html += '<div class="flashcard-set" id="'+choosenTopic.filename+'" onclick="alert(\'Clicked!\')"><div class="term">'+current.term+'</div><div class="definition">'+current.definition+'</div></div>';
+		html += '<div class="flashcard-set" id="'+choosenTopic.filename+'" data-card-id="'+current.id+'" onclick="alert(\'Clicked!\')"><div class="term">'+current.term+'</div><div class="definition">'+current.definition+'</div></div>';
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
 }
 
-function addFlashCard(){
+/**
+ * Add new flash cards to the currently active flash card set saved in global variable: choosenTopic
+ * @author Christopher Keers
+ */
+function saveCards(){
 	/**
-	 * THIS WILL CHANGE DRASTICALLY LATER SO WE CAN ADD MULTIPLE CARDS AT A TIME
+	 * Find all the new cards
 	 */
-	var term = document.getElementById("form-card-term").value;
-	var definition = document.getElementById("form-card-definition").value;
-	var type = document.getElementById("form-card-type").value;
-	document.getElementById("form-card-term").value = "";
-	document.getElementById("form-card-definition").value = "";
-	document.getElementById("form-card-type").value = "";
+	var startingPoint = document.getElementById("content");
+	var terms = find("[data-card-term]",startingPoint);
+	var definitions = find("[data-card-definition]",startingPoint);
+	var types = find("[data-card-type]",startingPoint);
 	
-	// CHECK THAT THESE ARE NOT EMPTY
-	choosenTopic.add(term,definition,type);
-	
-	// Save new subjects structure
+	/**
+	 * Match all the cards together dropping any that are 
+	 * missing values and add to the flash card set
+	 */
+	var len = terms.length, tmpTerm = null, tmpDefinition = null;
+	for(var x=0;x<len;x++){
+		tmpTerm = terms[x].value;
+		tmpDefinition = definitions[x].value;
+		if (tmpTerm!==null&&tmpDefinition!==null){
+			choosenTopic.add(tmpTerm,tmpDefinition,types[x].value);
+		}
+	}
 	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
 		genFlashCards();
 	} else {
 		// Error out
 	}
+//	var term = document.getElementById("form-card-term").value;
+//	var definition = document.getElementById("form-card-definition").value;
+//	var type = document.getElementById("form-card-type").value;
+//	document.getElementById("form-card-term").value = "";
+//	document.getElementById("form-card-definition").value = "";
+//	document.getElementById("form-card-type").value = "";
+//	
+//	// CHECK THAT THESE ARE NOT EMPTY
+//	choosenTopic.add(term,definition,type);
+//	
+//	// Save new subjects structure
+//	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
+//		genFlashCards();
+//	} else {
+//		// Error out
+//	}
 }
 
-// ==========================
+function addCard(){
+	var id = storage.id();
+	var html = '<div class="flashcard-set"><input type="text" name="card-term" data-card-term="'+id+'" placeholder="Term"><input type="text" name="card-definition" data-card-definition="'+id+'" placeholder="Definition"><select name="card-type" data-card-type="'+id+'"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select></div>';
+	document.getElementById("content").innerHTML = document.getElementById("content").innerHTML + html;
+}
 
+/**
+ * Load main list of subjects and close any open topic list (choosenSubject) or topic (choosenTopic)
+ * @author Christopher Keers
+ */
 function chooseSubject(){
 	choosenSubject = null;
 	choosenTopic = null; // This allows us to jump from a flash card set back to the main menu
 	genSubjectTiles();
 }
 
+/**
+ * Load currently active topic list (choosenSubject) and remove currently selected topic (choosenTopic)
+ * @author Christopher Keers
+ */
 function chooseTopic(){
 	choosenTopic = null;
 	genTopicTiles();
 } 
-
-// ==========================
 
 /**
  * An Immediately Invoked Funtion (IFFE) to wrap our core objects in.
@@ -439,6 +488,7 @@ function chooseTopic(){
 	
 	/**
 	 * Collection Record object for the Collection list.
+	 * @author Christopher Keers
 	 * @param {String} name what the user called this subject
 	 */
 	function collectionRecord(name){
@@ -448,6 +498,12 @@ function chooseTopic(){
 		this.previous = null;
 	}
 	
+	/**
+	 * Flash card set object that contains a whole study set of flash cards
+	 * @author Christopher Keers
+	 * @param {String} name user defined name of this flash card set
+	 * @param {String} filename unique ID used as this flash card sets local storage filename
+	 */
 	function flashCardSet(name,filename){
 		this.name = name;
 		this.filename = filename;
@@ -457,9 +513,14 @@ function chooseTopic(){
 	}
 	flashCardSet.prototype = {
 		
+		/**
+		 * Add a flash card to this flash card set
+		 * @param {String} term user defined term (question)
+		 * @param {String} definition user defined definition (answer)
+		 * @param {Number} type user defined type; number that represents what group this question belongs with
+		 */
 		add: function(term,definition,type){
-			// Prep type and make card
-			if(type!==null){ type = parseInt(type); } else {  type = 0; }
+			if(type!==null){ type = parseInt(type); } else {  type = 0; } // Prep type by making sure its a number
 			var newCard = new flashCards(term,definition,type);
 			
 			if(this.head===null){
@@ -531,6 +592,7 @@ function chooseTopic(){
 	function flashCards(term,definition,type){
 		this.term = term;
 		this.definition = definition;
+		this.id = generateId(); // We need this so we know which card to delete
 		this.type = type | 0;
 		this.next = null;
 		this.previous = null;
@@ -704,7 +766,7 @@ function chooseTopic(){
 	};
 	
 	/**
-	 * Create a unique id to use for filenames
+	 * Create a unique id to use for filenames or other general things that need to be unique
 	 * @returns {String} a unique id
 	 */
 	function generateId(){
@@ -727,8 +789,176 @@ function chooseTopic(){
 }(window));
 
 /**
+ * Search down the DOM tree for all matches of a provided selector. Unless an optional
+ * starting parameter is given the function will default to the document body.
+ * @author Christopher Keers
+ * @param {string} selector What to search for: ID, class, tag, or data attribute
+ * @param {node} elem An optional element for this function to start the search at
+ * @returns {Array|Boolean} Array of matched DOM elements or false if nothing was found
+ */
+function find(){
+	
+	/**
+	 * Save the selector we're looking for or return false
+	 */
+	var selector = arguments[0];
+	if (selector==null||selector.length<1){
+		return false;
+	}
+	
+	/**
+	 * Check if we're supposed to start our search at the document body or elsewhere
+	 */
+	var elem = arguments[1];
+	if (elem==null||elem.length<1){
+		elem = document.body;
+	}
+	
+	/**
+	 * If selector is a data attribute attempt to split the attribute from the value; there may not be a value
+	 */
+	var firstChar = selector.charAt(0), attribute, value = false, supports = 'classList' in document.documentElement;
+	if (firstChar==="[") {
+		selector = selector.substr( 0, selector.length - 1 );
+		attribute = selector.split( '=' );
+		if ( attribute.length > 1 ) {
+			value = true;
+			attribute[1] = attribute[1].replace( /"/g, '' ).replace( /'/g, '' );
+		}
+		attribute[0] = attribute[0].substr( 1,attribute[0].length );
+	}
+	
+	/**
+	 * Create a link list to store results and start searching
+	 */
+	var results = new list();
+	
+	/**
+	 * Internal function that does the actual finding to save time from re-running the above over and over
+	 */
+	function internalFind(results,selector,firstChar,attribute,value,supports,elem){
+		while(elem!=null){
+			/**
+			 * Only run if this is actually an HTML element
+			 */
+			if(elem.nodeType==1){
+				// If selector is a class
+				if ( firstChar === '.' ) {
+					if ( supports ) {
+						if ( elem.classList.contains( selector.substr(1) ) ) {
+							results.add(elem);
+						}
+					} else {
+						if ( new RegExp('(^|\\s)' + selector.substr(1) + '(\\s|$)').test( elem.className ) ) {
+							results.add(elem);
+						}
+					}
+				}
+
+				// If selector is an ID
+				if ( firstChar === '#' ) {
+					if ( elem.id === selector.substr(1) ) {
+						results.add(elem);
+					}
+				}
+
+				// If selector is a data attribute
+				if ( firstChar === '[' ) {
+					if ( elem.hasAttribute( attribute[0] ) ) {
+						if ( value ) {
+							if ( elem.getAttribute( attribute[0] ) === attribute[1] ) {
+								results.add(elem);
+							}
+						} else {
+							results.add(elem);
+						}
+					}
+				}
+				
+				// If selector is a tag
+				// We can use tagName now again becuase we check nodeType at the start
+				// nodeName is better going forward tagName is for IE 5.5
+				if ( elem.nodeName.toLowerCase() === selector ) {
+					results.add(elem);
+				}
+				
+				/**
+				 * Move down recursively through all children
+				 */
+				if(elem.hasChildNodes()){
+					internalFind(results,selector,firstChar,attribute,value,supports,elem.firstChild);
+				}
+			}
+			/**
+			 * Move on to next sibling if there is one
+			 */
+			elem = elem.nextSibling;
+		}
+	}
+	internalFind(results,selector,firstChar,attribute,value,supports,elem);
+	
+	/**
+	 * Link list used to store all results
+	 */
+	function list(){
+		this.head = null;
+		this.tail = null;
+		this.length = 0;
+		
+		list.prototype.add = function(elem){
+			var newNode = new node(elem);
+			if (this.head===null){
+				this.head = newNode;
+			} else if(this.tail===null) {
+				this.tail = newNode;
+				this.head.next = newNode;
+			} else {
+				this.tail.next = newNode;
+				this.tail = newNode;
+			}
+			this.length += 1;
+			console.log(this);
+		}
+		
+		/**
+		 * Stores link list into an array and garbage collects itself
+		 */
+		list.prototype.print = function(){
+			if(this.length<1){ return false; }
+			var array = new Array(this.length);
+			var index = 0;
+			var current = this.head;
+			var previous = current;
+			while(current!=null){
+				array[index] = current.value;
+				current = current.next;
+				previous.value = null;
+				previous.next = null;
+				previous = current;
+				index++;
+			}
+			this.head = null;
+			this.tail = null;
+			this.length = null;
+			return array;
+		}
+	}
+	
+	function node(elem){
+		this.value = elem;
+		this.next = null;
+	}
+	
+	/**
+	 * Return results stored in link list as an array or false if nothing was found
+	 */
+	return results.print();
+}
+
+/**
  * MD5 hash function
- * @author satazor https://github.com/satazor/js-spark-md5/blob/master/spark-md5.js
+ * @author satazor
+ * @link https://github.com/satazor/js-spark-md5/blob/master/spark-md5.js
  */
 (function (factory) {
     if (typeof exports === 'object') {
@@ -1435,7 +1665,7 @@ function chooseTopic(){
 }));
 
 /**
- * DOM ready cross-browser compatible vanilla javascript function
+ * Check if DOM is ready cross-browser compatible vanilla javascript function
  * @author Timo Huovinen
  * @link http://stackoverflow.com/a/7053197/3193156
  */
