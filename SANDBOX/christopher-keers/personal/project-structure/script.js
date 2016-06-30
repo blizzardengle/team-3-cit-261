@@ -1,3 +1,10 @@
+function attachId(id){
+	document.body.removeAttribute("id");
+	if (id!=="undefined"){
+		document.body.id = id;
+	}
+}
+
 /**
  * Load main page. If no subjects exist then the object is created and stored
  * empty until the user adds subjects (collectionRecords)
@@ -47,10 +54,26 @@ function genSubjectTiles(){
 	var html = "";
 	var current = subjects.head;
 	while (current!==null){
-		html += '<div class="tile" id="'+current.filename+'" onclick="loadChoosenSubject(this.id)">'+current.name+'</div>';
+		html += '<div class="tile"><div class="name" id="'+current.filename+'" onclick="loadChoosenSubject(this.id)">'+current.name+'</div><div class="controls"><div class="edit" onclick="editSubject(\''+current.filename+'\');">Edit</div><div class="remove" onclick="removeSubject(\''+current.filename+'\')">Remove</div></div></div>';
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+}
+
+function editSubject(id){
+	alert("I'll do this later its not important now.");
+}
+
+function removeSubject(id){
+	// Remove from subject list
+	subjects.removeDependants(id);
+	subjects.remove(id);
+	if(storage.update("SUBJECTS",subjects.serialize())){
+		genSubjectTiles();
+	} else {
+		// Error out
+		console.log("We were unable to update a required file please re-load the page and try again.");
+	}
 }
 
 /**
@@ -114,10 +137,29 @@ function genTopicTiles(){
 	var html = "";
 	var current = choosenSubject.head;
 	while (current!==null){
-		html += '<div class="tile" id="'+current.filename+'" onclick="loadFlashCards(this.id)">'+current.name+'</div>';
+		html += '<div class="tile"><div class="name" id="'+current.filename+'" onclick="loadFlashCards(this.id)">'+current.name+'</div><div class="controls"><div class="edit" onclick="editTopic(\''+current.filename+'\');">Edit</div><div class="remove" onclick="removeTopic(\''+current.filename+'\')">Remove</div></div></div>';
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+}
+
+function editTopic(id){
+	alert("I'll do this later its not important now.");
+}
+
+function removeTopic(id){
+	/**
+	 * Remove the topic form this collection and local storage
+	 */
+	choosenSubject.remove(id);
+	
+	// THIS IS DANGEROUS if it errors out here the local storage file is toast aleready!!!
+	if(storage.update(choosenSubject.id,choosenSubject.serialize())){
+		genTopicTiles();
+	} else {
+		// Error out
+		console.log("We were unable to update a required file please re-load the page and try again.");
+	}
 }
 
 /**
@@ -178,7 +220,7 @@ function genFlashCards(){
 	var html = "";
 	var current = choosenTopic.head;
 	while (current!==null){
-		html += '<div class="flashcard-set" id="'+choosenTopic.filename+'" data-card-id="'+current.id+'" onclick="alert(\'Clicked!\')"><div class="term">'+current.term+'</div><div class="definition">'+current.definition+'</div></div>';
+		html += '<div class="flashcard-set" id="'+choosenTopic.filename+'" data-card-id="'+current.id+'"><div class="term">'+current.term+'</div><div class="definition">'+current.definition+'</div><div class="controls"><div class="edit" onclick="editCard(\''+current.id+'\');">Edit</div><div class="remove" onclick="removeCard(\''+current.id+'\')">Remove</div></div></div>';
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
@@ -205,37 +247,98 @@ function saveCards(){
 	for(var x=0;x<len;x++){
 		tmpTerm = terms[x].value;
 		tmpDefinition = definitions[x].value;
-		if (tmpTerm!==null&&tmpDefinition!==null){
+		if (tmpTerm.length>0&&tmpDefinition.length>0){
 			choosenTopic.add(tmpTerm,tmpDefinition,types[x].value);
 		}
 	}
+	
 	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
 		genFlashCards();
 	} else {
 		// Error out
 	}
-//	var term = document.getElementById("form-card-term").value;
-//	var definition = document.getElementById("form-card-definition").value;
-//	var type = document.getElementById("form-card-type").value;
-//	document.getElementById("form-card-term").value = "";
-//	document.getElementById("form-card-definition").value = "";
-//	document.getElementById("form-card-type").value = "";
-//	
-//	// CHECK THAT THESE ARE NOT EMPTY
-//	choosenTopic.add(term,definition,type);
-//	
-//	// Save new subjects structure
-//	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
-//		genFlashCards();
-//	} else {
-//		// Error out
-//	}
+	
 }
 
 function addCard(){
 	var id = storage.id();
-	var html = '<div class="flashcard-set"><input type="text" name="card-term" data-card-term="'+id+'" placeholder="Term"><input type="text" name="card-definition" data-card-definition="'+id+'" placeholder="Definition"><select name="card-type" data-card-type="'+id+'"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select></div>';
-	document.getElementById("content").innerHTML = document.getElementById("content").innerHTML + html;
+	var newNode = document.createElement('div');
+	newNode.className = "flashcard-set";
+	newNode.innerHTML = '<div class="term"><textarea name="card-term" data-card-term="'+id+'" placeholder="Term"></textarea></div><div class="definition"><textarea name="card-definition" data-card-definition="'+id+'" placeholder="Definition"></textarea></div><div class="controls"><select name="card-type" data-card-type="'+id+'"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select></div>';
+	document.getElementById("content").appendChild(newNode);
+}
+
+function editCard(id){
+	/**
+	 * Get current cards data
+	 */		
+	var current = choosenTopic.head;
+	var term = null, definition = null, type = null;
+	while(current!==null){
+		if(current.id===id){
+			term = current.term;
+			definition = current.definition;
+			type = current.type;
+			break;
+		}
+		current = current.next;
+	}
+	
+	/**
+	 * Show editable values to the user
+	 */
+	var newNode = document.createElement('div');
+	newNode.id = "pop-up-edit-card";
+	newNode.innerHTML = '<div class="set"><div class="term"><textarea name="card-term" id="edit-term" placeholder="Term">'+term+'</textarea></div><div class="definition"><textarea name="card-definition" id="edit-definition" placeholder="Definition">'+definition+'</textarea></div><div class="controls"><select name="card-type" id="edit-type"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select><div class=""></div></div><div class="save-edit"><div class="button" onclick="saveEdit(\''+id+'\');">Save Changes</div></div></div>';
+	document.body.appendChild(newNode);
+	
+	setSelectedValue(document.getElementById("edit-type"),type);
+	
+	function setSelectedValue(elem,value){
+		for(var i=0; i < elem.options.length; i++){
+			if(elem.options[i].value == value) { // Can't be === because we never know when its being treated as an number or string
+				elem.selectedIndex = i;
+				break;
+			}
+		}
+	}
+}
+
+function saveEdit(id){
+	var current = choosenTopic.head;
+	while(current!==null){
+		if(current.id===id){
+			current.term = document.getElementById("edit-term").value;
+			current.definition = document.getElementById("edit-definition").value;
+			current.type = document.getElementById("edit-type").value;
+			break;
+		}
+		current = current.next;
+	}
+	
+	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
+		document.getElementById("pop-up-edit-card").outerHTML = "";
+		genFlashCards();
+	} else {
+		// Error out
+	}
+}
+
+function removeCard(id){
+	/**
+	 * Remove card
+	 */
+	choosenTopic.remove(id);
+	
+	/**
+	 * Update local storage
+	 */
+	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
+		genFlashCards();
+	} else {
+		// Error out
+		console.log("We were unable to update a required file please re-load the page and try again.");
+	}
 }
 
 /**
@@ -349,36 +452,37 @@ function chooseTopic(){
 			var current = this.head;
 			while(current!==null){
 				if(current.filename===filename){
-					if(storage.remove(filename)){ // Remove from local storage first
-						if(current===this.head){
-							if (current.next!==null){
-								this.head = current.next;
-								current.next.previous = null;
-								current.next = null;
-							} else {
-								this.head = null;
-							}
-						} else if (current===this.tail){
-							if(current.previous===this.head){
-								current.previous.next = null;
-								current.previous = null;
-								this.tail = null;
-							} else {
-								this.tail = current.previous;
-								current.previous.next = null;
-								current.previous = null;
-							}
-						} else {
-							current.previous.next = current.next;
-							current.next.previous = current.previous;
-							current.previous = null;
-							current.next = null;
-						}
-						this.length -= 1;
-						return true;
-					} else {
-						return false;
+					// Remove file from storage if it exists
+					if(!internalStorage.remove(filename)){ 
+						// Log error but keep going
 					}
+					console.log('MADE IT');
+					if(current===this.head){
+						if (current.next!==null){
+							this.head = current.next;
+							current.next.previous = null;
+							current.next = null;
+						} else {
+							this.head = null;
+						}
+					} else if (current===this.tail){
+						if(current.previous===this.head){
+							current.previous.next = null;
+							current.previous = null;
+							this.tail = null;
+						} else {
+							this.tail = current.previous;
+							current.previous.next = null;
+							current.previous = null;
+						}
+					} else {
+						current.previous.next = current.next;
+						current.next.previous = current.previous;
+						current.previous = null;
+						current.next = null;
+					}
+					this.length -= 1;
+					return true;
 				}
 				current = current.next;
 			}
@@ -420,12 +524,13 @@ function chooseTopic(){
 			/**
 			 * Load and deserialize the file
 			 */
-			var flatObj = storage.open(filename);
+			var flatObj = internalStorage.open(filename);
 			if (flatObj){
-				var obj = this.deserialize(flatObj);
+				var obj = new collection(flatObj.name);
+				obj.deserialize(flatObj);
 				var current = obj.head;
 				while(current!==null){
-					if(!storage.remove(current.filename)){
+					if(!internalStorage.remove(current.filename)){
 						/**
 						 * We should add a function here later that records orphaned files for deletion later
 						 * At this point we have no record that the file exists but it has been left in local storage
@@ -434,7 +539,7 @@ function chooseTopic(){
 					}
 					current = current.next;
 				}
-				storage.remove(filename);
+				internalStorage.remove(filename);
 				return true;
 			} else {
 				return false;
@@ -478,9 +583,11 @@ function chooseTopic(){
 			 */
 			function clone(obj){
 				var clone = new collection(obj.name);
-				clone.head = obj.head;
-				clone.tail = obj.tail;
-				clone.length = obj.length;
+				var current = obj.head;
+				while(current!==null){
+					clone.recreate(current);
+					current = current.next;
+				}
 				return clone;
 			}
 		}
@@ -523,18 +630,54 @@ function chooseTopic(){
 			if(type!==null){ type = parseInt(type); } else {  type = 0; } // Prep type by making sure its a number
 			var newCard = new flashCards(term,definition,type);
 			
-			if(this.head===null){
+			if(this.head==null){
 				this.head = newCard;
-			} else if (this.tail===null) {
+			} else if (this.tail==null) {
+				this.head.next = newCard;
 				newCard.previous = this.head;
 				this.tail = newCard;
-				this.head.next = this.tail;
 			} else {
 				newCard.previous = this.tail;
-				newCard.previous.next = newCard;
+				this.tail.next = newCard;
 				this.tail = newCard;
 			}
 			this.length += 1;
+		},
+		
+		remove: function(id){
+			var current = this.head;
+			while(current!==null){
+				if(current.id===id){
+					if(current===this.head){
+						if (current.next!==null){
+							this.head = current.next;
+							current.next.previous = null;
+							current.next = null;
+						} else {
+							this.head = null;
+						}
+					} else if (current===this.tail){
+						if(current.previous===this.head){
+							current.previous.next = null;
+							current.previous = null;
+							this.tail = null;
+						} else {
+							this.tail = current.previous;
+							current.previous.next = null;
+							current.previous = null;
+						}
+					} else {
+						current.previous.next = current.next;
+						current.next.previous = current.previous;
+						current.previous = null;
+						current.next = null;
+					}
+					this.length -= 1;
+					return true;
+				}
+				current = current.next;
+			}
+			return false;
 		},
 		
 		/**
@@ -575,9 +718,11 @@ function chooseTopic(){
 			 */
 			function clone(obj){
 				var clone = new flashCardSet(obj.name,obj.filename);
-				clone.head = obj.head;
-				clone.tail = obj.tail;
-				clone.length = obj.length;
+				var current = obj.head;
+				while(current!==null){
+					clone.add(current.term,current.definition,current.type,current.id);
+					current = current.next;
+				}
 				return clone;
 			}
 		}
@@ -588,12 +733,13 @@ function chooseTopic(){
 	 * @param {String} term the term (question) for this flash card
 	 * @param {String} definition the definition (answer) for this flash card
 	 * @param {Number} type a number used to determine what type of question this so we create test properly
+	 * @param {String} id unique ID for this card. This is only used by an interal method DO NOT USE
 	 */
-	function flashCards(term,definition,type){
+	function flashCards(term,definition,type,id){
 		this.term = term;
 		this.definition = definition;
-		this.id = generateId(); // We need this so we know which card to delete
-		this.type = type | 0;
+		this.id = id || generateId(); // We need this so we know which card to delete
+		this.type = type || 0;
 		this.next = null;
 		this.previous = null;
 	}
@@ -917,7 +1063,6 @@ function find(){
 				this.tail = newNode;
 			}
 			this.length += 1;
-			console.log(this);
 		}
 		
 		/**
