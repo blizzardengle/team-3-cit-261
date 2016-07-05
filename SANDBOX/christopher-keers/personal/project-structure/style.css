@@ -1,0 +1,96 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	max-width: 100%;
+}
+#wrapper {
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+.row {
+	padding: 20px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #000;
+}
+.tile {
+	padding: 15px;
+	border: 1px solid #000;
+	margin-bottom: 5px;
+}
+.flashcard-set {
+	position: relative;
+	display: block;
+    margin: 0 auto;
+    width: 80%;
+    border-top: 1px solid #000;
+    border-right: 1px solid #000;
+    border-left: 1px solid #000;
+    padding: 10px;
+}
+.flashcard-set:last-child {
+	border-bottom: 1px solid #000;
+}
+.flashcard-set .term, .set .term {
+	display: inline-block;
+	width: 40%;
+	vertical-align: top;
+}
+.flashcard-set .definition, .set .definition {
+	display: inline-block;
+	width: 40%;
+	vertical-align: top;
+}
+.flashcard-set .controls, .set .controls {
+	display: inline-block;
+	width: 18%;
+	text-align: center;
+	vertical-align: top;
+}
+.flashcard-set .controls .edit, .set .controls .edit {
+	width: 100%;
+	clear: both;
+}
+.flashcard-set .controls .remove, .set .controls .remove {
+	width: 100%;
+	clear: both;
+}
+.flashcard-set textarea, .set textarea {
+	width: 80%;
+}
+.flashcard-set select, .set select {
+	width: 100%;
+}
+#pop-up-edit-card {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.1);
+	z-index: 1000;
+}
+#pop-up-edit-card .set {
+	position: relative;
+	display: block;
+    margin: 0 auto;
+    width: 80%;
+    border: 1px solid #000;
+	top: 45%;
+	padding: 15px;
+	background-color: #fff;
+	-webkit-box-shadow: 0px 3px 10px 2px rgba(0,0,0,0.65);
+	-moz-box-shadow: 0px 3px 10px 2px rgba(0,0,0,0.65);
+	box-shadow: 0px 3px 10px 2px rgba(0,0,0,0.65);
+}
+#pop-up-edit-card .set .save-edit {
+	width: 100%;
+	clear: both;
+	text-align: center;
+	padding: 5px;
+	margin-top: 10px;
+}
+#pop-up-edit-card .set .save-edit .button {
+	display: inline-block;
+}
