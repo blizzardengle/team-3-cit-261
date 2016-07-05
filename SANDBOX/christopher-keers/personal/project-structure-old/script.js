@@ -1,8 +1,8 @@
-function attachId(id) {
-    document.body.removeAttribute("id");
-    if (id !== "undefined") {
-        document.body.id = id;
-    }
+function attachId(id){
+	document.body.removeAttribute("id");
+	if (id!=="undefined"){
+		document.body.id = id;
+	}
 }
 
 /**
@@ -10,38 +10,38 @@ function attachId(id) {
  * empty until the user adds subjects (collectionRecords)
  * @author Christopher Keers
  */
-function loadSubjects() {
-    var errorFlag = false;
-
-    /**
-     * Load subjects and save as a global variable
-     * create the file if its missing
-     */
-    if (storage.checkFile("SUBJECTS")) {
-        var flatObj = storage.open("SUBJECTS");
-        if (flatObj !== false) {
-            subjects = new collection("TMP");
-            subjects.deserialize(flatObj);
-        } else {
-            errorFlag = true;
-            console.log("We could not open a required file from local storage please re-load the page and try again.");
-        }
-    } else {
-        if (storage.create("SUBJECTS", null)) {
-            subjects = new collection("SUBJECTS");
-            storage.save("SUBJECTS", subjects);
-        } else {
-            errorFlag = true;
-            console.log("We were unable to create a required file please re-load the page and try again.");
-        }
-    }
-
-    /**
-     * Create subject tiles if there were no errors earlier
-     */
-    if (!errorFlag) {
-        genSubjectTiles();
-    }
+function loadSubjects(){
+	var errorFlag = false;
+	
+	/**
+	 * Load subjects and save as a global variable
+	 * create the file if its missing
+	 */
+	if(storage.checkFile("SUBJECTS")){
+		var flatObj = storage.open("SUBJECTS");
+		if(flatObj!==false){
+			subjects = new collection("TMP");
+			subjects.deserialize(flatObj);
+		} else {
+			errorFlag = true;
+			console.log("We could not open a required file from local storage please re-load the page and try again.");
+		}
+	} else {
+		if(storage.create("SUBJECTS",null)){
+			subjects = new collection("SUBJECTS");
+			storage.save("SUBJECTS",subjects);
+		} else {
+			errorFlag = true;
+			console.log("We were unable to create a required file please re-load the page and try again.");
+		}
+	}
+	
+	/**
+	 * Create subject tiles if there were no errors earlier
+	 */
+	if(!errorFlag){
+		genSubjectTiles();
+	}
 }
 
 /**
@@ -50,58 +50,58 @@ function loadSubjects() {
  * subject or deleting it from the list.
  * @author Christopher Keers
  */
-function genSubjectTiles() {
-    var html = "";
-    var current = subjects.head;
-    while (current !== null) {
-        html += '<div class="tile"><div class="name" id="' + current.filename + '" onclick="loadChoosenSubject(this.id)">' + current.name + '</div><div class="controls"><div class="edit" onclick="editSubject(\'' + current.filename + '\');">Edit</div><div class="remove" onclick="removeSubject(\'' + current.filename + '\')">Remove</div></div></div>';
-        current = current.next;
-    }
-    document.getElementById("content").innerHTML = html;
+function genSubjectTiles(){
+	var html = "";
+	var current = subjects.head;
+	while (current!==null){
+		html += '<div class="tile"><div class="name" id="'+current.filename+'" onclick="loadChoosenSubject(this.id)">'+current.name+'</div><div class="controls"><div class="edit" onclick="editSubject(\''+current.filename+'\');">Edit</div><div class="remove" onclick="removeSubject(\''+current.filename+'\')">Remove</div></div></div>';
+		current = current.next;
+	}
+	document.getElementById("content").innerHTML = html;
 }
 
-function editSubject(id) {
-    alert("I'll do this later its not important now.");
+function editSubject(id){
+	alert("I'll do this later its not important now.");
 }
 
-function removeSubject(id) {
-    // Remove from subject list
-    subjects.removeDependants(id);
-    subjects.remove(id);
-    if (storage.update("SUBJECTS", subjects.serialize())) {
-        genSubjectTiles();
-    } else {
-        // Error out
-        console.log("We were unable to update a required file please re-load the page and try again.");
-    }
+function removeSubject(id){
+	// Remove from subject list
+	subjects.removeDependants(id);
+	subjects.remove(id);
+	if(storage.update("SUBJECTS",subjects.serialize())){
+		genSubjectTiles();
+	} else {
+		// Error out
+		console.log("We were unable to update a required file please re-load the page and try again.");
+	}
 }
 
 /**
  * Add a subject to the users collection
  * @author Christopher Keers
  */
-function addSubject() {
-    var name = document.getElementById("form-subject").value;
-    document.getElementById("form-subject").value = "";
-    var newFile = subjects.add(name);
-    if (newFile !== false) {
-        // Save an empty collection object into this new subject
-        if (storage.update(newFile, new collection(name).serialize())) {
-            // Save new subjects structure
-            if (storage.update("SUBJECTS", subjects.serialize())) {
-                genSubjectTiles();
-            } else {
-                // Error out
-                console.log("We were unable to update a required file please re-load the page and try again.");
-            }
-        } else {
-            // Error out
-            console.log("We were unable to update a required file please re-load the page and try again.");
-        }
-    } else {
-        // Error out
-        console.log("We were unable to create a required file please re-load the page and try again.");
-    }
+function addSubject(){
+	var name = document.getElementById("form-subject").value;
+	document.getElementById("form-subject").value = "";
+	var newFile = subjects.add(name);
+	if(newFile!==false){
+		// Save an empty collection object into this new subject
+		if(storage.update(newFile,new collection(name).serialize())){
+			// Save new subjects structure
+			if(storage.update("SUBJECTS",subjects.serialize())){
+				genSubjectTiles();
+			} else {
+				// Error out
+				console.log("We were unable to update a required file please re-load the page and try again.");
+			}
+		} else {
+			// Error out
+			console.log("We were unable to update a required file please re-load the page and try again.");
+		}
+	} else {
+		// Error out
+		console.log("We were unable to create a required file please re-load the page and try again.");
+	}
 }
 
 /**
@@ -109,22 +109,22 @@ function addSubject() {
  * @author Christopher Keers
  * @param {String} id unique id that is used to pull the object from local storage
  */
-function loadChoosenSubject(id) {
-    var flatObj = storage.open(id);
-
-    /**
-     * If the file loaded deserialize the object, show any records to the
-     * user and wait for the user to add, remove, or select a record
-     */
-    if (flatObj !== false) {
-        choosenSubject = new collection(flatObj.name);
-        choosenSubject.deserialize(flatObj);
-        choosenSubject.id = id; // THIS IS NEW. We tack on an ID value here because we need it 2nd level and lower
-        genTopicTiles();
-    } else {
-        // Error
-        console.log("We were unable to load a required file please re-load the page and try again.");
-    }
+function loadChoosenSubject(id){
+	var flatObj = storage.open(id);
+	
+	/**
+	 * If the file loaded deserialize the object, show any records to the
+	 * user and wait for the user to add, remove, or select a record
+	 */
+	if(flatObj!==false){
+		choosenSubject = new collection(flatObj.name);
+		choosenSubject.deserialize(flatObj);
+		choosenSubject.id = id; // THIS IS NEW. We tack on an ID value here because we need it 2nd level and lower
+		genTopicTiles();
+	} else {
+		// Error 
+		console.log("We were unable to load a required file please re-load the page and try again.");
+	}
 }
 
 /**
@@ -133,82 +133,82 @@ function loadChoosenSubject(id) {
  * topic or deleting it from the list.
  * @author Christopher Keers
  */
-function genTopicTiles() {
-    var html = "";
-    var current = choosenSubject.head;
-    while (current !== null) {
-        html += '<div class="tile"><div class="name" id="' + current.filename + '" onclick="loadFlashCards(this.id)">' + current.name + '</div><div class="controls"><div class="edit" onclick="editTopic(\'' + current.filename + '\');">Edit</div><div class="remove" onclick="removeTopic(\'' + current.filename + '\')">Remove</div></div></div>';
-        current = current.next;
-    }
-    document.getElementById("content").innerHTML = html;
+function genTopicTiles(){
+	var html = "";
+	var current = choosenSubject.head;
+	while (current!==null){
+		html += '<div class="tile"><div class="name" id="'+current.filename+'" onclick="loadFlashCards(this.id)">'+current.name+'</div><div class="controls"><div class="edit" onclick="editTopic(\''+current.filename+'\');">Edit</div><div class="remove" onclick="removeTopic(\''+current.filename+'\')">Remove</div></div></div>';
+		current = current.next;
+	}
+	document.getElementById("content").innerHTML = html;
 }
 
-function editTopic(id) {
-    alert("I'll do this later its not important now.");
+function editTopic(id){
+	alert("I'll do this later its not important now.");
 }
 
-function removeTopic(id) {
-    /**
-     * Remove the topic form this collection and local storage
-     */
-    choosenSubject.remove(id);
-
-    // THIS IS DANGEROUS if it errors out here the local storage file is toast aleready!!!
-    if (storage.update(choosenSubject.id, choosenSubject.serialize())) {
-        genTopicTiles();
-    } else {
-        // Error out
-        console.log("We were unable to update a required file please re-load the page and try again.");
-    }
+function removeTopic(id){
+	/**
+	 * Remove the topic form this collection and local storage
+	 */
+	choosenSubject.remove(id);
+	
+	// THIS IS DANGEROUS if it errors out here the local storage file is toast aleready!!!
+	if(storage.update(choosenSubject.id,choosenSubject.serialize())){
+		genTopicTiles();
+	} else {
+		// Error out
+		console.log("We were unable to update a required file please re-load the page and try again.");
+	}
 }
 
 /**
  * Add a topic (study list) to the users currently selected subject (class)
  * @author Christopher Keers
  */
-function addTopic() {
-    var name = document.getElementById("form-topic").value;
-    document.getElementById("form-topic").value = "";
-    var newFile = choosenSubject.add(name);
-    if (newFile !== false) {
-        // Save an empty flashcard set object into this new topic
-        if (storage.update(newFile, new flashCardSet(name, newFile))) {
-            // Save new subjects structure
-            if (storage.update(choosenSubject.id, choosenSubject.serialize())) {
-                genTopicTiles();
-            } else {
-                // Error out
-                console.log("We were unable to update a required file please re-load the page and try again.");
-            }
-        } else {
-            // Error out
-            console.log("We were unable to update a required file please re-load the page and try again.");
-        }
-    } else {
-        // Error out
-        console.log("We were unable to create a required file please re-load the page and try again.");
-    }
+function addTopic(){
+	var name = document.getElementById("form-topic").value;
+	document.getElementById("form-topic").value = "";
+	var newFile = choosenSubject.add(name);
+	if(newFile!==false){
+		// Save an empty flashcard set object into this new topic
+		if(storage.update(newFile,new flashCardSet(name,newFile))){
+			// Save new subjects structure
+			if(storage.update(choosenSubject.id,choosenSubject.serialize())){
+				genTopicTiles();
+			} else {
+				// Error out
+				console.log("We were unable to update a required file please re-load the page and try again.");
+			}
+		} else {
+			// Error out
+			console.log("We were unable to update a required file please re-load the page and try again.");
+		}
+	} else {
+		// Error out
+		console.log("We were unable to create a required file please re-load the page and try again.");
+	}
 }
 
 /**
  * Load the selected topic's flash cards
  * @param {String} id the unique ID used as the local storage file name
  */
-function loadFlashCards(id) {
-    var flatObj = storage.open(id);
-
-    /**
-     * If the file loaded deserialize the object, show any records to the
-     * user and wait for the user to add, remove, or select a record
-     */
-    if (flatObj !== false) {
-        choosenTopic = new flashCardSet(flatObj.name, id);
-        choosenTopic.deserialize(flatObj);
-        genFlashCards();
-    } else {
-        // Error out
-        console.log("We were unable to load a required file please re-load the page and try again.");
-    }
+function loadFlashCards(id){
+	var flatObj = storage.open(id);
+	
+	/**
+	 * If the file loaded deserialize the object, show any records to the
+	 * user and wait for the user to add, remove, or select a record
+	 */
+	if(flatObj!==false){
+		choosenTopic = new flashCardSet(flatObj.name,id);
+		choosenTopic.deserialize(flatObj);
+		genFlashCards();
+	} else {
+		// Error out
+		console.log("We were unable to load a required file please re-load the page and try again.");
+	}
 }
 
 /**
@@ -216,149 +216,149 @@ function loadFlashCards(id) {
  * on the page. These are clickable and allow editing or deleting
  * @author Christopher Keers
  */
-function genFlashCards() {
-    var html = "";
-    var current = choosenTopic.head;
-    while (current !== null) {
-        html += '<div class="flashcard-set" id="' + choosenTopic.filename + '" data-card-id="' + current.id + '"><div class="term">' + current.term + '</div><div class="definition">' + current.definition + '</div><div class="controls"><div class="edit" onclick="editCard(\'' + current.id + '\');">Edit</div><div class="remove" onclick="removeCard(\'' + current.id + '\')">Remove</div></div></div>';
-        current = current.next;
-    }
-    document.getElementById("content").innerHTML = html;
+function genFlashCards(){
+	var html = "";
+	var current = choosenTopic.head;
+	while (current!==null){
+		html += '<div class="flashcard-set" id="'+choosenTopic.filename+'" data-card-id="'+current.id+'"><div class="term">'+current.term+'</div><div class="definition">'+current.definition+'</div><div class="controls"><div class="edit" onclick="editCard(\''+current.id+'\');">Edit</div><div class="remove" onclick="removeCard(\''+current.id+'\')">Remove</div></div></div>';
+		current = current.next;
+	}
+	document.getElementById("content").innerHTML = html;
 }
 
 /**
  * Add new flash cards to the currently active flash card set saved in global variable: choosenTopic
  * @author Christopher Keers
  */
-function saveCards() {
-    /**
-     * Find all the new cards
-     */
-    var startingPoint = document.getElementById("content");
-    var terms = find("[data-card-term]", startingPoint);
-    var definitions = find("[data-card-definition]", startingPoint);
-    var types = find("[data-card-type]", startingPoint);
-
-    /**
-     * Match all the cards together dropping any that are
-     * missing values and add to the flash card set
-     */
-    var len = terms.length, tmpTerm = null, tmpDefinition = null;
-    for (var x = 0; x < len; x++) {
-        tmpTerm = terms[x].value;
-        tmpDefinition = definitions[x].value;
-        if (tmpTerm.length > 0 && tmpDefinition.length > 0) {
-            choosenTopic.add(tmpTerm, tmpDefinition, types[x].value);
-        }
-    }
-
-    if (storage.update(choosenTopic.filename, choosenTopic.serialize())) {
-        genFlashCards();
-    } else {
-        // Error out
-    }
-
+function saveCards(){
+	/**
+	 * Find all the new cards
+	 */
+	var startingPoint = document.getElementById("content");
+	var terms = find("[data-card-term]",startingPoint);
+	var definitions = find("[data-card-definition]",startingPoint);
+	var types = find("[data-card-type]",startingPoint);
+	
+	/**
+	 * Match all the cards together dropping any that are 
+	 * missing values and add to the flash card set
+	 */
+	var len = terms.length, tmpTerm = null, tmpDefinition = null;
+	for(var x=0;x<len;x++){
+		tmpTerm = terms[x].value;
+		tmpDefinition = definitions[x].value;
+		if (tmpTerm.length>0&&tmpDefinition.length>0){
+			choosenTopic.add(tmpTerm,tmpDefinition,types[x].value);
+		}
+	}
+	
+	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
+		genFlashCards();
+	} else {
+		// Error out
+	}
+	
 }
 
-function addCard() {
-    var id = storage.id();
-    var newNode = document.createElement('div');
-    newNode.className = "flashcard-set";
-    newNode.innerHTML = '<div class="term"><textarea name="card-term" data-card-term="' + id + '" placeholder="Term"></textarea></div><div class="definition"><textarea name="card-definition" data-card-definition="' + id + '" placeholder="Definition"></textarea></div><div class="controls"><select name="card-type" data-card-type="' + id + '"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select></div>';
-    document.getElementById("content").appendChild(newNode);
+function addCard(){
+	var id = storage.id();
+	var newNode = document.createElement('div');
+	newNode.className = "flashcard-set";
+	newNode.innerHTML = '<div class="term"><textarea name="card-term" data-card-term="'+id+'" placeholder="Term"></textarea></div><div class="definition"><textarea name="card-definition" data-card-definition="'+id+'" placeholder="Definition"></textarea></div><div class="controls"><select name="card-type" data-card-type="'+id+'"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select></div>';
+	document.getElementById("content").appendChild(newNode);
 }
 
-function editCard(id) {
-    /**
-     * Get current cards data
-     */
-    var current = choosenTopic.head;
-    var term = null, definition = null, type = null;
-    while (current !== null) {
-        if (current.id === id) {
-            term = current.term;
-            definition = current.definition;
-            type = current.type;
-            break;
-        }
-        current = current.next;
-    }
-
-    /**
-     * Show editable values to the user
-     */
-    var newNode = document.createElement('div');
-    newNode.id = "pop-up-edit-card";
-    newNode.innerHTML = '<div class="set"><div class="term"><textarea name="card-term" id="edit-term" placeholder="Term">' + term + '</textarea></div><div class="definition"><textarea name="card-definition" id="edit-definition" placeholder="Definition">' + definition + '</textarea></div><div class="controls"><select name="card-type" id="edit-type"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select><div class=""></div></div><div class="save-edit"><div class="button" onclick="saveEdit(\'' + id + '\');">Save Changes</div></div></div>';
-    document.body.appendChild(newNode);
-
-    setSelectedValue(document.getElementById("edit-type"), type);
-
-    function setSelectedValue(elem, value) {
-        for (var i = 0; i < elem.options.length; i++) {
-            if (elem.options[i].value == value) { // Can't be === because we never know when its being treated as an number or string
-                elem.selectedIndex = i;
-                break;
-            }
-        }
-    }
+function editCard(id){
+	/**
+	 * Get current cards data
+	 */		
+	var current = choosenTopic.head;
+	var term = null, definition = null, type = null;
+	while(current!==null){
+		if(current.id===id){
+			term = current.term;
+			definition = current.definition;
+			type = current.type;
+			break;
+		}
+		current = current.next;
+	}
+	
+	/**
+	 * Show editable values to the user
+	 */
+	var newNode = document.createElement('div');
+	newNode.id = "pop-up-edit-card";
+	newNode.innerHTML = '<div class="set"><div class="term"><textarea name="card-term" id="edit-term" placeholder="Term">'+term+'</textarea></div><div class="definition"><textarea name="card-definition" id="edit-definition" placeholder="Definition">'+definition+'</textarea></div><div class="controls"><select name="card-type" id="edit-type"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select><div class=""></div></div><div class="save-edit"><div class="button" onclick="saveEdit(\''+id+'\');">Save Changes</div></div></div>';
+	document.body.appendChild(newNode);
+	
+	setSelectedValue(document.getElementById("edit-type"),type);
+	
+	function setSelectedValue(elem,value){
+		for(var i=0; i < elem.options.length; i++){
+			if(elem.options[i].value == value) { // Can't be === because we never know when its being treated as an number or string
+				elem.selectedIndex = i;
+				break;
+			}
+		}
+	}
 }
 
-function saveEdit(id) {
-    var current = choosenTopic.head;
-    while (current !== null) {
-        if (current.id === id) {
-            current.term = document.getElementById("edit-term").value;
-            current.definition = document.getElementById("edit-definition").value;
-            current.type = document.getElementById("edit-type").value;
-            break;
-        }
-        current = current.next;
-    }
-
-    if (storage.update(choosenTopic.filename, choosenTopic.serialize())) {
-        document.getElementById("pop-up-edit-card").outerHTML = "";
-        genFlashCards();
-    } else {
-        // Error out
-    }
+function saveEdit(id){
+	var current = choosenTopic.head;
+	while(current!==null){
+		if(current.id===id){
+			current.term = document.getElementById("edit-term").value;
+			current.definition = document.getElementById("edit-definition").value;
+			current.type = document.getElementById("edit-type").value;
+			break;
+		}
+		current = current.next;
+	}
+	
+	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
+		document.getElementById("pop-up-edit-card").outerHTML = "";
+		genFlashCards();
+	} else {
+		// Error out
+	}
 }
 
-function removeCard(id) {
-    /**
-     * Remove card
-     */
-    choosenTopic.remove(id);
-
-    /**
-     * Update local storage
-     */
-    if (storage.update(choosenTopic.filename, choosenTopic.serialize())) {
-        genFlashCards();
-    } else {
-        // Error out
-        console.log("We were unable to update a required file please re-load the page and try again.");
-    }
+function removeCard(id){
+	/**
+	 * Remove card
+	 */
+	choosenTopic.remove(id);
+	
+	/**
+	 * Update local storage
+	 */
+	if(storage.update(choosenTopic.filename,choosenTopic.serialize())){
+		genFlashCards();
+	} else {
+		// Error out
+		console.log("We were unable to update a required file please re-load the page and try again.");
+	}
 }
 
 /**
  * Load main list of subjects and close any open topic list (choosenSubject) or topic (choosenTopic)
  * @author Christopher Keers
  */
-function chooseSubject() {
-    choosenSubject = null;
-    choosenTopic = null; // This allows us to jump from a flash card set back to the main menu
-    genSubjectTiles();
+function chooseSubject(){
+	choosenSubject = null;
+	choosenTopic = null; // This allows us to jump from a flash card set back to the main menu
+	genSubjectTiles();
 }
 
 /**
  * Load currently active topic list (choosenSubject) and remove currently selected topic (choosenTopic)
  * @author Christopher Keers
  */
-function chooseTopic() {
-    choosenTopic = null;
-    genTopicTiles();
-}
+function chooseTopic(){
+	choosenTopic = null;
+	genTopicTiles();
+} 
 
 /**
  * An Immediately Invoked Funtion (IFFE) to wrap our core objects in.
@@ -366,584 +366,572 @@ function chooseTopic() {
  * @link http://benalman.com/news/2010/11/immediately-invoked-function-expression/
  * @param {DOM object} window the current DOM window
  */
-(function (window) {
-
-    /**
-     * Force us to use correct (strict) Javascript inside this IFFE
-     */
-    'use strict';
-
-    /**
-     * Collection list that maps a user generated name to a local storage file
-     * this file is either another collection list or a file that contains
-     * a flash card list.
-     * @author Christopher Keers
-     * @param {String} name user defined name to call this list
-     */
-    function collection(name) {
-        this.name = name;
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
-    }
-    collection.prototype = {
-        /**
-         * Add a record to the collection list
-         * @param {String} name user defined name to call this record in the list
-         * @returns {Boolean} new unique ID on success false when file/ record could not be created
-         */
-        add: function (name) {
-            var newRecord = new collectionRecord(name);
-
-            /**
-             * Attempt to create new local storage file with new ID
-             */
-            if (internalStorage.create(newRecord.filename, null)) {
-                if (this.head === null) {
-                    this.head = newRecord;
-                } else if (this.tail === null) {
-                    newRecord.previous = this.head;
-                    this.tail = newRecord;
-                    this.head.next = this.tail;
-                } else {
-                    newRecord.previous = this.tail;
-                    newRecord.previous.next = newRecord;
-                    this.tail = newRecord;
-                }
-                this.length += 1;
-                return newRecord.filename;
-            } else {
-                return false;
-            }
-        },
-        /**
-         * Recreate a collection objects structure. Used by deserialize DO NOT ACCESS DIRECTLY.
-         * This is a special add method becuase our normal add method above creates a new
-         * local storage file when you add a record and we don't want to do that when rebuilding
-         * this object or well destroy local storage with fragmentation
-         * @param {Object} flatObj the parsed now flat object pulled from local storage
-         */
-        recreate: function (flatObj) {
-            var newRecord = new collectionRecord(flatObj.name);
-            newRecord.filename = flatObj.filename;
-            if (this.head === null) {
-                this.head = newRecord;
-            } else if (this.tail === null) {
-                newRecord.previous = this.head;
-                this.tail = newRecord;
-                this.head.next = this.tail;
-            } else {
-                newRecord.previous = this.tail;
-                newRecord.previous.next = newRecord;
-                this.tail = newRecord;
-            }
-            this.length += 1;
-        },
-        /**
-         * Remove a single record from the list and local storage. DO NOT USE on top level
-         * collection lists, this if for collection lists of a collection list
-         * @param {String} filename unique filename (ID) to remove
-         * @returns {Boolean} true on successful delete and false on failure
-         */
-        remove: function (filename) {
-            var current = this.head;
-            while (current !== null) {
-                if (current.filename === filename) {
-                    // Remove file from storage if it exists
-                    if (!internalStorage.remove(filename)) {
-                        // Log error but keep going
-                    }
-                    console.log('MADE IT');
-                    if (current === this.head) {
-                        if (current.next !== null) {
-                            this.head = current.next;
-                            current.next.previous = null;
-                            current.next = null;
-                        } else {
-                            this.head = null;
-                        }
-                    } else if (current === this.tail) {
-                        if (current.previous === this.head) {
-                            current.previous.next = null;
-                            current.previous = null;
-                            this.tail = null;
-                        } else {
-                            this.tail = current.previous;
-                            current.previous.next = null;
-                            current.previous = null;
-                        }
-                    } else {
-                        current.previous.next = current.next;
-                        current.next.previous = current.previous;
-                        current.previous = null;
-                        current.next = null;
-                    }
-                    this.length -= 1;
-                    return true;
-                }
-                current = current.next;
-            }
-            return false;
-        },
-        /**
-         * Method to get the human readable name from a files unique ID
-         * @param {String} filename the filename (ID) to get the human readable name from
-         * @returns {String|Boolean} string of the human readable name on success or false on error
-         */
-        getName: function (filename) {
-            var current = this.head;
-            while (current !== null) {
-                if (current.filename === filename) {
-                    return current.name;
-                }
-                current = current.next;
-            }
-            return false;
-        },
-        /**
-         * Remove this file and any dependant files
-         * @memberOf removeChildren
-         * @param {String} filename unique filename (ID) to remove
-         * @returns {Boolean} true on success and false on any error
-         */
-        removeDependants: function (filename) {
-            return this.removeChildren(filename);
-        },
-        /**
-         * Remove this file and any dependant files
-         * @param {String} filename unique filename (ID) to remove
-         * @returns {Boolean} true on success and false on any error
-         */
-        removeChildren: function (filename) {
-            /**
-             * Load and deserialize the file
-             */
-            var flatObj = internalStorage.open(filename);
-            if (flatObj) {
-                var obj = new collection(flatObj.name);
-                obj.deserialize(flatObj);
-                var current = obj.head;
-                while (current !== null) {
-                    if (!internalStorage.remove(current.filename)) {
-                        /**
-                         * We should add a function here later that records orphaned files for deletion later
-                         * At this point we have no record that the file exists but it has been left in local storage
-                         */
-                        console.log("Data fragmentation caused. Failed to remove file from local storage: " + current.filename);
-                    }
-                    current = current.next;
-                }
-                internalStorage.remove(filename);
-                return true;
-            } else {
-                return false;
-            }
-        },
-        /**
-         * Put a flat object that was serialized back together
-         * @param {Object} flatObj the parsed now flat object pulled from local storage
-         * @returns {Collection} send back the restored collection object
-         */
-        deserialize: function (flatObj) {
-            this.name = flatObj.name;
-            var current = flatObj.head;
-            while (current !== null) {
-                this.recreate(current);
-                current = current.next;
-            }
-        },
-        /**
-         * Javascript can not handle circular refrences. Basicly by having a head pointer
-         * and a tail pointer if there is only 2 things in the collection the collection
-         * does infinite pointing back and forth between the records and breaks JSON.
-         * @returns {Collection object} a copy of the collection object with all previous pointers removed
-         */
-        serialize: function () {
-            var copyCollection = clone(this);
-            var current = copyCollection.head;
-            while (current !== null) {
-                current.previous = null;
-                current = current.next;
-            }
-            copyCollection.tail = null;
-            return copyCollection;
-
-            /**
-             * Private internal function that clones our collection object
-             * @param {Colleciton object} obj the current collection object
-             * @returns {Collection object} a cloned and trimed collection object
-             */
-            function clone(obj) {
-                var clone = new collection(obj.name);
-                var current = obj.head;
-                while (current !== null) {
-                    clone.recreate(current);
-                    current = current.next;
-                }
-                return clone;
-            }
-        }
-    };
-
-    /**
-     * Collection Record object for the Collection list.
-     * @author Christopher Keers
-     * @param {String} name what the user called this subject
-     */
-    function collectionRecord(name) {
-        this.name = name;
-        this.filename = generateId();
-        this.next = null;
-        this.previous = null;
-    }
-
-    /**
-     * Flash card set object that contains a whole study set of flash cards
-     * @author Christopher Keers
-     * @param {String} name user defined name of this flash card set
-     * @param {String} filename unique ID used as this flash card sets local storage filename
-     */
-    function flashCardSet(name, filename) {
-        this.name = name;
-        this.filename = filename;
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
-    }
-    flashCardSet.prototype = {
-        /**
-         * Add a flash card to this flash card set
-         * @param {String} term user defined term (question)
-         * @param {String} definition user defined definition (answer)
-         * @param {Number} type user defined type; number that represents what group this question belongs with
-         */
-        add: function (term, definition, type) {
-            if (type !== null) {
-                type = parseInt(type);
-            } else {
-                type = 0;
-            } // Prep type by making sure its a number
-            var newCard = new flashCards(term, definition, type);
-
-            if (this.head == null) {
-                this.head = newCard;
-            } else if (this.tail == null) {
-                this.head.next = newCard;
-                newCard.previous = this.head;
-                this.tail = newCard;
-            } else {
-                newCard.previous = this.tail;
-                this.tail.next = newCard;
-                this.tail = newCard;
-            }
-            this.length += 1;
-        },
-        remove: function (id) {
-            var current = this.head;
-            while (current !== null) {
-                if (current.id === id) {
-                    if (current === this.head) {
-                        if (current.next !== null) {
-                            this.head = current.next;
-                            current.next.previous = null;
-                            current.next = null;
-                        } else {
-                            this.head = null;
-                        }
-                    } else if (current === this.tail) {
-                        if (current.previous === this.head) {
-                            current.previous.next = null;
-                            current.previous = null;
-                            this.tail = null;
-                        } else {
-                            this.tail = current.previous;
-                            current.previous.next = null;
-                            current.previous = null;
-                        }
-                    } else {
-                        current.previous.next = current.next;
-                        current.next.previous = current.previous;
-                        current.previous = null;
-                        current.next = null;
-                    }
-                    this.length -= 1;
-                    return true;
-                }
-                current = current.next;
-            }
-            return false;
-        },
-        /**
-         * Put a flat object that was serialized back together
-         * @param {Object} flatObj the parsed now flat object pulled from local storage
-         * @returns {Flash Card Set object} send back the restored flash card set object
-         */
-        deserialize: function (flatObj) {
-            this.name = flatObj.name;
-            this.filename = flatObj.filename;
-            var current = flatObj.head;
-            while (current !== null) {
-                this.add(current.term, current.definition, current.type);
-                current = current.next;
-            }
-        },
-        /**
-         * Javascript can not handle circular refrences. Basicly by having a head pointer
-         * and a tail pointer if there is only 2 things in the collection the collection
-         * does infinite pointing back and forth between the records and breaks JSON.
-         * @returns {Flash Card object} a copy of the flash card set object with all previous pointers removed
-         */
-        serialize: function () {
-            var copyCollection = clone(this);
-            var current = copyCollection.head;
-            while (current !== null) {
-                current.previous = null;
-                current = current.next;
-            }
-            copyCollection.tail = null;
-            return copyCollection;
-
-            /**
-             * Private internal function that clones our flash card object
-             * @param {Flash Card object} obj the current flash card object
-             * @returns {Flash Card object} a cloned and trimed flash card object
-             */
-            function clone(obj) {
-                var clone = new flashCardSet(obj.name, obj.filename);
-                var current = obj.head;
-                while (current !== null) {
-                    clone.add(current.term, current.definition, current.type, current.id);
-                    current = current.next;
-                }
-                return clone;
-            }
-        }
-    };
-
-    /**
-     * Flash Card objects for a Flash Card Set object
-     * @param {String} term the term (question) for this flash card
-     * @param {String} definition the definition (answer) for this flash card
-     * @param {Number} type a number used to determine what type of question this so we create test properly
-     * @param {String} id unique ID for this card. This is only used by an interal method DO NOT USE
-     */
-    function flashCards(term, definition, type, id) {
-        this.term = term;
-        this.definition = definition;
-        this.id = id || generateId(); // We need this so we know which card to delete
-        this.type = type || 0;
-        this.next = null;
-        this.previous = null;
-    }
-
-    /**
-     * Create an object to handle local storage
-     * @author Jesus Arredondo
-     */
-    function storage() {}
-    storage.prototype = {
-        /**
-         * Attempt to create a local storage file
-         * @param {String} filename name of the file you will like to create (This should be autogenerated)
-         * @param {Object} obj an un-stringifed object you would like to save (Optional can be empty)
-         * @returns {Boolean} true on success and false when an error happened
-         */
-        create: function (filename, obj) {
-            var canAdd = true;
-            if (obj === null) {
-                obj = "1";
-            } // If object is empty save something to avoid possible errors
-            try {
-                var exists = false;
-                exists = this.checkFile(filename);
-                if (exists === true) {
-                    throw "That filename already exists";
-                } else {
-                    localStorage.setItem(filename, JSON.stringify(obj));
-                }
-            } catch (e) {
-                /**
-                 * Storage is full, the file name exists arealy, or the user is browsing
-                 * the internet in private mode
-                 */
-                if (this.checkQuota(e)) {
-                    e = "Local storage is full";
-                }
-                canAdd = false;
-                console.log(e); // Log error to console for those that really want to know what happened
-            }
-            return canAdd;
-        },
-        /**
-         * Local storage file you would like to retrive
-         * @param {String} filename name (ID) of file you would like to receive
-         * @returns {Object|Boolean} flat object that was in the file on success or false on any error
-         */
-        open: function (filename) {
-            var obj = false;
-            try {
-                obj = JSON.parse(localStorage.getItem(filename));
-            } catch (e) {
-                console.log(e); // Log error to console for those that really want to know what happened
-                obj = false;
-            }
-            return obj;
-        },
-        /**
-         * Save an object to an already existing file
-         * @memberOf update
-         * @param {string} filename name of the file you will like to update
-         * @param {Object} obj an object that you want to store into this file
-         * @returns {Boolean} true on success and false on any error
-         */
-        save: function (filename, obj) {
-            return this.update(filename, obj);
-        },
-        /**
-         * Save an object to an already existing file
-         * @param {string} filename name of the file you will like to update
-         * @param {Object} obj an object that you want to store into this file
-         * @returns {Boolean} true on success and false on any error
-         */
-        update: function (filename, obj) {
-
-            if (obj === null) {
-                return false;
-            } // Stop trying to saving a null
-
-            try {
-                localStorage.setItem(filename, JSON.stringify(obj));
-            } catch (e) {
-                /**
-                 * Storage is full or the user is browsing the internet in private mode
-                 */
-                if (this.checkQuota(e)) {
-                    e = "Local storage is full";
-                }
-                console.log(e); // Log error to console for those that really want to know what happened
-                return false;
-            }
-            return true;
-        },
-        /**
-         * Check if there is space to add anything to local storage. This is
-         * not very reliable but its the best we can do with the current standards
-         * @param {String} e error that was thrown
-         * @returns {Boolean} true we can save things still false there is no more space
-         */
-        checkQuota: function (e) {
-            var quotaExceeded = false;
-            if (e) {
-                if (e.code) {
-                    switch (e.code) {
-                        case 22:
-                            quotaExceeded = true;
-                            break;
-                        case 1014:
-                            // Firefox
-                            if (e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-                                quotaExceeded = true;
-                            }
-                            break;
-                    }
-                } else if (e.number === -2147024882) {
-                    // Internet Explorer 8
-                    quotaExceeded = true;
-                }
-            }
-            return quotaExceeded;
-        },
-        /**
-         * Check if filename exists in local storage
-         * @param {String} filename the filename to check on
-         * @returns {Boolean} true if the file exists and false if not
-         */
-        checkFile: function (filename) {
-            if (localStorage.getItem(filename) !== null) {
-                return true;
-            }
-            return false;
-        },
-        /**
-         * Retreive all flash cards from a topic folder
-         * @param {string} Folder name containing flashcards
-         * @returns {array of objects} returns an array containing all the flash card object
-         * for a choosen topic
-         */
-
-        getFlashCards: function (item) {
-            var cards = [];
-
-            for (var i = 0; i < localStorage.length; i++) {
-
-                var current = item.head;
-                var next = current.next;
-                cards.push(current);
-
-                while (next !== null) {
-                    current = next;
-                    next = current.next;
-                    cards.push(current);
-                }
-                return cards;
-            }
-        },
-        /**
-         * Remove a file from local storage. This only removes one file and does
-         * not remove any other files this one may link to
-         * @param {string} filename the name of the file to delete
-         * @returns {boolean} true if it was deleted false if an error happened
-         */
-        remove: function (filename) {
-            if (localStorage.getItem(filename) !== null) {
-                try {
-                    localStorage.removeItem(filename);
-                    // Double check that it was deleted
-                    if (this.checkFile(filename)) {
-                        throw "The file was not deleted for some reason please try again";
-                    }
-                    // It was really deleted
-                    return true;
-                } catch (e) {
-                    console.log(e); // Log error to console for those that really want to know what happened
-                    return false;
-                }
-            }
-            console.log("This filename does not exists so there was nothing to delete");
-            return false;
-        },
-        /**
-         * Not really needed used for debuging mainly. You can use this
-         * to get a unique ID to use elsewhere in the APP. Just call
-         * storage.id() and you'll get an ID to use
-         * @returns {String} unique ID
-         */
-        id: function () {
-            return generateId();
-        }
-    };
-
-    /**
-     * Create a unique id to use for filenames or other general things that need to be unique
-     * @returns {String} a unique id
-     */
-    function generateId() {
-        var ranNum = Math.floor((Math.random() * 1000) + 1) + "-" + Math.floor((Math.random() * 1000) + 1);
-        return MD5.hash(String(new Date(new Date().getTime())) + "-" + ranNum);
-    }
-
-    /**
-     * Register plugins
-     */
-    window.storage = storage;
-    window.collection = collection;
-    window.flashCardSet = flashCardSet;
-
-    /**
-     * Create an internal storage object that the IIFE functions can use
-     */
-    var internalStorage = new storage();
-
+(function(window) {
+	
+	/**
+	 * Force us to use correct (strict) Javascript inside this IFFE
+	 */
+	'use strict';
+	
+	/**
+	 * Collection list that maps a user generated name to a local storage file
+	 * this file is either another collection list or a file that contains 
+	 * a flash card list.
+	 * @author Christopher Keers
+	 * @param {String} name user defined name to call this list
+	 */
+	function collection(name){
+		this.name = name;	
+		this.head = null;
+		this.tail = null;
+		this.length = 0;
+	}
+	collection.prototype = {
+		
+		/**
+		 * Add a record to the collection list
+		 * @param {String} name user defined name to call this record in the list
+		 * @returns {Boolean} new unique ID on success false when file/ record could not be created
+		 */
+		add: function(name){
+			var newRecord = new collectionRecord(name);
+			
+			/**
+			 * Attempt to create new local storage file with new ID
+			 */
+			if (internalStorage.create(newRecord.filename,null)){
+				if(this.head===null){
+					this.head = newRecord;
+				} else if (this.tail===null) {
+					newRecord.previous = this.head;
+					this.tail = newRecord;
+					this.head.next = this.tail;
+				} else {
+					newRecord.previous = this.tail;
+					newRecord.previous.next = newRecord;
+					this.tail = newRecord;
+				}
+				this.length += 1;
+				return newRecord.filename;
+			} else {
+				return false;
+			}
+		},
+		
+		/**
+		 * Recreate a collection objects structure. Used by deserialize DO NOT ACCESS DIRECTLY.
+		 * This is a special add method becuase our normal add method above creates a new
+		 * local storage file when you add a record and we don't want to do that when rebuilding
+		 * this object or well destroy local storage with fragmentation
+		 * @param {Object} flatObj the parsed now flat object pulled from local storage
+		 */
+		recreate: function(flatObj){
+			var newRecord = new collectionRecord(flatObj.name);
+			newRecord.filename = flatObj.filename;
+			if(this.head===null){
+				this.head = newRecord;
+			} else if (this.tail===null) {
+				newRecord.previous = this.head;
+				this.tail = newRecord;
+				this.head.next = this.tail;
+			} else {
+				newRecord.previous = this.tail;
+				newRecord.previous.next = newRecord;
+				this.tail = newRecord;
+			}
+			this.length += 1;
+		},
+		
+		/**
+		 * Remove a single record from the list and local storage. DO NOT USE on top level
+		 * collection lists, this if for collection lists of a collection list
+		 * @param {String} filename unique filename (ID) to remove
+		 * @returns {Boolean} true on successful delete and false on failure
+		 */
+		remove: function(filename){
+			var current = this.head;
+			while(current!==null){
+				if(current.filename===filename){
+					// Remove file from storage if it exists
+					if(!internalStorage.remove(filename)){ 
+						// Log error but keep going
+					}
+					console.log('MADE IT');
+					if(current===this.head){
+						if (current.next!==null){
+							this.head = current.next;
+							current.next.previous = null;
+							current.next = null;
+						} else {
+							this.head = null;
+						}
+					} else if (current===this.tail){
+						if(current.previous===this.head){
+							current.previous.next = null;
+							current.previous = null;
+							this.tail = null;
+						} else {
+							this.tail = current.previous;
+							current.previous.next = null;
+							current.previous = null;
+						}
+					} else {
+						current.previous.next = current.next;
+						current.next.previous = current.previous;
+						current.previous = null;
+						current.next = null;
+					}
+					this.length -= 1;
+					return true;
+				}
+				current = current.next;
+			}
+			return false;
+		},
+		
+		/**
+		 * Method to get the human readable name from a files unique ID
+		 * @param {String} filename the filename (ID) to get the human readable name from
+		 * @returns {String|Boolean} string of the human readable name on success or false on error
+		 */
+		getName: function(filename){
+			var current = this.head;
+			while(current!==null){
+				if(current.filename===filename){
+					return current.name;
+				}
+				current = current.next;
+			}
+			return false;
+		},
+		
+		/**
+		 * Remove this file and any dependant files
+		 * @memberOf removeChildren
+		 * @param {String} filename unique filename (ID) to remove
+		 * @returns {Boolean} true on success and false on any error
+		 */
+		removeDependants: function(filename){
+			return this.removeChildren(filename);
+		},
+		
+		/**
+		 * Remove this file and any dependant files
+		 * @param {String} filename unique filename (ID) to remove
+		 * @returns {Boolean} true on success and false on any error
+		 */
+		removeChildren: function(filename){
+			/**
+			 * Load and deserialize the file
+			 */
+			var flatObj = internalStorage.open(filename);
+			if (flatObj){
+				var obj = new collection(flatObj.name);
+				obj.deserialize(flatObj);
+				var current = obj.head;
+				while(current!==null){
+					if(!internalStorage.remove(current.filename)){
+						/**
+						 * We should add a function here later that records orphaned files for deletion later
+						 * At this point we have no record that the file exists but it has been left in local storage
+						 */
+						console.log("Data fragmentation caused. Failed to remove file from local storage: "+current.filename);
+					}
+					current = current.next;
+				}
+				internalStorage.remove(filename);
+				return true;
+			} else {
+				return false;
+			}
+		},
+		
+		/**
+		 * Put a flat object that was serialized back together
+		 * @param {Object} flatObj the parsed now flat object pulled from local storage
+		 * @returns {Collection} send back the restored collection object
+		 */
+		deserialize: function(flatObj){
+			this.name = flatObj.name;
+			var current = flatObj.head;
+			while(current!==null){
+				this.recreate(current);
+				current = current.next;
+			}
+		},
+		
+		/**
+		 * Javascript can not handle circular refrences. Basicly by having a head pointer
+		 * and a tail pointer if there is only 2 things in the collection the collection
+		 * does infinite pointing back and forth between the records and breaks JSON.
+		 * @returns {Collection object} a copy of the collection object with all previous pointers removed
+		 */
+		serialize: function(){
+			var copyCollection = clone(this);
+			var current = copyCollection.head;
+			while(current!==null){
+				current.previous = null;
+				current = current.next;
+			}
+			copyCollection.tail = null;
+			return copyCollection;
+			
+			/**
+			 * Private internal function that clones our collection object
+			 * @param {Colleciton object} obj the current collection object
+			 * @returns {Collection object} a cloned and trimed collection object
+			 */
+			function clone(obj){
+				var clone = new collection(obj.name);
+				var current = obj.head;
+				while(current!==null){
+					clone.recreate(current);
+					current = current.next;
+				}
+				return clone;
+			}
+		}
+	};
+	
+	/**
+	 * Collection Record object for the Collection list.
+	 * @author Christopher Keers
+	 * @param {String} name what the user called this subject
+	 */
+	function collectionRecord(name){
+		this.name = name;
+		this.filename = generateId();
+		this.next = null;
+		this.previous = null;
+	}
+	
+	/**
+	 * Flash card set object that contains a whole study set of flash cards
+	 * @author Christopher Keers
+	 * @param {String} name user defined name of this flash card set
+	 * @param {String} filename unique ID used as this flash card sets local storage filename
+	 */
+	function flashCardSet(name,filename){
+		this.name = name;
+		this.filename = filename;
+		this.head = null;
+		this.tail = null;
+		this.length = 0;
+	}
+	flashCardSet.prototype = {
+		
+		/**
+		 * Add a flash card to this flash card set
+		 * @param {String} term user defined term (question)
+		 * @param {String} definition user defined definition (answer)
+		 * @param {Number} type user defined type; number that represents what group this question belongs with
+		 */
+		add: function(term,definition,type){
+			if(type!==null){ type = parseInt(type); } else {  type = 0; } // Prep type by making sure its a number
+			var newCard = new flashCards(term,definition,type);
+			
+			if(this.head==null){
+				this.head = newCard;
+			} else if (this.tail==null) {
+				this.head.next = newCard;
+				newCard.previous = this.head;
+				this.tail = newCard;
+			} else {
+				newCard.previous = this.tail;
+				this.tail.next = newCard;
+				this.tail = newCard;
+			}
+			this.length += 1;
+		},
+		
+		remove: function(id){
+			var current = this.head;
+			while(current!==null){
+				if(current.id===id){
+					if(current===this.head){
+						if (current.next!==null){
+							this.head = current.next;
+							current.next.previous = null;
+							current.next = null;
+						} else {
+							this.head = null;
+						}
+					} else if (current===this.tail){
+						if(current.previous===this.head){
+							current.previous.next = null;
+							current.previous = null;
+							this.tail = null;
+						} else {
+							this.tail = current.previous;
+							current.previous.next = null;
+							current.previous = null;
+						}
+					} else {
+						current.previous.next = current.next;
+						current.next.previous = current.previous;
+						current.previous = null;
+						current.next = null;
+					}
+					this.length -= 1;
+					return true;
+				}
+				current = current.next;
+			}
+			return false;
+		},
+		
+		/**
+		 * Put a flat object that was serialized back together
+		 * @param {Object} flatObj the parsed now flat object pulled from local storage
+		 * @returns {Flash Card Set object} send back the restored flash card set object
+		 */
+		deserialize: function(flatObj){
+			this.name = flatObj.name;
+			this.filename = flatObj.filename;
+			var current = flatObj.head;
+			while(current!==null){
+				this.add(current.term,current.definition,current.type);
+				current = current.next;
+			}
+		},
+		
+		/**
+		 * Javascript can not handle circular refrences. Basicly by having a head pointer
+		 * and a tail pointer if there is only 2 things in the collection the collection
+		 * does infinite pointing back and forth between the records and breaks JSON.
+		 * @returns {Flash Card object} a copy of the flash card set object with all previous pointers removed
+		 */
+		serialize: function(){
+			var copyCollection = clone(this);
+			var current = copyCollection.head;
+			while(current!==null){
+				current.previous = null;
+				current = current.next;
+			}
+			copyCollection.tail = null;
+			return copyCollection;
+			
+			/**
+			 * Private internal function that clones our flash card object
+			 * @param {Flash Card object} obj the current flash card object
+			 * @returns {Flash Card object} a cloned and trimed flash card object
+			 */
+			function clone(obj){
+				var clone = new flashCardSet(obj.name,obj.filename);
+				var current = obj.head;
+				while(current!==null){
+					clone.add(current.term,current.definition,current.type,current.id);
+					current = current.next;
+				}
+				return clone;
+			}
+		}
+	};
+	
+	/**
+	 * Flash Card objects for a Flash Card Set object
+	 * @param {String} term the term (question) for this flash card
+	 * @param {String} definition the definition (answer) for this flash card
+	 * @param {Number} type a number used to determine what type of question this so we create test properly
+	 * @param {String} id unique ID for this card. This is only used by an interal method DO NOT USE
+	 */
+	function flashCards(term,definition,type,id){
+		this.term = term;
+		this.definition = definition;
+		this.id = id || generateId(); // We need this so we know which card to delete
+		this.type = type || 0;
+		this.next = null;
+		this.previous = null;
+	}
+	
+	/**
+	 * Create an object to handle local storage
+	 * @author Jesus Arredondo
+	 */
+	function storage(){}
+	storage.prototype = {
+		
+		/**
+		 * Attempt to create a local storage file
+		 * @param {String} filename name of the file you will like to create (This should be autogenerated)
+		 * @param {Object} obj an un-stringifed object you would like to save (Optional can be empty)
+		 * @returns {Boolean} true on success and false when an error happened
+		 */
+		create: function(filename,obj){
+			var canAdd = true;
+			if(obj===null) { obj = "1"; } // If object is empty save something to avoid possible errors
+			try {
+				var exists = false;
+				exists = this.checkFile(filename);
+				if (exists===true){
+					throw "That filename already exists";
+				} else {
+					localStorage.setItem(filename,JSON.stringify(obj));	
+				}
+			} catch(e) {
+				/**
+				 * Storage is full, the file name exists arealy, or the user is browsing
+				 * the internet in private mode
+				 */
+				if(this.checkQuota(e)){
+					e = "Local storage is full";
+				}
+				canAdd = false;
+				console.log(e); // Log error to console for those that really want to know what happened
+			}
+			return canAdd;
+		},
+		
+		/**
+		 * Local storage file you would like to retrive
+		 * @param {String} filename name (ID) of file you would like to receive
+		 * @returns {Object|Boolean} flat object that was in the file on success or false on any error
+		 */
+		open: function(filename){
+			var obj = false;
+			try {
+				obj = JSON.parse(localStorage.getItem(filename));
+			} catch(e) {
+				console.log(e); // Log error to console for those that really want to know what happened
+				obj = false;
+			}
+			return obj;
+		},
+		
+		/**
+		 * Save an object to an already existing file
+		 * @memberOf update
+		 * @param {string} filename name of the file you will like to update
+		 * @param {Object} obj an object that you want to store into this file
+		 * @returns {Boolean} true on success and false on any error
+		 */
+		save: function(filename,obj){
+			return this.update(filename,obj);
+		},
+		
+		/**
+		 * Save an object to an already existing file
+		 * @param {string} filename name of the file you will like to update
+		 * @param {Object} obj an object that you want to store into this file
+		 * @returns {Boolean} true on success and false on any error
+		 */
+		update: function(filename,obj){
+			
+			if(obj===null) { return false; } // Stop trying to saving a null 
+			
+			try {
+				localStorage.setItem(filename,JSON.stringify(obj));
+			} catch(e) {
+				/**
+				 * Storage is full or the user is browsing the internet in private mode
+				 */
+				if(this.checkQuota(e)){
+					e = "Local storage is full";
+				}
+				console.log(e); // Log error to console for those that really want to know what happened
+				return false;
+			}
+			return true;
+		},
+		
+		/**
+		 * Check if there is space to add anything to local storage. This is 
+		 * not very reliable but its the best we can do with the current standards
+		 * @param {String} e error that was thrown
+		 * @returns {Boolean} true we can save things still false there is no more space
+		 */
+		checkQuota: function(e){
+			var quotaExceeded = false;
+			if (e) {
+				if (e.code) {
+					switch (e.code) {
+						case 22:
+							quotaExceeded = true;
+							break;
+						case 1014:
+							// Firefox
+							if (e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+								quotaExceeded = true;
+							}
+							break;
+					}
+				} else if (e.number === -2147024882) {
+					// Internet Explorer 8
+					quotaExceeded = true;
+				}
+			}
+			return quotaExceeded;
+		},
+		
+		/**
+		 * Check if filename exists in local storage
+		 * @param {String} filename the filename to check on
+		 * @returns {Boolean} true if the file exists and false if not
+		 */
+		checkFile: function(filename){
+			if(localStorage.getItem(filename)!==null){
+				return true;
+			}
+			return false;
+		},
+		
+		/**
+		 * Remove a file from local storage. This only removes one file and does
+		 * not remove any other files this one may link to
+		 * @param {string} filename the name of the file to delete
+		 * @returns {boolean} true if it was deleted false if an error happened
+		 */
+		remove: function(filename){
+			if (localStorage.getItem(filename)!==null){
+				try {
+					localStorage.removeItem(filename);
+					// Double check that it was deleted
+					if(this.checkFile(filename)){
+						throw "The file was not deleted for some reason please try again";
+					}
+					// It was really deleted
+					return true;
+				} catch(e) {
+					console.log(e); // Log error to console for those that really want to know what happened
+					return false;
+				}
+			}
+			console.log("This filename does not exists so there was nothing to delete");
+			return false;
+		},
+		
+		/**
+		 * Not really needed used for debuging mainly. You can use this
+		 * to get a unique ID to use elsewhere in the APP. Just call
+		 * storage.id() and you'll get an ID to use
+		 * @returns {String} unique ID
+		 */
+		id: function(){
+			return generateId();
+		}
+	};
+	
+	/**
+	 * Create a unique id to use for filenames or other general things that need to be unique
+	 * @returns {String} a unique id
+	 */
+	function generateId(){
+		var ranNum = Math.floor((Math.random() * 1000) + 1) + "-" + Math.floor((Math.random() * 1000) + 1);
+		return MD5.hash(String(new Date(new Date().getTime())) + "-" + ranNum);
+	}
+	
+	/**
+	 * Register plugins
+	 */
+	window.storage = storage;
+	window.collection = collection;
+	window.flashCardSet = flashCardSet;
+	
+	/**
+	 * Create an internal storage object that the IIFE functions can use
+	 */
+	var internalStorage = new storage();
+	
 }(window));
 
 /**
@@ -954,164 +942,162 @@ function chooseTopic() {
  * @param {node} elem An optional element for this function to start the search at
  * @returns {Array|Boolean} Array of matched DOM elements or false if nothing was found
  */
-function find() {
+function find(){
+	
+	/**
+	 * Save the selector we're looking for or return false
+	 */
+	var selector = arguments[0];
+	if (selector==null||selector.length<1){
+		return false;
+	}
+	
+	/**
+	 * Check if we're supposed to start our search at the document body or elsewhere
+	 */
+	var elem = arguments[1];
+	if (elem==null||elem.length<1){
+		elem = document.body;
+	}
+	
+	/**
+	 * If selector is a data attribute attempt to split the attribute from the value; there may not be a value
+	 */
+	var firstChar = selector.charAt(0), attribute, value = false, supports = 'classList' in document.documentElement;
+	if (firstChar==="[") {
+		selector = selector.substr( 0, selector.length - 1 );
+		attribute = selector.split( '=' );
+		if ( attribute.length > 1 ) {
+			value = true;
+			attribute[1] = attribute[1].replace( /"/g, '' ).replace( /'/g, '' );
+		}
+		attribute[0] = attribute[0].substr( 1,attribute[0].length );
+	}
+	
+	/**
+	 * Create a link list to store results and start searching
+	 */
+	var results = new list();
+	
+	/**
+	 * Internal function that does the actual finding to save time from re-running the above over and over
+	 */
+	function internalFind(results,selector,firstChar,attribute,value,supports,elem){
+		while(elem!=null){
+			/**
+			 * Only run if this is actually an HTML element
+			 */
+			if(elem.nodeType==1){
+				// If selector is a class
+				if ( firstChar === '.' ) {
+					if ( supports ) {
+						if ( elem.classList.contains( selector.substr(1) ) ) {
+							results.add(elem);
+						}
+					} else {
+						if ( new RegExp('(^|\\s)' + selector.substr(1) + '(\\s|$)').test( elem.className ) ) {
+							results.add(elem);
+						}
+					}
+				}
 
-    /**
-     * Save the selector we're looking for or return false
-     */
-    var selector = arguments[0];
-    if (selector == null || selector.length < 1) {
-        return false;
-    }
+				// If selector is an ID
+				if ( firstChar === '#' ) {
+					if ( elem.id === selector.substr(1) ) {
+						results.add(elem);
+					}
+				}
 
-    /**
-     * Check if we're supposed to start our search at the document body or elsewhere
-     */
-    var elem = arguments[1];
-    if (elem == null || elem.length < 1) {
-        elem = document.body;
-    }
-
-    /**
-     * If selector is a data attribute attempt to split the attribute from the value; there may not be a value
-     */
-    var firstChar = selector.charAt(0), attribute, value = false, supports = 'classList' in document.documentElement;
-    if (firstChar === "[") {
-        selector = selector.substr(0, selector.length - 1);
-        attribute = selector.split('=');
-        if (attribute.length > 1) {
-            value = true;
-            attribute[1] = attribute[1].replace(/"/g, '').replace(/'/g, '');
-        }
-        attribute[0] = attribute[0].substr(1, attribute[0].length);
-    }
-
-    /**
-     * Create a link list to store results and start searching
-     */
-    var results = new list();
-
-    /**
-     * Internal function that does the actual finding to save time from re-running the above over and over
-     */
-    function internalFind(results, selector, firstChar, attribute, value, supports, elem) {
-        while (elem != null) {
-            /**
-             * Only run if this is actually an HTML element
-             */
-            if (elem.nodeType == 1) {
-                // If selector is a class
-                if (firstChar === '.') {
-                    if (supports) {
-                        if (elem.classList.contains(selector.substr(1))) {
-                            results.add(elem);
-                        }
-                    } else {
-                        if (new RegExp('(^|\\s)' + selector.substr(1) + '(\\s|$)').test(elem.className)) {
-                            results.add(elem);
-                        }
-                    }
-                }
-
-                // If selector is an ID
-                if (firstChar === '#') {
-                    if (elem.id === selector.substr(1)) {
-                        results.add(elem);
-                    }
-                }
-
-                // If selector is a data attribute
-                if (firstChar === '[') {
-                    if (elem.hasAttribute(attribute[0])) {
-                        if (value) {
-                            if (elem.getAttribute(attribute[0]) === attribute[1]) {
-                                results.add(elem);
-                            }
-                        } else {
-                            results.add(elem);
-                        }
-                    }
-                }
-
-                // If selector is a tag
-                // We can use tagName now again becuase we check nodeType at the start
-                // nodeName is better going forward tagName is for IE 5.5
-                if (elem.nodeName.toLowerCase() === selector) {
-                    results.add(elem);
-                }
-
-                /**
-                 * Move down recursively through all children
-                 */
-                if (elem.hasChildNodes()) {
-                    internalFind(results, selector, firstChar, attribute, value, supports, elem.firstChild);
-                }
-            }
-            /**
-             * Move on to next sibling if there is one
-             */
-            elem = elem.nextSibling;
-        }
-    }
-    internalFind(results, selector, firstChar, attribute, value, supports, elem);
-
-    /**
-     * Link list used to store all results
-     */
-    function list() {
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
-
-        list.prototype.add = function (elem) {
-            var newNode = new node(elem);
-            if (this.head === null) {
-                this.head = newNode;
-            } else if (this.tail === null) {
-                this.tail = newNode;
-                this.head.next = newNode;
-            } else {
-                this.tail.next = newNode;
-                this.tail = newNode;
-            }
-            this.length += 1;
-        }
-
-        /**
-         * Stores link list into an array and garbage collects itself
-         */
-        list.prototype.print = function () {
-            if (this.length < 1) {
-                return false;
-            }
-            var array = new Array(this.length);
-            var index = 0;
-            var current = this.head;
-            var previous = current;
-            while (current != null) {
-                array[index] = current.value;
-                current = current.next;
-                previous.value = null;
-                previous.next = null;
-                previous = current;
-                index++;
-            }
-            this.head = null;
-            this.tail = null;
-            this.length = null;
-            return array;
-        }
-    }
-
-    function node(elem) {
-        this.value = elem;
-        this.next = null;
-    }
-
-    /**
-     * Return results stored in link list as an array or false if nothing was found
-     */
-    return results.print();
+				// If selector is a data attribute
+				if ( firstChar === '[' ) {
+					if ( elem.hasAttribute( attribute[0] ) ) {
+						if ( value ) {
+							if ( elem.getAttribute( attribute[0] ) === attribute[1] ) {
+								results.add(elem);
+							}
+						} else {
+							results.add(elem);
+						}
+					}
+				}
+				
+				// If selector is a tag
+				// We can use tagName now again becuase we check nodeType at the start
+				// nodeName is better going forward tagName is for IE 5.5
+				if ( elem.nodeName.toLowerCase() === selector ) {
+					results.add(elem);
+				}
+				
+				/**
+				 * Move down recursively through all children
+				 */
+				if(elem.hasChildNodes()){
+					internalFind(results,selector,firstChar,attribute,value,supports,elem.firstChild);
+				}
+			}
+			/**
+			 * Move on to next sibling if there is one
+			 */
+			elem = elem.nextSibling;
+		}
+	}
+	internalFind(results,selector,firstChar,attribute,value,supports,elem);
+	
+	/**
+	 * Link list used to store all results
+	 */
+	function list(){
+		this.head = null;
+		this.tail = null;
+		this.length = 0;
+		
+		list.prototype.add = function(elem){
+			var newNode = new node(elem);
+			if (this.head===null){
+				this.head = newNode;
+			} else if(this.tail===null) {
+				this.tail = newNode;
+				this.head.next = newNode;
+			} else {
+				this.tail.next = newNode;
+				this.tail = newNode;
+			}
+			this.length += 1;
+		}
+		
+		/**
+		 * Stores link list into an array and garbage collects itself
+		 */
+		list.prototype.print = function(){
+			if(this.length<1){ return false; }
+			var array = new Array(this.length);
+			var index = 0;
+			var current = this.head;
+			var previous = current;
+			while(current!=null){
+				array[index] = current.value;
+				current = current.next;
+				previous.value = null;
+				previous.next = null;
+				previous = current;
+				index++;
+			}
+			this.head = null;
+			this.tail = null;
+			this.length = null;
+			return array;
+		}
+	}
+	
+	function node(elem){
+		this.value = elem;
+		this.next = null;
+	}
+	
+	/**
+	 * Return results stored in link list as an array or false if nothing was found
+	 */
+	return results.print();
 }
 
 /**
@@ -1151,14 +1137,14 @@ function find() {
      */
 
     /* this function is much faster,
-     so if possible we use it. Some IEs
-     are the only ones I know of that
-     need the idiotic second function,
-     generated by an if clause.  */
+      so if possible we use it. Some IEs
+      are the only ones I know of that
+      need the idiotic second function,
+      generated by an if clause.  */
     var add32 = function (a, b) {
         return (a + b) & 0xFFFFFFFF;
     },
-            hex_chr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+        hex_chr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
 
 
     function cmn(q, a, b, x, s, t) {
@@ -1184,9 +1170,9 @@ function find() {
 
     function md5cycle(x, k) {
         var a = x[0],
-                b = x[1],
-                c = x[2],
-                d = x[3];
+            b = x[1],
+            c = x[2],
+            d = x[3];
 
         a = ff(a, b, c, d, k[0], 7, -680876936);
         d = ff(d, a, b, c, k[1], 12, -389564586);
@@ -1264,7 +1250,7 @@ function find() {
 
     function md5blk(s) {
         var md5blks = [],
-                i; /* Andy King said do it this way. */
+            i; /* Andy King said do it this way. */
 
         for (i = 0; i < 64; i += 4) {
             md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
@@ -1274,7 +1260,7 @@ function find() {
 
     function md5blk_array(a) {
         var md5blks = [],
-                i; /* Andy King said do it this way. */
+            i; /* Andy King said do it this way. */
 
         for (i = 0; i < 64; i += 4) {
             md5blks[i >> 2] = a[i] + (a[i + 1] << 8) + (a[i + 2] << 16) + (a[i + 3] << 24);
@@ -1284,13 +1270,13 @@ function find() {
 
     function md51(s) {
         var n = s.length,
-                state = [1732584193, -271733879, -1732584194, 271733878],
-                i,
-                length,
-                tail,
-                tmp,
-                lo,
-                hi;
+            state = [1732584193, -271733879, -1732584194, 271733878],
+            i,
+            length,
+            tail,
+            tmp,
+            lo,
+            hi;
 
         for (i = 64; i <= n; i += 64) {
             md5cycle(state, md5blk(s.substring(i - 64, i)));
@@ -1324,13 +1310,13 @@ function find() {
 
     function md51_array(a) {
         var n = a.length,
-                state = [1732584193, -271733879, -1732584194, 271733878],
-                i,
-                length,
-                tail,
-                tmp,
-                lo,
-                hi;
+            state = [1732584193, -271733879, -1732584194, 271733878],
+            i,
+            length,
+            tail,
+            tmp,
+            lo,
+            hi;
 
         for (i = 64; i <= n; i += 64) {
             md5cycle(state, md5blk_array(a.subarray(i - 64, i)));
@@ -1372,7 +1358,7 @@ function find() {
 
     function rhex(n) {
         var s = '',
-                j;
+            j;
         for (j = 0; j < 4; j += 1) {
             s += hex_chr[(n >> (j * 8 + 4)) & 0x0F] + hex_chr[(n >> (j * 8)) & 0x0F];
         }
@@ -1391,7 +1377,7 @@ function find() {
     if (hex(md51('hello')) !== '5d41402abc4b2a76b9719d911017c592') {
         add32 = function (x, y) {
             var lsw = (x & 0xFFFF) + (y & 0xFFFF),
-                    msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+                msw = (x >> 16) + (y >> 16) + (lsw >> 16);
             return (msw << 16) | (lsw & 0xFFFF);
         };
     }
@@ -1418,12 +1404,12 @@ function find() {
 
             ArrayBuffer.prototype.slice = function (from, to) {
                 var length = this.byteLength,
-                        begin = clamp(from, length),
-                        end = length,
-                        num,
-                        target,
-                        targetArray,
-                        sourceArray;
+                    begin = clamp(from, length),
+                    end = length,
+                    num,
+                    target,
+                    targetArray,
+                    sourceArray;
 
                 if (to !== undefined) {
                     end = clamp(to, length);
@@ -1461,9 +1447,9 @@ function find() {
 
     function utf8Str2ArrayBuffer(str, returnUInt8Array) {
         var length = str.length,
-                buff = new ArrayBuffer(length),
-                arr = new Uint8Array(buff),
-                i;
+           buff = new ArrayBuffer(length),
+           arr = new Uint8Array(buff),
+           i;
 
         for (i = 0; i < length; i += 1) {
             arr[i] = str.charCodeAt(i);
@@ -1487,8 +1473,8 @@ function find() {
 
     function hexToBinaryString(hex) {
         var bytes = [],
-                length = hex.length,
-                x;
+            length = hex.length,
+            x;
 
         for (x = 0; x < length - 1; x += 2) {
             bytes.push(parseInt(hex.substr(x, 2), 16));
@@ -1539,7 +1525,7 @@ function find() {
         this._length += contents.length;
 
         var length = this._buff.length,
-                i;
+            i;
 
         for (i = 64; i <= length; i += 64) {
             md5cycle(this._hash, md5blk(this._buff.substring(i - 64, i)));
@@ -1560,10 +1546,10 @@ function find() {
      */
     MD5.prototype.end = function (raw) {
         var buff = this._buff,
-                length = buff.length,
-                i,
-                tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                ret;
+            length = buff.length,
+            i,
+            tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ret;
 
         for (i = 0; i < length; i += 1) {
             tail[i >> 2] |= buff.charCodeAt(i) << ((i % 4) << 3);
@@ -1640,9 +1626,9 @@ function find() {
      */
     MD5.prototype._finish = function (tail, length) {
         var i = length,
-                tmp,
-                lo,
-                hi;
+            tmp,
+            lo,
+            hi;
 
         tail[i >> 2] |= 0x80 << ((i % 4) << 3);
         if (i > 55) {
@@ -1689,7 +1675,7 @@ function find() {
      */
     MD5.hashBinary = function (content, raw) {
         var hash = md51(content),
-                ret = hex(hash);
+            ret = hex(hash);
 
         return raw ? hexToBinaryString(ret) : ret;
     };
@@ -1715,8 +1701,8 @@ function find() {
      */
     MD5.ArrayBuffer.prototype.append = function (arr) {
         var buff = concatenateArrayBuffers(this._buff.buffer, arr, true),
-                length = buff.length,
-                i;
+            length = buff.length,
+            i;
 
         this._length += arr.byteLength;
 
@@ -1739,10 +1725,10 @@ function find() {
      */
     MD5.ArrayBuffer.prototype.end = function (raw) {
         var buff = this._buff,
-                length = buff.length,
-                tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                i,
-                ret;
+            length = buff.length,
+            tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            i,
+            ret;
 
         for (i = 0; i < length; i += 1) {
             tail[i >> 2] |= buff[i] << ((i % 4) << 3);
@@ -1815,7 +1801,7 @@ function find() {
      */
     MD5.ArrayBuffer.hash = function (arr, raw) {
         var hash = md51_array(new Uint8Array(arr)),
-                ret = hex(hash);
+            ret = hex(hash);
 
         return raw ? hexToBinaryString(ret) : ret;
     };
@@ -1828,19 +1814,19 @@ function find() {
  * @author Timo Huovinen
  * @link http://stackoverflow.com/a/7053197/3193156
  */
-var ready = (function () {
+var ready = (function(){
 
     var readyList,
-            DOMContentLoaded,
-            class2type = {};
-    class2type["[object Boolean]"] = "boolean";
-    class2type["[object Number]"] = "number";
-    class2type["[object String]"] = "string";
-    class2type["[object Function]"] = "function";
-    class2type["[object Array]"] = "array";
-    class2type["[object Date]"] = "date";
-    class2type["[object RegExp]"] = "regexp";
-    class2type["[object Object]"] = "object";
+        DOMContentLoaded,
+        class2type = {};
+        class2type["[object Boolean]"] = "boolean";
+        class2type["[object Number]"] = "number";
+        class2type["[object String]"] = "string";
+        class2type["[object Function]"] = "function";
+        class2type["[object Array]"] = "array";
+        class2type["[object Date]"] = "date";
+        class2type["[object RegExp]"] = "regexp";
+        class2type["[object Object]"] = "object";
 
     var ReadyObj = {
         // Is the DOM ready to be used? Set to true once it occurs.
@@ -1849,30 +1835,30 @@ var ready = (function () {
         // the ready event fires. See #6781
         readyWait: 1,
         // Hold (or release) the ready event
-        holdReady: function (hold) {
-            if (hold) {
+        holdReady: function( hold ) {
+            if ( hold ) {
                 ReadyObj.readyWait++;
             } else {
-                ReadyObj.ready(true);
+                ReadyObj.ready( true );
             }
         },
         // Handle when the DOM is ready
-        ready: function (wait) {
+        ready: function( wait ) {
             // Either a released hold or an DOMready/load event and not yet ready
-            if ((wait === true && !--ReadyObj.readyWait) || (wait !== true && !ReadyObj.isReady)) {
+            if ( (wait === true && !--ReadyObj.readyWait) || (wait !== true && !ReadyObj.isReady) ) {
                 // Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-                if (!document.body) {
-                    return setTimeout(ReadyObj.ready, 1);
+                if ( !document.body ) {
+                    return setTimeout( ReadyObj.ready, 1 );
                 }
 
                 // Remember that the DOM is ready
                 ReadyObj.isReady = true;
                 // If a normal DOM Ready event fired, decrement, and wait if need be
-                if (wait !== true && --ReadyObj.readyWait > 0) {
+                if ( wait !== true && --ReadyObj.readyWait > 0 ) {
                     return;
                 }
                 // If there are functions bound, to execute
-                readyList.resolveWith(document, [ReadyObj]);
+                readyList.resolveWith( document, [ ReadyObj ] );
 
                 // Trigger any bound ready events
                 //if ( ReadyObj.fn.trigger ) {
@@ -1880,34 +1866,34 @@ var ready = (function () {
                 //}
             }
         },
-        bindReady: function () {
-            if (readyList) {
+        bindReady: function() {
+            if ( readyList ) {
                 return;
             }
             readyList = ReadyObj._Deferred();
 
             // Catch cases where $(document).ready() is called after the
             // browser event has already occurred.
-            if (document.readyState === "complete") {
+            if ( document.readyState === "complete" ) {
                 // Handle it asynchronously to allow scripts the opportunity to delay ready
-                return setTimeout(ReadyObj.ready, 1);
+                return setTimeout( ReadyObj.ready, 1 );
             }
 
             // Mozilla, Opera and webkit nightlies currently support this event
-            if (document.addEventListener) {
+            if ( document.addEventListener ) {
                 // Use the handy event callback
-                document.addEventListener("DOMContentLoaded", DOMContentLoaded, false);
+                document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
                 // A fallback to window.onload, that will always work
-                window.addEventListener("load", ReadyObj.ready, false);
+                window.addEventListener( "load", ReadyObj.ready, false );
 
-                // If IE event model is used
-            } else if (document.attachEvent) {
+            // If IE event model is used
+            } else if ( document.attachEvent ) {
                 // ensure firing before onload,
                 // maybe late but safe also for iframes
-                document.attachEvent("onreadystatechange", DOMContentLoaded);
+                document.attachEvent( "onreadystatechange", DOMContentLoaded );
 
                 // A fallback to window.onload, that will always work
-                window.attachEvent("onload", ReadyObj.ready);
+                window.attachEvent( "onload", ReadyObj.ready );
 
                 // If IE and not a frame
                 // continually check to see if the document is ready
@@ -1915,98 +1901,103 @@ var ready = (function () {
 
                 try {
                     toplevel = window.frameElement == null;
-                } catch (e) {
-                }
+                } catch(e) {}
 
-                if (document.documentElement.doScroll && toplevel) {
+                if ( document.documentElement.doScroll && toplevel ) {
                     doScrollCheck();
                 }
             }
         },
-        _Deferred: function () {
+        _Deferred: function() {
             var // callbacks list
-                    callbacks = [],
-                    // stored [ context , args ]
-                    fired,
-                    // to avoid firing when already doing so
-                    firing,
-                    // flag to know if the deferred has been cancelled
-                    cancelled,
-                    // the deferred itself
-                    deferred = {
-                        // done( f1, f2, ...)
-                        done: function () {
-                            if (!cancelled) {
-                                var args = arguments,
-                                        i,
-                                        length,
-                                        elem,
-                                        type,
-                                        _fired;
-                                if (fired) {
-                                    _fired = fired;
-                                    fired = 0;
-                                }
-                                for (i = 0, length = args.length; i < length; i++) {
-                                    elem = args[ i ];
-                                    type = ReadyObj.type(elem);
-                                    if (type === "array") {
-                                        deferred.done.apply(deferred, elem);
-                                    } else if (type === "function") {
-                                        callbacks.push(elem);
-                                    }
-                                }
-                                if (_fired) {
-                                    deferred.resolveWith(_fired[ 0 ], _fired[ 1 ]);
+                callbacks = [],
+                // stored [ context , args ]
+                fired,
+                // to avoid firing when already doing so
+                firing,
+                // flag to know if the deferred has been cancelled
+                cancelled,
+                // the deferred itself
+                deferred  = {
+
+                    // done( f1, f2, ...)
+                    done: function() {
+                        if ( !cancelled ) {
+                            var args = arguments,
+                                i,
+                                length,
+                                elem,
+                                type,
+                                _fired;
+                            if ( fired ) {
+                                _fired = fired;
+                                fired = 0;
+                            }
+                            for ( i = 0, length = args.length; i < length; i++ ) {
+                                elem = args[ i ];
+                                type = ReadyObj.type( elem );
+                                if ( type === "array" ) {
+                                    deferred.done.apply( deferred, elem );
+                                } else if ( type === "function" ) {
+                                    callbacks.push( elem );
                                 }
                             }
-                            return this;
-                        },
-                        // resolve with given context and args
-                        resolveWith: function (context, args) {
-                            if (!cancelled && !fired && !firing) {
-                                // make sure args are available (#8421)
-                                args = args || [];
-                                firing = 1;
-                                try {
-                                    while (callbacks[ 0 ]) {
-                                        callbacks.shift().apply(context, args);//shifts a callback, and applies it to document
-                                    }
-                                } finally {
-                                    fired = [context, args];
-                                    firing = 0;
-                                }
+                            if ( _fired ) {
+                                deferred.resolveWith( _fired[ 0 ], _fired[ 1 ] );
                             }
-                            return this;
-                        },
-                        // resolve with this as context and given arguments
-                        resolve: function () {
-                            deferred.resolveWith(this, arguments);
-                            return this;
-                        },
-                        // Has this deferred been resolved?
-                        isResolved: function () {
-                            return !!(firing || fired);
-                        },
-                        // Cancel
-                        cancel: function () {
-                            cancelled = 1;
-                            callbacks = [];
-                            return this;
                         }
-                    };
+                        return this;
+                    },
+
+                    // resolve with given context and args
+                    resolveWith: function( context, args ) {
+                        if ( !cancelled && !fired && !firing ) {
+                            // make sure args are available (#8421)
+                            args = args || [];
+                            firing = 1;
+                            try {
+                                while( callbacks[ 0 ] ) {
+                                    callbacks.shift().apply( context, args );//shifts a callback, and applies it to document
+                                }
+                            }
+                            finally {
+                                fired = [ context, args ];
+                                firing = 0;
+                            }
+                        }
+                        return this;
+                    },
+
+                    // resolve with this as context and given arguments
+                    resolve: function() {
+                        deferred.resolveWith( this, arguments );
+                        return this;
+                    },
+
+                    // Has this deferred been resolved?
+                    isResolved: function() {
+                        return !!( firing || fired );
+                    },
+
+                    // Cancel
+                    cancel: function() {
+                        cancelled = 1;
+                        callbacks = [];
+                        return this;
+                    }
+                };
 
             return deferred;
         },
-        type: function (obj) {
+        type: function( obj ) {
             return obj == null ?
-                    String(obj) :
-                    class2type[ Object.prototype.toString.call(obj) ] || "object";
+                String( obj ) :
+                class2type[ Object.prototype.toString.call(obj) ] || "object";
         }
     }
     // The DOM ready check for Internet Explorer
     function doScrollCheck() {
-        if (ReadyObj.isReady) {
+        if ( ReadyObj.isReady ) {
             return;
         }
 
@@ -2014,8 +2005,8 @@ var ready = (function () {
             // If IE is used, use the trick by Diego Perini
             // http://javascript.nwbox.com/IEContentLoaded/
             document.documentElement.doScroll("left");
-        } catch (e) {
-            setTimeout(doScrollCheck, 1);
+        } catch(e) {
+            setTimeout( doScrollCheck, 1 );
             return;
         }
 
@@ -2023,192 +2014,55 @@ var ready = (function () {
         ReadyObj.ready();
     }
     // Cleanup functions for the document ready method
-    if (document.addEventListener) {
-        DOMContentLoaded = function () {
-            document.removeEventListener("DOMContentLoaded", DOMContentLoaded, false);
+    if ( document.addEventListener ) {
+        DOMContentLoaded = function() {
+            document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
             ReadyObj.ready();
         };
 
-    } else if (document.attachEvent) {
-        DOMContentLoaded = function () {
+    } else if ( document.attachEvent ) {
+        DOMContentLoaded = function() {
             // Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-            if (document.readyState === "complete") {
-                document.detachEvent("onreadystatechange", DOMContentLoaded);
+            if ( document.readyState === "complete" ) {
+                document.detachEvent( "onreadystatechange", DOMContentLoaded );
                 ReadyObj.ready();
             }
         };
     }
-    function ready(fn) {
+    function ready( fn ) {
         // Attach the listeners
         ReadyObj.bindReady();
 
-        var type = ReadyObj.type(fn);
+        var type = ReadyObj.type( fn );
 
         // Add the callback
-        readyList.done(fn);//readyList is result of _Deferred()
+        readyList.done( fn );//readyList is result of _Deferred()
     }
     return ready;
 })();
 
-
-function loadMemoryGame() {
-    var cards = choosenTopic;
-    var size = null;
-    var shuffledCards = null;
-
-    cards = storage.getFlashCards(cards);
-    size = cards.length * 2;
-    shuffledCards = shuffleCards(cards);
-    createNewBoard(size, shuffledCards, cards);
-
-}
-
-
-function createNewBoard(size, shuffledCards, cards) {
-    var board = document.createElement("div");
-    var content = document.getElementById("content");
-    var card = null;
-    var front = null;
-    var back = null;
-
-    content.innerHTML = "";
-    board.id = "memory-board";
-
-    for (var i = 0; i < size; i++) {
-        card = document.createElement("div");
-        front = document.createElement("div");
-        back = document.createElement("div");
-
-        card.id = i;
-
-        front.className = "front";
-        back.className = "back";
-        card.className = "card";
-
-        content.appendChild(card);
-        content.id = "memory-board";
-        //board.appendChild(card);
-        card.appendChild(front);
-        card.appendChild(back);
-
-        card.addEventListener("click", function () {
-            flipCard(this, shuffledCards, cards);
-        });
-
-    }
-}
-
-
-function flipCard(card, shuffledCards, cards) {
-
-    var number = parseInt(card.id);
-    var flippedCards = [];
-    var count = 0;
-    var showedCards = null;
-
-    flippedCards.push(card.id);
-
-    count = document.getElementsByClassName("flipped").length;
-
-    if (count >= 2) {
-        return;
-    }
-
-    card.firstChild.className = "flipped";
-    card.firstChild.innerHTML = shuffledCards[number];
-
-    count = document.getElementsByClassName("flipped").length;
-    showedCards = document.getElementsByClassName("flipped");
-
-    if (count == 2) {
-
-        var valid = convert(card, cards);
-
-        if (valid == false) {
-
-            function flipBack() {
-                for (var i = 0; i <= flippedCards.length; i++) {
-                    showedCards[0].innerHTML = "";
-                    showedCards[0].className = "front";
-                }
-            }
-            setTimeout(flipBack, 2000);
-        }
-    }
-}
-
-
-function convert(card, cards) {
-    var flippedCards = document.getElementsByClassName("flipped");
-    var term = null;
-    var definition = null;
-    var valid = false;
-    var j = 0;
-
-    for (var i = 0; i < cards.length; i++) {
-        term = cards[i].term;
-        definition = cards[i].definition;
-
-
-        if (term == flippedCards[j].innerHTML || definition == flippedCards[j].innerHTML) {
-            if (term == flippedCards[j + 1].innerHTML || definition == flippedCards[j + 1].innerHTML) {
-                valid = true;
-                flippedCards[j].className = "correct";
-                flippedCards[j].className = "correct";
-                return valid;
-            }
-        }
-    }
-    return valid;
-}
-
-
-function shuffleCards(cards) {
-    var replacedCard = null;
-    var randomNumber = 0;
-    var data = [];
-    var temp = null;
-
-    for (var i = 0; i < cards.length; i++) {
-        data.push(cards[i].term);
-        data.push(cards[i].definition);
-    }
-
-    for (var i = 0; i < data.length; i++) {
-        randomNumber = Math.floor(Math.random() * data.length);
-        temp = data[i];
-        data[i] = data[randomNumber];
-        data[randomNumber] = temp;
-    }
-    return data;
-}
-
-
 /**
  * PLACE ANY FUNCTIONS THAT NEED TO RUN ON PAGE LOAD INSIDE HERE
  */
-ready(function () {
-    /**
-     * Make global storage object so we all can use local storage
-     */
-    storage = new storage();
-
-    /**
-     * Load the first page or create an empty object so we're ready for the user to add subjects
-     */
-    loadSubjects();
-
-    /**
-     * Global variable to track which subject we are in
-     */
-    choosenSubject = null;
-
-    /**
-     * Global variable to track which topic we are in. This is when a user clicks
-     * on a topic from the choosen subject
-     */
-    choosenTopic = null;
-
-
+ready(function(){
+	/**
+	 * Make global storage object so we all can use local storage
+	 */
+	storage = new storage();
+	
+	/**
+	 * Load the first page or create an empty object so we're ready for the user to add subjects
+	 */
+	loadSubjects();
+	
+	/**
+	 * Global variable to track which subject we are in
+	 */
+	choosenSubject = null;
+	
+	/**
+	 * Global variable to track which topic we are in. This is when a user clicks
+	 * on a topic from the choosen subject
+	 */
+	choosenTopic = null;
 });
-

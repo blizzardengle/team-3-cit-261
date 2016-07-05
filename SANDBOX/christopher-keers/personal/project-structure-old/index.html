@@ -1,28 +1,26 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>DOM</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <link rel="stylesheet" type="text/css" href="memory-style.css">
-    </head>
-    <body>
-        <div id="wrapper">
-            <div class="row">
-                This is the header to our application. This is where the menu and things that need to stay for every page should go. Right now it just has these buttons that allow you to navigate back to where you came from and add a new subject list.<br><br>
-                <input type="text" name="subject" id="form-subject" placeholder="Subject / Class"> <input type="button" value="Add" onclick="addSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="text" name="topic" id="form-topic" placeholder="Topic / Name of Study List"> <input type="button" value="Add" onclick="addTopic();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="button" value="Add Card" onclick="addCard();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="button" value="Save Cards" onclick="saveCards();">
-                <br>
-                <br>
-                <input type="button" value="Go Back (LEAVE SUBEJCT)" onclick="chooseSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                <input type="button" value="Go Back (LEAVE FLASH CARD SET)" onclick="chooseTopic();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                <input type="button" value="Load Memory Match Game" onclick="loadMemoryGame();">
-            </div>
-            <div id="content" class="row">
-                This is the home page to our application. It is using objects to track everything you interact with.<br>
-            </div>
-        </div>
-        <!-- SCRIPTS -->
-        <script type="text/javascript" src="script.js"></script>
-        <script type="text/javascript" src="helper.js"></script>
-    </body>
+<head>
+  <meta charset="utf-8">
+  <title>DOM</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="wrapper">
+		<div class="row">
+			This is the header to our application. This is where the menu and things that need to stay for every page should go. Right now it just has these buttons that allow you to navigate back to where you came from and add a new subject list.<br><br>
+			<input type="text" name="subject" id="form-subject" placeholder="Subject / Class"> <input type="button" value="Add" onclick="addSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="text" name="topic" id="form-topic" placeholder="Topic / Name of Study List"> <input type="button" value="Add" onclick="addTopic();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="button" value="Add Card" onclick="addCard();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <input type="button" value="Save Cards" onclick="saveCards();">
+			<br>
+			<br>
+			<input type="button" value="Go Back (LEAVE SUBEJCT)" onclick="chooseSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<input type="button" value="Go Back (LEAVE FLASH CARD SET)" onclick="chooseTopic();">
+		</div>
+		<div id="content" class="row">
+			This is the home page to our application. It is using objects to track everything you interact with.<br>
+		</div>
+	</div>
+	<!-- SCRIPTS -->
+	<script type="text/javascript" src="script.js"></script>
+	<script type="text/javascript" src="helper.js"></script>
+</body>
 </html>
