@@ -50,6 +50,7 @@
 .title-row {
 	background-color: #F7F4F0;
 	font-weight: bold;
+	overflow: hidden;
 }
 .flashcard-set {
 	position: relative;
