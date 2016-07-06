@@ -1,0 +1,1 @@
+//This is the commands to get the information from the FlashCards
