@@ -4,33 +4,62 @@
 
 
 </head>
-<body onload = "load()">
+<body>
 
 
-
-<h2>Local Storage</h2>
+<h1>Local Storage</h1>
+<h2>Example 1</h2>
 <input type="text" id="textfield"/>
 <input type="button" value="save" onclick="save()"/>
-<input type="button" value="remove" onclick="remove()"/>
+<input type="button" value="remove" onclick="destroy()"/>
 
-<p id="value"> This is the value that is in local storage: </p>
+
+<p>This is the value that is in local storage: </p>
+<p id="result"></p>
 
 <script type="text/javascript">
 function save() {
 	var fieldValue = document.getElementById('textfield').value;
-	localStorage.setItem('text', fieldValue);
+        if (fieldValue===''||fieldValue===null) {
+            alert("Please enter something");
+        } else {
+	localStorage.setItem('value1', fieldValue);
+        load();
+         }
 }
 
 function load() {
-	var storedValue = localStorage.getItem('text');
-	if (storedValue) {
-		document.getElementById('textfield').value = storedValue;
-	}
+	var storedValue = localStorage.getItem('value1');
+	if (storedValue!==null) {
+		document.getElementById('result').innerHTML = storedValue;
+	} else {
+            alert("There is nothing in storage!");
+        }
 }	
 
-function remove() {
-	document.getElementById('textfield').setAttribute('value','saljsldfj');	
-	localStorage.removeItem('text');
+function destroy() {
+	localStorage.removeItem('value1');
+}
+</script>
+
+<h2>Example 2</h2>
+
+<p><button onclick="clickCounter()" type="button">Click me!</button></p>
+<div id="result2"></div>
+<p>Click the button to see the counter increase.</p>
+
+<script>
+function clickCounter() {
+    if(typeof(Storage) !== "undefined") {
+        if (localStorage.clickcount) {
+            localStorage.clickcount = Number(localStorage.clickcount)+1;
+        } else {
+            localStorage.clickcount = 1;
+        }
+        document.getElementById("result2").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
+    } else {
+        document.getElementById("result2").innerHTML = "Sorry, your browser does not support web storage...";
+    }
 }
 </script>
 
