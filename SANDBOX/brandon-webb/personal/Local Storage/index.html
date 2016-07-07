@@ -9,7 +9,7 @@
 
 <h1>Local Storage</h1>
 <h2>Example 1</h2>
-<input type="text" id="textfield"/>
+<input type="text" id="textfield"/> 
 <input type="button" value="save" onclick="save()"/>
 <input type="button" value="remove" onclick="destroy()"/>
 
@@ -18,7 +18,8 @@
 <p id="result"></p>
 
 <script type="text/javascript">
-function save() {
+
+function save() { //This function saves the value entered above to local storage
 	var fieldValue = document.getElementById('textfield').value;
         if (fieldValue===''||fieldValue===null) {
             alert("Please enter something");
@@ -27,8 +28,7 @@ function save() {
         load();
          }
 }
-
-function load() {
+function load() { //This function loads whatevers in storage at the value
 	var storedValue = localStorage.getItem('value1');
 	if (storedValue!==null) {
 		document.getElementById('result').innerHTML = storedValue;
@@ -36,8 +36,7 @@ function load() {
             alert("There is nothing in storage!");
         }
 }	
-
-function destroy() {
+function destroy() { //This function destroys the value that is in local storage
 	localStorage.removeItem('value1');
 }
 </script>
@@ -48,7 +47,7 @@ function destroy() {
 <div id="result2"></div>
 <p>Click the button to see the counter increase.</p>
 
-<script>
+<script> //This function basically checks that storage is there and then increasers a counter
 function clickCounter() {
     if(typeof(Storage) !== "undefined") {
         if (localStorage.clickcount) {
@@ -63,5 +62,7 @@ function clickCounter() {
 }
 </script>
 
+<h2>Example 3</h2>
+<a href="example2.html">Click Here</a>
 </body>
 </html>

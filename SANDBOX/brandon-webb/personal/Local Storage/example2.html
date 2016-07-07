@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script>
-function clickCounter() {
-    if(typeof(Storage) !== "undefined") {
-        if (localStorage.clickcount) {
-            localStorage.clickcount = Number(localStorage.clickcount)+1;
-        } else {
-            localStorage.clickcount = 1;
-        }
-        document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
-    } else {
-        document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
-    }
-}
-</script>
+    <title>Complex</title>
 </head>
 <body>
-<p><button onclick="clickCounter()" type="button">Click me!</button></p>
-<div id="result"></div>
-<p>Click the button to see the counter increase.</p>
-<p>Close the browser tab (or window), and try again, and the counter will continue to count (is not reset).</p>
+    <h1>Enter three of your Favorite Ice Creams</h1>
+    <p>Flavor 1</p>
+    <input type="text" id="icecream1"/> 
+    <p>Flavor 2</p>
+    <input type="text" id="icecream2"/> 
+    <p>Flavor 3</p>
+    <input type="text" id="icecream3"/> 
+    <input type="button" value="Store and Show" onclick="display()"/>
+    <br>
+    <p>These are the values stored as a string</p>
+    <div id="result1"></div>
+    <p>These are the  values store as a object</p>
+    <div id="result2"></div>
+    
+    <h1>Unload from Storage</h1>
+    <input type="button" value="Pull from storage" onclick="pull()"/>
+    <p>These are the values pulled from storage</p>
+    <div id="result3"></div>
+    
+    <script>
+        function display() {
+        var flavors = "[" + document.getElementById('icecream1').value + ","
+                             + document.getElementById('icecream2').value + ","
+                             + document.getElementById('icecream3').value + "]";
+        document.getElementById('result1').innerHTML = JSON.stringify(flavors);
+        document.getElementById('result2').innerHTML = flavors;
+        localStorage.setItem("flavors", JSON.stringify(flavors));
+        }
+        function pull() {
+            var retrievedData = localStorage.getItem("flavors");
+            var flavors = JSON.parse(retrievedData);
+            document.getElementById('result3').innerHTML = flavors;
+        }
+    </script>
+
+    
+    
+    
+
 </body>
 </html>
