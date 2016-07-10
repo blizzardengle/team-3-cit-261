@@ -1174,6 +1174,33 @@ function chooseTopic(){
 		},
 		
 		/**
+         * Retreive all flash cards from a topic folder
+         * @param {string} Folder name containing flashcards
+         * @returns {array of objects} returns an array containing all the flash card object
+         * for a choosen topic
+         */
+
+        getFlashCards: function (item) {
+            var cards = [];
+
+            for (var i = 0; i < localStorage.length; i++) {
+
+                var current = item.head;
+                var next = current.next;
+                cards.push(current);
+
+                while (next !== null) {
+                    current = next;
+                    next = current.next;
+                    cards.push(current);
+                }
+                return cards;
+            }
+        },
+
+
+		
+		/**
 		 * Remove a file from local storage. This only removes one file and does
 		 * not remove any other files this one may link to
 		 * @param {string} filename the name of the file to delete
@@ -2339,6 +2366,198 @@ var ready = (function(){
     return ready;
 })();
 
+
+/**
+* Functions related to the memory match game application start here 
+*/
+
+function loadMemoryGame() {
+    var cards = choosenTopic;
+    var size = null;
+    var shuffledCards = null;
+    moveCounter =0;
+
+    cards = storage.getFlashCards(cards);
+    size = cards.length * 2;
+    shuffledCards = shuffleCards(cards);
+    createNewBoard(size, shuffledCards, cards);
+
+}
+
+
+function createNewBoard(size, shuffledCards, cards) {
+    var board = document.createElement("div");
+    var content = document.getElementById("content");
+    var card = null;
+    var front = null;
+    var back = null;
+    var result = null;
+
+    content.innerHTML = "";
+    board.id = "memory-board";
+
+    result = document.createElement("div");
+    result.id = "result";
+
+    board.appendChild(result);
+
+    for (var i = 0; i < size; i++) {
+        card = document.createElement("div");
+        front = document.createElement("div");
+        back = document.createElement("div");
+
+        card.id = i;
+
+        front.className = "front";
+        back.className = "back";
+        card.className = "card";
+
+        content.appendChild(board);
+        board.appendChild(card);
+        card.appendChild(front);
+        card.appendChild(back);
+        
+
+        card.addEventListener("click", function () {
+            document.getElementById("result").innerHTML="";
+            flipCard(this, shuffledCards, cards);
+            var done = document.getElementsByClassName("correct");
+            if (done.length == size){
+            	var result = document.getElementById("result");
+            	result.innerHTML="You have finished in "+ moveCounter + " moves";
+            	result.id = "winner";
+            	result.className = "winner";
+            }
+        });
+    }
+}
+
+function flipCard(card, shuffledCards, cards) {
+	
+    var par = document.createElement("div");
+    var flippedCards = [];
+    var count = 0;
+    var showedCards = null;
+    var sub = null;
+    var complete = null;
+    var completeNext = null;
+    var fullSentence = null;
+
+    flippedCards.push(card.id);
+
+    count = document.getElementsByClassName("flipped").length;
+
+    if (count >= 2) {
+        return;
+    }
+
+    card.firstChild.className = "flipped";
+    card.firstChild.appendChild(par);
+    
+    count = document.getElementsByClassName("flipped").length;
+    showedCards = document.getElementsByClassName("flipped");
+    
+	sub = addElipse(shuffledCards[card.id]);
+	if (sub === null){
+		card.firstChild.firstChild.innerHTML = shuffledCards[card.id];
+	}else{
+		card.firstChild.firstChild.innerHTML = sub+" ...";
+		fullSentence = shuffledCards[card.id];
+		var result = document.getElementById("result");
+		result.innerHTML = "Full Text: "+ fullSentence;
+	}
+
+    if (count == 2) {
+        var number = showedCards[0].parentNode.id;
+        var number2 = showedCards[1].parentNode.id;
+        var valid = convert(card, cards, shuffledCards, number, number2);
+
+        moveCounter = moveCounter+1;
+
+        if (valid == false) {
+
+            function flipBack() {
+                for (var i = 0; i <= flippedCards.length; i++) {
+                    showedCards[0].innerHTML = "";
+                    showedCards[0].className = "front";
+                }
+            }
+            setTimeout(flipBack, 2000);
+        }
+    }
+}
+
+
+function convert(card, cards, shuffledCards, number, number2) {
+   	var flippedCards = document.getElementsByClassName("flipped");	
+    var term = null;
+    var definition = null;
+    var completeNext = null;
+    var complete = null;
+    var valid = false;
+    var j = 0;
+
+    for (var i = 0; i < cards.length; i++) {
+        term = cards[i].term;
+        definition = cards[i].definition;
+
+
+        complete = shuffledCards[number];
+        completeNext = shuffledCards[number2];
+
+        if (term == complete || definition == complete) {
+            if (term == completeNext || definition == completeNext) {
+                valid = true;
+                flippedCards[0].className = "correct";
+                flippedCards[0].className = "correct";
+                return valid;
+            }
+        }
+    }
+    return valid;
+}
+
+
+function shuffleCards(cards) {
+    var replacedCard = null;
+    var randomNumber = 0;
+    var data = [];
+    var temp = null;
+
+    for (var i = 0; i < cards.length; i++) {
+        data.push(cards[i].term);
+        data.push(cards[i].definition);
+    }
+
+    for (var i = 0; i < data.length; i++) {
+        randomNumber = Math.floor(Math.random() * data.length);
+        temp = data[i];
+        data[i] = data[randomNumber];
+        data[randomNumber] = temp;
+    }
+    return data;
+}
+
+function addElipse(word){
+	var white = 0;
+	var sub = null;
+
+	if (word.length>54){
+
+		word = word.trim();
+		sub = word.substring(0,53);
+		white = sub.lastIndexOf(" ");
+		sub = word.substring(0,white);
+	}
+
+	return sub;
+}
+
+
+/**
+* Functions related to the memory match game end here
+*/
+
 /**
  * PLACE ANY FUNCTIONS THAT NEED TO RUN ON PAGE LOAD INSIDE HERE
  * DO NOT PLAVE ANY OTHER CODE BELOW THIS FUNCTION!!!
@@ -2371,6 +2590,11 @@ ready(function(){
 	 * Load game links
 	 */
 	genGameLinks();
+
+	/**
+	 * Count Moves
+	 */	
+	moveCounter = null;
 });
 /**
  *  DO NOT PLAVE ANY OTHER CODE BELOW THIS FUNCTION!!!

@@ -2070,9 +2070,16 @@ function createNewBoard(size, shuffledCards, cards) {
     var card = null;
     var front = null;
     var back = null;
+    var result = null;
+    var body = null;
 
     content.innerHTML = "";
     board.id = "memory-board";
+
+    result = document.createElement("div");
+    result.id = "result";
+
+    board.appendChild(result);
 
     for (var i = 0; i < size; i++) {
         card = document.createElement("div");
@@ -2085,26 +2092,28 @@ function createNewBoard(size, shuffledCards, cards) {
         back.className = "back";
         card.className = "card";
 
-        content.appendChild(card);
-        content.id = "memory-board";
-        //board.appendChild(card);
+        content.appendChild(board);
+        board.appendChild(card);
         card.appendChild(front);
         card.appendChild(back);
+        
 
         card.addEventListener("click", function () {
             flipCard(this, shuffledCards, cards);
         });
-
     }
 }
 
-
 function flipCard(card, shuffledCards, cards) {
-
-    var number = parseInt(card.id);
+	
+    var par = document.createElement("div");
     var flippedCards = [];
     var count = 0;
     var showedCards = null;
+    var sub = null;
+    var complete = null;
+    var completeNext = null;
+    var fullSentence = null;
 
     flippedCards.push(card.id);
 
@@ -2115,14 +2124,25 @@ function flipCard(card, shuffledCards, cards) {
     }
 
     card.firstChild.className = "flipped";
-    card.firstChild.innerHTML = shuffledCards[number];
-
+    card.firstChild.appendChild(par);
+    
     count = document.getElementsByClassName("flipped").length;
     showedCards = document.getElementsByClassName("flipped");
+    
+	sub = addElipse(shuffledCards[card.id]);
+	if (sub === null){
+		card.firstChild.firstChild.innerHTML = shuffledCards[card.id];
+	}else{
+		card.firstChild.firstChild.innerHTML = sub+" ...";
+		fullSentence = shuffledCards[card.id];
+		var result = document.getElementById("result");
+		result.innerHTML = "Full Text: "+ fullSentence;
+	}
 
     if (count == 2) {
-
-        var valid = convert(card, cards);
+        var number = showedCards[0].parentNode.id;
+        var number2 = showedCards[1].parentNode.id;
+        var valid = convert(card, cards, shuffledCards, number, number2);
 
         if (valid == false) {
 
@@ -2138,10 +2158,12 @@ function flipCard(card, shuffledCards, cards) {
 }
 
 
-function convert(card, cards) {
-    var flippedCards = document.getElementsByClassName("flipped");
+function convert(card, cards, shuffledCards, number, number2) {
+   	var flippedCards = document.getElementsByClassName("flipped");	
     var term = null;
     var definition = null;
+    var completeNext = null;
+    var complete = null;
     var valid = false;
     var j = 0;
 
@@ -2150,11 +2172,14 @@ function convert(card, cards) {
         definition = cards[i].definition;
 
 
-        if (term == flippedCards[j].innerHTML || definition == flippedCards[j].innerHTML) {
-            if (term == flippedCards[j + 1].innerHTML || definition == flippedCards[j + 1].innerHTML) {
+        complete = shuffledCards[number];
+        completeNext = shuffledCards[number2];
+
+        if (term == complete || definition == complete) {
+            if (term == completeNext || definition == completeNext) {
                 valid = true;
-                flippedCards[j].className = "correct";
-                flippedCards[j].className = "correct";
+                flippedCards[0].className = "correct";
+                flippedCards[0].className = "correct";
                 return valid;
             }
         }
@@ -2181,6 +2206,110 @@ function shuffleCards(cards) {
         data[randomNumber] = temp;
     }
     return data;
+}
+
+function addElipse(word){
+	var white = 0;
+	var sub = null;
+
+	if (word.length>54){
+
+		word = word.trim();
+		sub = word.substring(0,53);
+		white = sub.lastIndexOf(" ");
+		sub = word.substring(0,white);
+	}
+
+	return sub;
+}
+
+function createFlashCards() {
+    document.getElementById('content').innerHTML = "";
+
+    var current = choosenTopic.head; // This grabs the head value of your flashCardSet list which is a flashCards object (link)
+    var html = "<div id='cards'>";
+    var i = 1;
+    var next = 0;
+	while(current!==null){
+            // creates each card
+            html += "<div id='" + i + "' class='invisible' onclick='flip(\"back\", \"" + current.definition + "\")'>";
+            html += "<p class='frontText'>" + current.term + "</p>";
+            html += "<p class='invisibleText'>" + current.definition + "</p></div>"
+            i++;
+            current = current.next; // Make sure to move on to the next record or you'll create an infinite loop
+	}
+    html += "<input type='button' id='back' value='back' onclick='back(null)'><input type='button' id='next' value='next' onclick='next(2)'></div>";
+    document.getElementById('content').innerHTML = html;
+    slideIn(1);
+    
+}
+
+function slideIn(id) {
+    var card = document.getElementById(id);// this grabs the desired card
+    card.setAttribute("class", "front"); // this changes the card from invisible to show front
+    
+}
+
+function slideOut(id) {
+    var card = document.getElementById(id);// this grabs the desired card
+    card.setAttribute("class", "invisible"); // this changes the card from invisible to show front
+    
+}
+
+function back(i) {
+    var nextCard = document.getElementById(i);
+    if (nextCard == null) {
+        return;
+    } else {
+        var currentId = i + 1;
+        slideOut(currentId);
+        slideIn(i);
+        var backId = i - 1;
+        var replacmentForBackButton = "back(" + backId + ")";
+        var backButton = document.getElementById('back');
+        backButton.setAttribute("onclick", replacmentForBackButton);
+        var replacmentForNextButton = "next(" + currentId + ")";
+        var nextButton = document.getElementById('next');
+        nextButton.setAttribute("onclick", replacmentForNextButton);
+    }
+}
+
+function next(i) {
+    var nextCard = document.getElementById(i);
+    if (nextCard == null) {
+        return;
+    } else {
+        var currentId = i - 1;
+        slideOut(currentId);
+        slideIn(i);
+        var nextId = i + 1;
+        var replacmentForNextButton = "next(" + nextId + ")";
+        var nextButton = document.getElementById('next');
+        nextButton.setAttribute("onclick", replacmentForNextButton);
+        var replacmentForBackButton = "back(" + currentId + ")";
+        var backButton = document.getElementById('back');
+        backButton.setAttribute("onclick", replacmentForBackButton);
+    }
+}
+
+function flip(side, textInput) {
+    var card = null;
+    var done = false;
+    for (var i = 1; done == false; i++) {
+        card =  document.getElementById(i);
+        var classType = card.getAttribute('class');
+        if (classType != "invisible") {
+            done = true;
+        }
+    }
+    var currentText = card.childNodes[0].childNodes[0].nodeValue;
+    var currentc = 'flip("' + card.getAttribute('class') + '", "' + currentText + '")';
+    card.setAttribute('onclick', currentc);
+    var text = document.createTextNode(textInput);
+    card.setAttribute('class', side); 
+   setTimeout(function(){ card.childNodes[0].replaceChild(text, card.childNodes[0].childNodes[0]); if (side == 'back') { card.childNodes[0].setAttribute('class', side);} else card.childNodes[0].setAttribute('class', ''); }, 250);
+      
+      
 }
 
 

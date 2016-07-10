@@ -94,3 +94,63 @@ body, html {
 #pop-up-edit-card .set .save-edit .button {
 	display: inline-block;
 }
+.invisible {
+    display:none;
+  
+}
+
+div.front {
+    
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:200px;
+    width:300px;
+    height:200px;
+    text-align:center;
+    padding:10px;
+    border:solid black 1px;
+    background-color:#e6e6e6;
+    
+}
+
+#cards p {
+    margin-top:20px;
+  
+}
+
+div.back {
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:200px;
+    width:300px;
+    height:200px;
+    text-align:center;
+    padding:10px;
+    border:solid black 1px;
+    background-color:#e6e6e6;
+   
+}
+
+div.back p {
+     margin-top:20px;
+}
+
+
+.back {
+     -webkit-transform: rotateY(180deg); /* Safari */
+    transform: rotateY(180deg);
+}
+
+p.back {
+    -webkit-transform: rotateY(180deg); /* Safari */
+    transform: rotateY(180deg);
+}
+
+#cards div {
+    transition: 1s;
+    -webkit-transition: -webkit-transform 1s; 
+}
+
+.invisibleText {
+    display:none;
+}
