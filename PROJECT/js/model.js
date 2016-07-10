@@ -33,12 +33,32 @@ function printType(num){
 
 /**
  * Print out the HTML select list for the flash card types
- * author Christopher Keers
+ * @author Christopher Keers
  * @param {type} id unique id of object this list belongs to
  * @returns {String} HTML select list of type options
  */
 function printTypeSelect(id){
 	return '<select name="card-type" data-card-type="'+id+'"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select>';
+}
+
+/**
+ * Creat the buttons that will launch our games
+ * @author Christopher Keers
+ */
+function genGameLinks(){
+	var games = {
+		"Memory Match":"loadMemoryGame",  // <=== Notice the , after each line
+		"Dont Clcik":"fakelink",
+		"Dont Click":"fakelink" // <=== The last line should not have the comma
+	};
+	
+	var html = "";
+	
+	for (var key in games) {
+		html += '<li onclick="'+games[key]+'();">'+key+'</li>';
+	}
+	
+	document.getElementById("game-menu").innerHTML = html;
 }
 
 /**
@@ -94,6 +114,16 @@ function genSubjectTiles(){
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+	
+	/**
+	 * Update add button and turn on input
+	 */
+	var btn = find(".btn-wrapper",document.getElementById("controls"));
+	btn = btn[0];
+	btn.onclick = addSubject;
+	document.getElementById("form-subject").placeholder = "Add Class / Subject";
+	document.getElementById("form-subject").style.display = "inline-block";
+	document.getElementById("save-btn-wrapper").style.display = "none";
 }
 
 /**
@@ -125,6 +155,10 @@ function saveSubjectTile(id){
 	topicHtml = topicHtml[0];
 	var topic = find("[data-topic-name]",startingPoint);
 	topic = topic[0].value;
+	var controls = find(".controls",startingPoint);
+	controls = controls[0];
+	
+	controls.innerHTML = '<div class="name" onclick="loadChoosenSubject(\''+id+'\')">'+id+'</div><div class="controls"><div class="edit" title="Edit" onclick="editSubjectTile(\''+id+'\');"><i class="fa fa-pencil"></i></div><div class="remove" title="Remove" onclick="removeSubjectTile(\''+id+'\')"><i class="fa fa-trash-o"></i></div></div>';
 	
 	if(topic.length>0){
 		topicHtml.innerHTML = topic;
@@ -172,24 +206,26 @@ function removeSubjectTile(id){
 function addSubject(){
 	var name = document.getElementById("form-subject").value;
 	document.getElementById("form-subject").value = "";
-	var newFile = subjects.add(name);
-	if(newFile!==false){
-		// Save an empty collection object into this new subject
-		if(storage.update(newFile,new collection(name).serialize())){
-			// Save new subjects structure
-			if(storage.update("SUBJECTS",subjects.serialize())){
-				genSubjectTiles();
+	if(name.length>1){
+		var newFile = subjects.add(name);
+		if(newFile!==false){
+			// Save an empty collection object into this new subject
+			if(storage.update(newFile,new collection(name).serialize())){
+				// Save new subjects structure
+				if(storage.update("SUBJECTS",subjects.serialize())){
+					genSubjectTiles();
+				} else {
+					// Error out
+					console.log("We were unable to update a required file please re-load the page and try again.");
+				}
 			} else {
 				// Error out
 				console.log("We were unable to update a required file please re-load the page and try again.");
 			}
 		} else {
 			// Error out
-			console.log("We were unable to update a required file please re-load the page and try again.");
+			console.log("We were unable to create a required file please re-load the page and try again.");
 		}
-	} else {
-		// Error out
-		console.log("We were unable to create a required file please re-load the page and try again.");
 	}
 }
 
@@ -230,6 +266,16 @@ function genTopicTiles(){
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+	
+	/**
+	 * Update add button and turn on input
+	 */
+	var btn = find(".btn-wrapper",document.getElementById("controls"));
+	btn = btn[0];
+	btn.onclick = addTopic;
+	document.getElementById("form-subject").placeholder = "Add Topic / Study Set";
+	document.getElementById("form-subject").style.display = "inline-block";
+	document.getElementById("save-btn-wrapper").style.display = "none";
 }
 
 /**
@@ -261,6 +307,10 @@ function saveTopicTile(id){
 	topicHtml = topicHtml[0];
 	var topic = find("[data-topic-name]",startingPoint);
 	topic = topic[0].value;
+	var controls = find(".controls",startingPoint);
+	controls = controls[0];
+	
+	controls.innerHTML = '<div class="name" onclick="loadFlashCards(\''+id+'\')">'+id+'</div><div class="controls"><div class="edit" title="Edit" onclick="editTopicTile(\''+id+'\');"><i class="fa fa-pencil"></i></div><div class="remove" title="Remove" onclick="removeTopicTile(\''+id+'\')"><i class="fa fa-trash-o"></i></div></div>';
 	
 	if(topic.length>0){
 		topicHtml.innerHTML = topic;
@@ -309,26 +359,28 @@ function removeTopicTile(id){
  * @author Christopher Keers
  */
 function addTopic(){
-	var name = document.getElementById("form-topic").value;
-	document.getElementById("form-topic").value = "";
-	var newFile = choosenSubject.add(name);
-	if(newFile!==false){
-		// Save an empty flashcard set object into this new topic
-		if(storage.update(newFile,new flashCardSet(name,newFile))){
-			// Save new subjects structure
-			if(storage.update(choosenSubject.id,choosenSubject.serialize())){
-				genTopicTiles();
+	var name = document.getElementById("form-subject").value;
+	document.getElementById("form-subject").value = "";
+	if(name.length>1){
+		var newFile = choosenSubject.add(name);
+		if(newFile!==false){
+			// Save an empty flashcard set object into this new topic
+			if(storage.update(newFile,new flashCardSet(name,newFile))){
+				// Save new subjects structure
+				if(storage.update(choosenSubject.id,choosenSubject.serialize())){
+					genTopicTiles();
+				} else {
+					// Error out
+					console.log("We were unable to update a required file please re-load the page and try again.");
+				}
 			} else {
 				// Error out
 				console.log("We were unable to update a required file please re-load the page and try again.");
 			}
 		} else {
 			// Error out
-			console.log("We were unable to update a required file please re-load the page and try again.");
+			console.log("We were unable to create a required file please re-load the page and try again.");
 		}
-	} else {
-		// Error out
-		console.log("We were unable to create a required file please re-load the page and try again.");
 	}
 }
 
@@ -367,6 +419,25 @@ function genFlashCards(){
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+	
+	/**
+	 * Update add button
+	 */
+	var btn = find(".btn-wrapper",document.getElementById("controls"));
+	btn = btn[0];
+	btn.onclick = addCard;
+	document.getElementById("form-subject").style.display = "none";
+	document.getElementById("save-btn-wrapper").style.display = "inline-block";
+	
+	/**
+	 * Turn on the back button and play button
+	 */
+	var btn = find(".back-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "inline-block";
+	btn = find(".game-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "inline-block";
 }
 
 /**
@@ -553,6 +624,17 @@ function removeCard(id){
 function chooseSubject(){
 	choosenSubject = null;
 	choosenTopic = null; // This allows us to jump from a flash card set back to the main menu
+	
+	/**
+	 * Hide the back button and the play button
+	 */
+	var btn = find(".back-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	btn = find(".game-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	
 	genSubjectTiles();
 }
 
@@ -562,6 +644,17 @@ function chooseSubject(){
  */
 function chooseTopic(){
 	choosenTopic = null;
+	
+	/**
+	 * Hide the back button and play button
+	 */
+	var btn = find(".back-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	btn = find(".game-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	
 	genTopicTiles();
 } 
 
@@ -2273,6 +2366,11 @@ ready(function(){
 	 * on a topic from the choosen subject
 	 */
 	choosenTopic = null;
+	
+	/**
+	 * Load game links
+	 */
+	genGameLinks();
 });
 /**
  *  DO NOT PLAVE ANY OTHER CODE BELOW THIS FUNCTION!!!
