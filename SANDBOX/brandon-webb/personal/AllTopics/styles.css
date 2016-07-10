@@ -1,6 +1,11 @@
 /*This is the external style sheet*/
 
-#div { 
+p.inline {
+    display:inline;
+}
+
+/*This defines the divs that are family_members*/
+#family_members { 
     width: 100px; /*Size of the Box*/
     height: 100px;
     background-color: red;
@@ -10,7 +15,13 @@
     animation-duration: 10s;
     animation-delay: 1s; /*Delay before the animation starts to run*/
     animation-iteration-count: 3; /*Amount of times you want the animation to run*/
-    animation-iteration-count: infinite; /*Makes the animation run infinitely*/
+    animation-iteration-count: infinite; /*Makes the animation run infinitely*/   
+}
+/*This is for the hover function*/
+#family_members:hover {
+    -webkit-transform: rotate(720deg); /* Safari */
+    transform: rotate(720deg);
+    transition: width 5s, height 5s, transform 5s;
 }
 /* This is the standard syntax for changing colors */
 @keyframes colors {
@@ -27,9 +38,9 @@
     background-color: red;
     font-weight: bold;
     position: relative;
-    animation: moveblocks 5s infinite;
-    -webkit-animation: moveblocks 5s infinite; 
-    -webkit-animation-timing-function: linear;}
+    //animation: moveblocks 5s infinite;
+    //-webkit-animation: moveblocks 5s infinite; 
+    //-webkit-animation-timing-function: linear;}
 #div1:hover {
     width: 300px;
     height: 300px;
@@ -82,9 +93,9 @@
     -webkit-animation: moveblocks 5s infinite;
     animation-timing-function: ease-in-out;}
 
-
 /* Move the blocks */
 @keyframes moveblocks {
     0%  {left: 0px;}
     50%  {left: 300px;}
 }
+
