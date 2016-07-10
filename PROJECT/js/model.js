@@ -33,12 +33,32 @@ function printType(num){
 
 /**
  * Print out the HTML select list for the flash card types
- * author Christopher Keers
+ * @author Christopher Keers
  * @param {type} id unique id of object this list belongs to
  * @returns {String} HTML select list of type options
  */
 function printTypeSelect(id){
 	return '<select name="card-type" data-card-type="'+id+'"><option value="0"></option><option value="1">True or False</option><option value="2">Multiple Choice</option><option value="3">Fill in the Blank</option><option value="4">Mathematic</option><option value="5">Scientific</option><option value="6">Vocabulary</option><option value="7">Group 1</option><option value="8">Group 2</option><option value="9">Group 3</option></select>';
+}
+
+/**
+ * Creat the buttons that will launch our games
+ * @author Christopher Keers
+ */
+function genGameLinks(){
+	var games = {
+		"Memory Match":"loadMemoryGame",  // <=== Notice the , after each line
+		"Dont Clcik":"fakelink",
+		"Dont Click":"fakelink" // <=== The last line should not have the comma
+	};
+	
+	var html = "";
+	
+	for (var key in games) {
+		html += '<li onclick="'+games[key]+'();">'+key+'</li>';
+	}
+	
+	document.getElementById("game-menu").innerHTML = html;
 }
 
 /**
@@ -94,6 +114,16 @@ function genSubjectTiles(){
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+	
+	/**
+	 * Update add button and turn on input
+	 */
+	var btn = find(".btn-wrapper",document.getElementById("controls"));
+	btn = btn[0];
+	btn.onclick = addSubject;
+	document.getElementById("form-subject").placeholder = "Add Class / Subject";
+	document.getElementById("form-subject").style.display = "inline-block";
+	document.getElementById("save-btn-wrapper").style.display = "none";
 }
 
 /**
@@ -125,6 +155,10 @@ function saveSubjectTile(id){
 	topicHtml = topicHtml[0];
 	var topic = find("[data-topic-name]",startingPoint);
 	topic = topic[0].value;
+	var controls = find(".controls",startingPoint);
+	controls = controls[0];
+	
+	controls.innerHTML = '<div class="name" onclick="loadChoosenSubject(\''+id+'\')">'+id+'</div><div class="controls"><div class="edit" title="Edit" onclick="editSubjectTile(\''+id+'\');"><i class="fa fa-pencil"></i></div><div class="remove" title="Remove" onclick="removeSubjectTile(\''+id+'\')"><i class="fa fa-trash-o"></i></div></div>';
 	
 	if(topic.length>0){
 		topicHtml.innerHTML = topic;
@@ -172,24 +206,26 @@ function removeSubjectTile(id){
 function addSubject(){
 	var name = document.getElementById("form-subject").value;
 	document.getElementById("form-subject").value = "";
-	var newFile = subjects.add(name);
-	if(newFile!==false){
-		// Save an empty collection object into this new subject
-		if(storage.update(newFile,new collection(name).serialize())){
-			// Save new subjects structure
-			if(storage.update("SUBJECTS",subjects.serialize())){
-				genSubjectTiles();
+	if(name.length>1){
+		var newFile = subjects.add(name);
+		if(newFile!==false){
+			// Save an empty collection object into this new subject
+			if(storage.update(newFile,new collection(name).serialize())){
+				// Save new subjects structure
+				if(storage.update("SUBJECTS",subjects.serialize())){
+					genSubjectTiles();
+				} else {
+					// Error out
+					console.log("We were unable to update a required file please re-load the page and try again.");
+				}
 			} else {
 				// Error out
 				console.log("We were unable to update a required file please re-load the page and try again.");
 			}
 		} else {
 			// Error out
-			console.log("We were unable to update a required file please re-load the page and try again.");
+			console.log("We were unable to create a required file please re-load the page and try again.");
 		}
-	} else {
-		// Error out
-		console.log("We were unable to create a required file please re-load the page and try again.");
 	}
 }
 
@@ -230,6 +266,16 @@ function genTopicTiles(){
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+	
+	/**
+	 * Update add button and turn on input
+	 */
+	var btn = find(".btn-wrapper",document.getElementById("controls"));
+	btn = btn[0];
+	btn.onclick = addTopic;
+	document.getElementById("form-subject").placeholder = "Add Topic / Study Set";
+	document.getElementById("form-subject").style.display = "inline-block";
+	document.getElementById("save-btn-wrapper").style.display = "none";
 }
 
 /**
@@ -261,6 +307,10 @@ function saveTopicTile(id){
 	topicHtml = topicHtml[0];
 	var topic = find("[data-topic-name]",startingPoint);
 	topic = topic[0].value;
+	var controls = find(".controls",startingPoint);
+	controls = controls[0];
+	
+	controls.innerHTML = '<div class="name" onclick="loadFlashCards(\''+id+'\')">'+id+'</div><div class="controls"><div class="edit" title="Edit" onclick="editTopicTile(\''+id+'\');"><i class="fa fa-pencil"></i></div><div class="remove" title="Remove" onclick="removeTopicTile(\''+id+'\')"><i class="fa fa-trash-o"></i></div></div>';
 	
 	if(topic.length>0){
 		topicHtml.innerHTML = topic;
@@ -309,26 +359,28 @@ function removeTopicTile(id){
  * @author Christopher Keers
  */
 function addTopic(){
-	var name = document.getElementById("form-topic").value;
-	document.getElementById("form-topic").value = "";
-	var newFile = choosenSubject.add(name);
-	if(newFile!==false){
-		// Save an empty flashcard set object into this new topic
-		if(storage.update(newFile,new flashCardSet(name,newFile))){
-			// Save new subjects structure
-			if(storage.update(choosenSubject.id,choosenSubject.serialize())){
-				genTopicTiles();
+	var name = document.getElementById("form-subject").value;
+	document.getElementById("form-subject").value = "";
+	if(name.length>1){
+		var newFile = choosenSubject.add(name);
+		if(newFile!==false){
+			// Save an empty flashcard set object into this new topic
+			if(storage.update(newFile,new flashCardSet(name,newFile))){
+				// Save new subjects structure
+				if(storage.update(choosenSubject.id,choosenSubject.serialize())){
+					genTopicTiles();
+				} else {
+					// Error out
+					console.log("We were unable to update a required file please re-load the page and try again.");
+				}
 			} else {
 				// Error out
 				console.log("We were unable to update a required file please re-load the page and try again.");
 			}
 		} else {
 			// Error out
-			console.log("We were unable to update a required file please re-load the page and try again.");
+			console.log("We were unable to create a required file please re-load the page and try again.");
 		}
-	} else {
-		// Error out
-		console.log("We were unable to create a required file please re-load the page and try again.");
 	}
 }
 
@@ -367,6 +419,25 @@ function genFlashCards(){
 		current = current.next;
 	}
 	document.getElementById("content").innerHTML = html;
+	
+	/**
+	 * Update add button
+	 */
+	var btn = find(".btn-wrapper",document.getElementById("controls"));
+	btn = btn[0];
+	btn.onclick = addCard;
+	document.getElementById("form-subject").style.display = "none";
+	document.getElementById("save-btn-wrapper").style.display = "inline-block";
+	
+	/**
+	 * Turn on the back button and play button
+	 */
+	var btn = find(".back-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "inline-block";
+	btn = find(".game-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "inline-block";
 }
 
 /**
@@ -553,6 +624,17 @@ function removeCard(id){
 function chooseSubject(){
 	choosenSubject = null;
 	choosenTopic = null; // This allows us to jump from a flash card set back to the main menu
+	
+	/**
+	 * Hide the back button and the play button
+	 */
+	var btn = find(".back-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	btn = find(".game-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	
 	genSubjectTiles();
 }
 
@@ -562,6 +644,17 @@ function chooseSubject(){
  */
 function chooseTopic(){
 	choosenTopic = null;
+	
+	/**
+	 * Hide the back button and play button
+	 */
+	var btn = find(".back-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	btn = find(".game-btn",document.getElementById("controls"));
+	btn = btn[0];
+	btn.style.display = "none";
+	
 	genTopicTiles();
 } 
 
@@ -1079,6 +1172,33 @@ function chooseTopic(){
 			}
 			return false;
 		},
+		
+		/**
+         * Retreive all flash cards from a topic folder
+         * @param {string} Folder name containing flashcards
+         * @returns {array of objects} returns an array containing all the flash card object
+         * for a choosen topic
+         */
+
+        getFlashCards: function (item) {
+            var cards = [];
+
+            for (var i = 0; i < localStorage.length; i++) {
+
+                var current = item.head;
+                var next = current.next;
+                cards.push(current);
+
+                while (next !== null) {
+                    current = next;
+                    next = current.next;
+                    cards.push(current);
+                }
+                return cards;
+            }
+        },
+
+
 		
 		/**
 		 * Remove a file from local storage. This only removes one file and does
@@ -2246,6 +2366,198 @@ var ready = (function(){
     return ready;
 })();
 
+
+/**
+* Functions related to the memory match game application start here 
+*/
+
+function loadMemoryGame() {
+    var cards = choosenTopic;
+    var size = null;
+    var shuffledCards = null;
+    moveCounter =0;
+
+    cards = storage.getFlashCards(cards);
+    size = cards.length * 2;
+    shuffledCards = shuffleCards(cards);
+    createNewBoard(size, shuffledCards, cards);
+
+}
+
+
+function createNewBoard(size, shuffledCards, cards) {
+    var board = document.createElement("div");
+    var content = document.getElementById("content");
+    var card = null;
+    var front = null;
+    var back = null;
+    var result = null;
+
+    content.innerHTML = "";
+    board.id = "memory-board";
+
+    result = document.createElement("div");
+    result.id = "result";
+
+    board.appendChild(result);
+
+    for (var i = 0; i < size; i++) {
+        card = document.createElement("div");
+        front = document.createElement("div");
+        back = document.createElement("div");
+
+        card.id = i;
+
+        front.className = "front";
+        back.className = "back";
+        card.className = "card";
+
+        content.appendChild(board);
+        board.appendChild(card);
+        card.appendChild(front);
+        card.appendChild(back);
+        
+
+        card.addEventListener("click", function () {
+            document.getElementById("result").innerHTML="";
+            flipCard(this, shuffledCards, cards);
+            var done = document.getElementsByClassName("correct");
+            if (done.length == size){
+            	var result = document.getElementById("result");
+            	result.innerHTML="You have finished in "+ moveCounter + " moves";
+            	result.id = "winner";
+            	result.className = "winner";
+            }
+        });
+    }
+}
+
+function flipCard(card, shuffledCards, cards) {
+	
+    var par = document.createElement("div");
+    var flippedCards = [];
+    var count = 0;
+    var showedCards = null;
+    var sub = null;
+    var complete = null;
+    var completeNext = null;
+    var fullSentence = null;
+
+    flippedCards.push(card.id);
+
+    count = document.getElementsByClassName("flipped").length;
+
+    if (count >= 2) {
+        return;
+    }
+
+    card.firstChild.className = "flipped";
+    card.firstChild.appendChild(par);
+    
+    count = document.getElementsByClassName("flipped").length;
+    showedCards = document.getElementsByClassName("flipped");
+    
+	sub = addElipse(shuffledCards[card.id]);
+	if (sub === null){
+		card.firstChild.firstChild.innerHTML = shuffledCards[card.id];
+	}else{
+		card.firstChild.firstChild.innerHTML = sub+" ...";
+		fullSentence = shuffledCards[card.id];
+		var result = document.getElementById("result");
+		result.innerHTML = "Full Text: "+ fullSentence;
+	}
+
+    if (count == 2) {
+        var number = showedCards[0].parentNode.id;
+        var number2 = showedCards[1].parentNode.id;
+        var valid = convert(card, cards, shuffledCards, number, number2);
+
+        moveCounter = moveCounter+1;
+
+        if (valid == false) {
+
+            function flipBack() {
+                for (var i = 0; i <= flippedCards.length; i++) {
+                    showedCards[0].innerHTML = "";
+                    showedCards[0].className = "front";
+                }
+            }
+            setTimeout(flipBack, 2000);
+        }
+    }
+}
+
+
+function convert(card, cards, shuffledCards, number, number2) {
+   	var flippedCards = document.getElementsByClassName("flipped");	
+    var term = null;
+    var definition = null;
+    var completeNext = null;
+    var complete = null;
+    var valid = false;
+    var j = 0;
+
+    for (var i = 0; i < cards.length; i++) {
+        term = cards[i].term;
+        definition = cards[i].definition;
+
+
+        complete = shuffledCards[number];
+        completeNext = shuffledCards[number2];
+
+        if (term == complete || definition == complete) {
+            if (term == completeNext || definition == completeNext) {
+                valid = true;
+                flippedCards[0].className = "correct";
+                flippedCards[0].className = "correct";
+                return valid;
+            }
+        }
+    }
+    return valid;
+}
+
+
+function shuffleCards(cards) {
+    var replacedCard = null;
+    var randomNumber = 0;
+    var data = [];
+    var temp = null;
+
+    for (var i = 0; i < cards.length; i++) {
+        data.push(cards[i].term);
+        data.push(cards[i].definition);
+    }
+
+    for (var i = 0; i < data.length; i++) {
+        randomNumber = Math.floor(Math.random() * data.length);
+        temp = data[i];
+        data[i] = data[randomNumber];
+        data[randomNumber] = temp;
+    }
+    return data;
+}
+
+function addElipse(word){
+	var white = 0;
+	var sub = null;
+
+	if (word.length>54){
+
+		word = word.trim();
+		sub = word.substring(0,53);
+		white = sub.lastIndexOf(" ");
+		sub = word.substring(0,white);
+	}
+
+	return sub;
+}
+
+
+/**
+* Functions related to the memory match game end here
+*/
+
 /**
  * PLACE ANY FUNCTIONS THAT NEED TO RUN ON PAGE LOAD INSIDE HERE
  * DO NOT PLAVE ANY OTHER CODE BELOW THIS FUNCTION!!!
@@ -2273,6 +2585,16 @@ ready(function(){
 	 * on a topic from the choosen subject
 	 */
 	choosenTopic = null;
+	
+	/**
+	 * Load game links
+	 */
+	genGameLinks();
+
+	/**
+	 * Count Moves
+	 */	
+	moveCounter = null;
 });
 /**
  *  DO NOT PLAVE ANY OTHER CODE BELOW THIS FUNCTION!!!
