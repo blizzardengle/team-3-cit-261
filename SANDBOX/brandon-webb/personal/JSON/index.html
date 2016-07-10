@@ -6,21 +6,31 @@
 
 <p id="demo"></p>
 
-<script>
-var text = '{"name":"John Johnson","street":"Oslo West 16","phone":"555 1234567"}';
+<p>Please enter your information below</p>
+<b>Name</b>
+<input type="text" id="name"/> 
+<b>Age</b>
+<input type="text" id="age"/>
+<b>Nickname</b>
+<input type="text" id="nickname"/>
+<input type="button" value="output" onclick="makeObject()"/>
 
-var obj = JSON.parse(text);
+<script >
+    
+function makeObject() {
+    //var name = document.getElementById('name').value;
+    //var text = '{"name":' + document.getElementById('name').value + ',"street":"Oslo West 16","phone":"555 1234567"}';
+    var name = document.getElementById("name").value;
+    var age = document.getElementById("age").value;
+    var nickname = document.getElementById("nickname").value;
+    var text = '{"name":"' + name + '","age":"' + age + '","nickname":"' + nickname + '"}';
+    var obj = JSON.parse(text);
 
 document.getElementById("demo").innerHTML =
-obj.name + "<br>" +
-obj.street + "<br>" +
-obj.phone;
-</script>
-
-<p id="2"></p>
-
-<script>
-    var text = ''
+"Your name is " + obj.name + 
+" and you are " + obj.age +  " years old." + 
+" You also go by the name " + obj.nickname;
+}
 </script>
 
 </body>
