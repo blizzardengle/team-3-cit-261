@@ -14,7 +14,7 @@
 function loadDoc(url) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
       document.getElementById('A1').innerHTML = xhttp.status;
       document.getElementById('A2').innerHTML = xhttp.statusText;
       document.getElementById('A3').innerHTML = xhttp.responseText;

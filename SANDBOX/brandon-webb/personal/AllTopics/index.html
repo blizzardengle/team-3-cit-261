@@ -9,29 +9,37 @@
 
 
 <body onload="javascript: checkStorage(); getUserList();">
-    <b id="storage_status"></b>
-    <b id="details"></b>
-<h1>Get To Know Them</h1>
+<h1>Get To Know The Family</h1>
+<p id="family_members" onmouseover="showinfo()" onmouseout="hideinfo()"></p>
+<p class="family_member">Hello</p>
 
 
-<p id="div"></p>
-
-<p><b>Note:</b> When an animation is finished, it changes back to its original style.</p>
-<p></p>
 <h2>JSON Object Creation in Java Script</h2>
 
-<p id="demo"></p>
 
+<p>Test</p>
+<div id="users"></div>
+
+
+
+<!--
 <div id="div1"><p>LINEAR</p><div id="Person1" onmouseover="showinfo()"></div></div>
 <div id="div2">EASE<div id="Person2"></div></div>
 <div id="div3">EASE-IN<div id="Person3"></div></div>
 <div id="div4">EASE-OUT<div id="Person4"></div></div>
 <div id="div5">EASE-IN-OUT<div id="Person5"></div></div>
+-->
+
 
 <script>
+function showinfo() {
+    document.getElementById("users").innerHTML = "Hello";
+} 
+function hideinfo() {
+    document.getElementById("users").innerHTML = "";
+}
     
-    
-    
+        
     
     
     
