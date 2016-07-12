@@ -2419,6 +2419,9 @@ function createNewBoard(size, shuffledCards, cards) {
         
 
         card.addEventListener("click", function () {
+        	if (this.firstChild.className == "correct"){
+        		return;
+        	}
             document.getElementById("result").innerHTML="";
             flipCard(this, shuffledCards, cards);
             var done = document.getElementsByClassName("correct");
