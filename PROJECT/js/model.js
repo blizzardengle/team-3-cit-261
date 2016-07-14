@@ -31,6 +31,34 @@ function printType(num){
 	}
 }
 
+
+ function showHint(str)
+   {
+    if (str.length===0)
+     { 
+      document.getElementById("txtHint").innerHTML="";
+      return;
+     }
+   if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+   }
+   else
+   {// code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+   }
+   xmlhttp.onreadystatechange=function()
+   {
+    if (xmlhttp.readyState===4 && xmlhttp.status===200)
+    {
+     document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+    }
+   };
+   xmlhttp.open("GET","gethint.php?q="+str,true);
+   xmlhttp.send();
+  }
+  
+
 /**
  * Print out the HTML select list for the flash card types
  * @author Christopher Keers
@@ -48,8 +76,7 @@ function printTypeSelect(id){
 function genGameLinks(){
 	var games = {
 		"Memory Match":"loadMemoryGame",  // <=== Notice the , after each line
-		"Dont Clcik":"fakelink",
-		"Dont Click":"fakelink" // <=== The last line should not have the comma
+		"Flash Cards":"createFlashCards"
 	};
 	
 	var html = "";
@@ -1175,11 +1202,10 @@ function chooseTopic(){
 		
 		/**
          * Retreive all flash cards from a topic folder
-         * @param {string} Folder name containing flashcards
+         * @param {string} item folder name containing flashcards
          * @returns {array of objects} returns an array containing all the flash card object
          * for a choosen topic
          */
-
         getFlashCards: function (item) {
             var cards = [];
 
@@ -2370,20 +2396,17 @@ var ready = (function(){
 /**
 * Functions related to the memory match game application start here 
 */
-
 function loadMemoryGame() {
     var cards = choosenTopic;
     var size = null;
     var shuffledCards = null;
-    moveCounter =0;
+    moveCounter = 0;
 
     cards = storage.getFlashCards(cards);
     size = cards.length * 2;
     shuffledCards = shuffleCards(cards);
     createNewBoard(size, shuffledCards, cards);
-
 }
-
 
 function createNewBoard(size, shuffledCards, cards) {
     var board = document.createElement("div");
@@ -2427,7 +2450,7 @@ function createNewBoard(size, shuffledCards, cards) {
             var done = document.getElementsByClassName("correct");
             if (done.length == size){
             	var result = document.getElementById("result");
-            	result.innerHTML="You have finished in "+ moveCounter + " moves";
+            	result.innerHTML="You have finished in "+ moveCounter + " moves!";
             	result.id = "winner";
             	result.className = "winner";
             }
@@ -2560,6 +2583,97 @@ function addElipse(word){
 /**
 * Functions related to the memory match game end here
 */
+
+
+function createFlashCards() {
+    document.getElementById('content').innerHTML = "";
+
+    var current = choosenTopic.head; // This grabs the head value of your flashCardSet list which is a flashCards object (link)
+    var html = "<div id='cards'><div id='back' onclick='back(null)'><i class='fa fa-chevron-left'></i></div>";
+    var i = 1;
+    var next = 0;
+	while(current!==null){
+            // creates each card
+            html += "<div id='" + i + "' class='invisible' onclick='flip(\"back\", \"" + current.definition + "\")'>";
+            html += "<p class='frontText'>" + current.term + "</p>";
+            html += "<p class='invisibleText'>" + current.definition + "</p></div>"
+            i++;
+            current = current.next; // Make sure to move on to the next record or you'll create an infinite loop
+	}
+    html += "<div id='next' onclick='next(2)'><i class='fa fa-chevron-right'></i></div></div>";
+    document.getElementById('content').innerHTML = html;
+    slideIn(1);
+    
+}
+
+function slideIn(id) {
+    var card = document.getElementById(id);// this grabs the desired card
+    card.setAttribute("class", "front"); // this changes the card from invisible to show front
+    
+}
+
+function slideOut(id) {
+    var card = document.getElementById(id);// this grabs the desired card
+    card.setAttribute("class", "invisible"); // this changes the card from invisible to show front
+    
+}
+
+function back(i) {
+    var nextCard = document.getElementById(i);
+    if (nextCard == null) {
+        return;
+    } else {
+        var currentId = i + 1;
+        slideOut(currentId);
+        slideIn(i);
+        var backId = i - 1;
+        var replacmentForBackButton = "back(" + backId + ")";
+        var backButton = document.getElementById('back');
+        backButton.setAttribute("onclick", replacmentForBackButton);
+        var replacmentForNextButton = "next(" + currentId + ")";
+        var nextButton = document.getElementById('next');
+        nextButton.setAttribute("onclick", replacmentForNextButton);
+    }
+}
+
+function next(i) {
+    var nextCard = document.getElementById(i);
+    if (nextCard == null) {
+        return;
+    } else {
+        var currentId = i - 1;
+        slideOut(currentId);
+        slideIn(i);
+        var nextId = i + 1;
+        var replacmentForNextButton = "next(" + nextId + ")";
+        var nextButton = document.getElementById('next');
+        nextButton.setAttribute("onclick", replacmentForNextButton);
+        var replacmentForBackButton = "back(" + currentId + ")";
+        var backButton = document.getElementById('back');
+        backButton.setAttribute("onclick", replacmentForBackButton);
+    }
+}
+
+function flip(side, textInput) {
+    var card = null;
+    var done = false;
+    for (var i = 1; done == false; i++) {
+        card =  document.getElementById(i);
+        var classType = card.getAttribute('class');
+        if (classType != "invisible") {
+            done = true;
+        }
+    }
+    var currentText = card.childNodes[0].childNodes[0].nodeValue;
+    var currentc = 'flip("' + card.getAttribute('class') + '", "' + currentText + '")';
+    card.setAttribute('onclick', currentc);
+    var text = document.createTextNode(textInput);
+    card.setAttribute('class', side); 
+   setTimeout(function(){ card.childNodes[0].replaceChild(text, card.childNodes[0].childNodes[0]); if (side == 'back') { card.childNodes[0].setAttribute('class', side);} else card.childNodes[0].setAttribute('class', ''); }, 250);
+      
+      
+}
+
 
 /**
  * PLACE ANY FUNCTIONS THAT NEED TO RUN ON PAGE LOAD INSIDE HERE

@@ -1,6 +1,22 @@
 /**
  * FRAMEWORK
  */
+#input-wrapper {
+	display: inline-block;
+	position: relative;
+}
+#input-wrapper #txtHint {
+	position: absolute;
+	border: 1px solid #000;
+	width: 100%;
+	font-size: 16px;
+	padding: 10px;
+	background: #fff;
+}
+
+
+
+
 body, html {
 	margin: 0;
 	padding: 0;
@@ -351,3 +367,92 @@ body, html {
 }
 
 /*CSS for memory match game ends here*/
+
+#cards {
+	display: block;
+    position: relative;
+    width: 100%;
+	text-align: center;
+	vertical-align: top;
+	cursor: pointer;
+}
+
+.invisible {
+    display:none;
+  
+}
+
+div.front {
+	vertical-align: top;
+    display: inline-block;
+    padding:10px;
+	width: 300px;
+	height: 200px;
+    border:solid black 1px;
+    background-color:#e6e6e6;
+}
+
+#cards p {
+    margin-top:20px;
+  
+}
+
+#back  {
+	line-height: 200px;
+	margin-right: 25px;
+	vertical-align: top;
+	display: inline-block;
+    padding:10px;
+	width: 50px;
+	height: 200px;
+    border:solid black 1px;
+    background-color:#e6e6e6;
+	cursor: pointer;
+}
+#next  {
+	line-height: 200px;
+	margin-left: 25px;
+	vertical-align: top;
+	display: inline-block;
+    padding:10px;
+	width: 50px;
+	height: 200px;
+    border:solid black 1px;
+    background-color:#e6e6e6;
+	cursor: pointer;
+}
+
+div.back {
+    vertical-align: top;
+    display: inline-block;
+    padding:10px;
+	width: 300px;
+	height: 200px;
+    border:solid black 1px;
+    background-color:#e6e6e6;
+   
+}
+
+div.back p {
+     margin-top:20px;
+}
+
+
+.back {
+     -webkit-transform: rotateY(180deg); /* Safari */
+    transform: rotateY(180deg);
+}
+
+p.back {
+    -webkit-transform: rotateY(180deg); /* Safari */
+    transform: rotateY(180deg);
+}
+
+#cards div {
+    transition: 1s;
+    -webkit-transition: -webkit-transform 1s; 
+}
+
+.invisibleText {
+    display:none;
+}
