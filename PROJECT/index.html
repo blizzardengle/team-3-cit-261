@@ -5,25 +5,9 @@
   <title>DOM</title>
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
-  
 </head>
 <body>
 	<div id="wrapper">
-<<<<<<< HEAD
-		<div class="row">
-			This is the header to our application. This is where the menu and things that need to stay for every page should go. Right now it just has these buttons that allow you to navigate back to where you came from and add a new subject list.<br><br>
-			<input type="text" name="subject" id="form-subject" placeholder="Subject / Class" onkeyup="showHint(this.value)" size="20" /> 
-                        <p>Suggestions: <span id="txtHint"></span></p>
-                        <input type="button" value="Add" onclick="addSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-                        <input type="text" name="topic" id="form-topic" placeholder="Topic / Name of Study List"> 
-                        <input type="button" value="Add" onclick="addTopic();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-                        <input type="button" value="Add Card" onclick="addCard();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-                        <input type="button" value="Save Cards" onclick="saveCards();">
-			<br>
-			<br>
-			<input type="button" value="Go Back (LEAVE SUBEJCT)" onclick="chooseSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<input type="button" value="Go Back (LEAVE FLASH CARD SET)" onclick="chooseTopic();">
-=======
 		<div id="controls">
 			<div class="home-btn" onclick="chooseSubject();">
 				<i class="fa fa-home"></i> <span>Home Page</span> 
@@ -40,26 +24,15 @@
 				</ul>
 			</div>
 			<div class="add-btn">
-				<input type="text" id="form-subject" placeholder="Add Class / Subject"> <div id="save-btn-wrapper" title="Save" onclick="saveCards();" style="display:none;"><i class="fa fa-floppy-o"></i></div><div class="btn-wrapper" title="Add" onclick="addSubject();"><i class="fa fa-plus"></i></div>
+				<div id="input-wrapper"><input type="text" id="form-subject" placeholder="Add Class / Subject" onkeyup="showHint(this.value)"><div id="txtHint">Suggestions:</div></div> <div id="save-btn-wrapper" title="Save" onclick="saveCards();" style="display:none;"><i class="fa fa-floppy-o"></i></div><div class="btn-wrapper" title="Add" onclick="addSubject();"><i class="fa fa-plus"></i></div>
 			</div>
->>>>>>> 6a0cb658c8edaa371eb5923bb1514a06548e97ed
 		</div>
 		<div id="content" class="row">
-			<!-- BRANDON I MOVED YOUR CODE HERE SORRY FOR BREAKING IT -->
-			<input type="text" name="subject" id="form-subject" placeholder="Subject / Class" onkeyup="showHint(this.value)" size="20" /> 
-                       <p>Suggestions: <span id="txtHint"></span></p>
-                       <input type="button" value="Add" onclick="addSubject();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-                       <input type="text" name="topic" id="form-topic" placeholder="Topic / Name of Study List"> 
-                       <input type="button" value="Add" onclick="addTopic();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-                       <input type="button" value="Add Card" onclick="addCard();"> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;    <input type="button" value="Save Cards" onclick="saveCards();">
+			<!-- This content is loaded dynamically -->
 		</div>
 	</div>
 	<!-- SCRIPTS -->
 	<script type="text/javascript" src="js/model.js"></script>
-<<<<<<< HEAD
-        <script type="text/javascript" src="hints.js"></script> <!--BMW-->
-=======
 	<script type="text/javascript" src="hints.js"></script> <!--BMW-->
->>>>>>> 6a0cb658c8edaa371eb5923bb1514a06548e97ed
 </body>
 </html>
