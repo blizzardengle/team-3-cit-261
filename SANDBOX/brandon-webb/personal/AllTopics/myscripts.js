@@ -30,6 +30,7 @@ function createUserList(users) {
         var list = JSON.parse(users);
         document.getElementById('users').innerHTML=list.member1name;
         
+        
         /*for(var i = 0; i < list.length; i++) {	//loop through the list
             var option = document.createElement("option");
             option.value = users[i];

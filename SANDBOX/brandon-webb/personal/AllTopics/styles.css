@@ -24,12 +24,7 @@ p.inline {
     transition: width 1s, height 1s, transform 1s;
     animation-name: size;
 }
-#family_members:nothover {
-    -webkit-transform: rotate(360deg); /* Safari */
-    transform: rotate(360deg);
-    transition: width 1s, height 1s, transform 1s;
-    animation-name: size;
-}
+
 /* This is the standard syntax for changing colors */
 @keyframes colors {
     0% {background-color: red;}
