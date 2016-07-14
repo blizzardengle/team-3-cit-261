@@ -10,24 +10,36 @@ p.inline {
     height: 100px;
     background-color: red;
     -webkit-animation-name: colors; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 4s; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 2s; /* Chrome, Safari, Opera */
     animation-name: colors;
-    animation-duration: 10s;
-    animation-delay: 1s; /*Delay before the animation starts to run*/
+    animation-duration: 2s;
+    /*animation-delay: 1s; /*Delay before the animation starts to run*/
     animation-iteration-count: 3; /*Amount of times you want the animation to run*/
     animation-iteration-count: infinite; /*Makes the animation run infinitely*/   
 }
 /*This is for the hover function*/
 #family_members:hover {
-    -webkit-transform: rotate(720deg); /* Safari */
-    transform: rotate(720deg);
-    transition: width 5s, height 5s, transform 5s;
+    -webkit-transform: rotate(360deg); /* Safari */
+    transform: rotate(360deg);
+    transition: width 1s, height 1s, transform 1s;
+    animation-name: size;
+}
+#family_members:nothover {
+    -webkit-transform: rotate(360deg); /* Safari */
+    transform: rotate(360deg);
+    transition: width 1s, height 1s, transform 1s;
+    animation-name: size;
 }
 /* This is the standard syntax for changing colors */
 @keyframes colors {
     0% {background-color: red;}
     50% {background-color: yellow;}
 }
+@keyframes size {
+    0% {width:100px; height:100px;}
+    100%{width:200px; height:200px;}
+}
+
 
 /* This is for the moving blocks */
 #div1 {
@@ -93,9 +105,17 @@ p.inline {
     -webkit-animation: moveblocks 5s infinite;
     animation-timing-function: ease-in-out;}
 
-/* Move the blocks */
-@keyframes moveblocks {
-    0%  {left: 0px;}
-    50%  {left: 300px;}
+/*This piece of code keeps my border centered and everything in a box*/
+h1 {
+    text-align: center;
+    border-style: solid;
+    border-color: blue;
+    min-width: 100%;
 }
+
+appspace.picture {
+    alignment-adjust: middle;
+}
+
+
 

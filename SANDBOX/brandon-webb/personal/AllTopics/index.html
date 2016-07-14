@@ -3,24 +3,36 @@
 <head>
   
 <link rel="stylesheet" type="text/css" href="styles.css">
+
 <script type="text/javascript" src="myscripts.js"></script>
 <title>CIT261 Application</title>
 </head>
 
 
-<body onload="javascript: checkStorage(); getUserList();">
-<h1>Get To Know The Family</h1>
-<img id="family_members" src="Don.png" width="100" height="100" alt="picture" onclick="showinfo()">
+
+<body onload="checkStorage(); getUserList(); hideApp()">
+<span id="storage_status"></span>
+
+<div id="header">
+    
+    
+</div>
+
+
+<h1 class="appname">Christmas Time, Are You Thinking Ahead</h1>
+
+<div id="appspace">
+<img id="family_members" class="picture" src="Don.png" width="100" height="100" alt="picture" onclick="showinfo()">
 <img id="family_members" src="Tammy.png" width="100" height="100">
 <img id="family_members" src="Brandon.png" width="100" height="100">
 <img id="family_members" src="Brenton.png" width="100" height="100">
 <img id="family_members" src="Brittany.png" width="100" height="100">
 <img id="family_members" src="Bryson.png" width="100" height="100">
-    
+</div>
 <br>
-<input type="button" value="Run" onclick="getUserList()"/>
+<input type="button" value="View People" onclick="getUserList(); showApp()"/>
 
-<p id="users"></p>
+<!--<p id="users"></p>-->
 
 
 

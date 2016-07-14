@@ -1,11 +1,13 @@
 //Author Brandon Webb
 
+//This is a reminder application that reminds you about all your friends
+
 //Local Storage - This function checks browser of localstorage
 function checkStorage() {
     if (typeof(Storage) !== "undefined") {
-    document.getElementById("storage_status").innerHTML = "Storage is working";
+    document.getElementById("storage_status").innerHTML = "";
     } else {
-    //Sorry! No Web Storage support..
+    document.getElementById("storage_status").innerHTML = "This application won't work on your device";
     }
 }
 
@@ -37,6 +39,15 @@ function createUserList(users) {
         }*/
 }
 
+//This function hides the pictures of the users
+function hideApp() {
+    	document.getElementById("appspace").style.display = "none";
+
+}
+
+function showApp() {
+    document.getElementById("appspace").style.display = "inline";
+}
 
 
 
