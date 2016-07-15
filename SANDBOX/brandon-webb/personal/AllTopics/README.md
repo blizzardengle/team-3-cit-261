@@ -1,0 +1,1 @@
+#AJAX - June 9, 2016 This is how AJAX Animation works.
