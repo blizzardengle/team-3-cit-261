@@ -32,5 +32,21 @@ foreach ($teamates as $member){
 	fclose($file);
 }
 
-echo "Done."
+/**
+ * Fix file permissions
+ */
+function chmod_r($path) {
+    $dir = new DirectoryIterator($path);
+    foreach ($dir as $item) {
+        chmod($item->getPathname(), 0777);
+        if ($item->isDir() && !$item->isDot()) {
+            chmod_r($item->getPathname());
+        }
+    }
+}
+chmod_r("../cache");
+chmod_r("../PROJECT");
+chmod_r("../SANDBOX");
+
+echo "All done."
 ?>

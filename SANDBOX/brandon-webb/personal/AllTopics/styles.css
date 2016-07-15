@@ -38,9 +38,12 @@ p.inline {
     background-color: red;
     font-weight: bold;
     position: relative;
-    //animation: moveblocks 5s infinite;
+/*  CORRECT CSS COMMENTS 
+	//animation: moveblocks 5s infinite;
     //-webkit-animation: moveblocks 5s infinite; 
-    //-webkit-animation-timing-function: linear;}
+    //-webkit-animation-timing-function: linear;
+*/
+}
 #div1:hover {
     width: 300px;
     height: 300px;
