@@ -2,15 +2,14 @@
 <html>
 <head>
   
-<link rel="stylesheet" type="text/css" href="styles.css">
-
-<script type="text/javascript" src="myscripts.js"></script>
-<title>CIT261 Application</title>
+<link rel="stylesheet" type="text/css" href="styles.css"> <!--This references my stylesheet-->
+<script type="text/javascript" src="myscripts.js"></script> <!--This references my javascript file-->
+<title>Christmas Application</title>
 </head>
 
 
 
-<body onload="checkStorage(); getUserList(); hideApp()">
+<body onload="checkStorage(); getUserList(); hideApp(); hideForm()">
 <span id="storage_status"></span>
 
 <div id="header">
@@ -22,16 +21,28 @@
 <h1 class="appname">Christmas Time, Are You Thinking Ahead</h1>
 
 <div id="appspace">
-<img id="family_members" class="picture" src="Don.png" width="100" height="100" alt="picture" onclick="showinfo()">
-<img id="family_members" src="Tammy.png" width="100" height="100">
-<img id="family_members" src="Brandon.png" width="100" height="100">
-<img id="family_members" src="Brenton.png" width="100" height="100">
-<img id="family_members" src="Brittany.png" width="100" height="100">
-<img id="family_members" src="Bryson.png" width="100" height="100">
-</div>
-<br>
-<input type="button" value="View People" onclick="getUserList(); showApp()"/>
+    <p>
+        Click on a picture of each person to see what they want for Christmas
+    </p>
+<img id="family_members" alt="Don" class="picture" src="Don.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt)">
+<p id="donwants" class="wants"></p>
+<img id="family_members" alt="Tammy" class="picture" src="Tammy.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
+<p id="tammywants" class="wants">Car</p>
+<img id="family_members" alt="Brandon" class="picture" src="Brandon.png" width="100" height="100" onmouseover="showinfo(this.alt)">
+<p id="brandonwants" class="wants">Computer</p>
+<img id="family_members" alt="Brenton" class="picture" src="Brenton.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
+<p id="brentonwants" class="wants">iPad</p>
+<img id="family_members" alt="Brittany" class="picture" src="Brittany.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
+<p id="brittanywants" class="wants">Scooter</p>
+<img id="family_members" alt="Bryson" class="picture" src="Bryson.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
+<p id="brysonwants" class="wants">BMW</p>
 
+</div>
+
+<br>
+<div id="buttons">
+<input id="start" type="button" value="START" onclick="getUserList(); showApp()"/>
+</div>
 <!--<p id="users"></p>-->
 
 

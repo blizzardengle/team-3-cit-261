@@ -103,7 +103,8 @@ p.inline {
     -webkit-animation: moveblocks 5s infinite;
     animation-timing-function: ease-in-out;}
 
-/*This piece of code keeps my border centered and everything in a box*/
+/*This piece of code keeps my border centered and 
+everything in a box*/
 h1 {
     text-align: center;
     border-style: solid;
@@ -111,9 +112,19 @@ h1 {
     min-width: 100%;
 }
 
-appspace.picture {
-    alignment-adjust: middle;
+p {
+    text-align: center;
 }
+
+IMG.picture {
+    display: block;
+    margin-right: auto;
+}
+
+wants {
+    display: inline-block;
+}
+
 
 
 

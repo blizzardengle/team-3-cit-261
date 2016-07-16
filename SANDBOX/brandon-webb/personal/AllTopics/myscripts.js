@@ -28,7 +28,6 @@ function getUserList() {
 	
 function createUserList(users) {
         var list = JSON.parse(users);
-        document.getElementById('users').innerHTML=list.member1name;
         
         
         /*for(var i = 0; i < list.length; i++) {	//loop through the list
@@ -40,21 +39,134 @@ function createUserList(users) {
         }*/
 }
 
-//This function hides the pictures of the users
+//This function hides the application part when intially starting application
 function hideApp() {
     	document.getElementById("appspace").style.display = "none";
 
 }
 
+//This function starts the app and gets ride of the start button
 function showApp() {
     document.getElementById("appspace").style.display = "inline";
+    document.getElementById("start").style.display = "none";
+    hidewants();
+    
+    //This hides all off the wants of the user
+    function hidewants() {
+        var elements = document.getElementsByClassName("wants");
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.display='none';   
+        }
+    }
 }
 
-
-
-function showinfo() {
-    document.getElementById("users").innerHTML = "Hello";
+//Shows the information about the users and what they want and what they are going to get.
+function showinfo(src) {
+    this.src = src;
+    switch (src) {
+        case 'Don':
+            document.getElementById("donwants").style.display = "inline";
+            var url = src + ".txt";
+            getWishList(url);
+        break;
+        
+        case 'Tammy':
+            document.getElementById("tammywants").style.display = "inline";
+            var url = src + ".txt";
+            getWishList(url);
+        break;
+        
+        case 'Brandon':
+            document.getElementById("brandonwants").style.display = "inline";
+            var url = src + ".txt";
+            getWishList(url);
+        break;
+        
+        case 'Brenton':
+            document.getElementById("brentonwants").style.display = "inline";
+            var url = src + ".txt";
+            getWishList(url);
+        break;
+        
+        case 'Brittany':
+            document.getElementById("brittanywants").style.display = "inline";
+            var url = src + ".txt";
+            getWishList(url);
+        break;
+        
+        case 'Bryson':
+            document.getElementById("brysonwants").style.display = "inline";
+            var url = src + ".txt";
+            getWishList(url);
+        break;
+    }
 } 
-function hideinfo() {
-    document.getElementById("users").innerHTML = "";
+
+//Does a AJAX request to get what the user stored on the web
+function getWishList(url) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
+            
+            //This is the code to make JSON 
+            //var response = mkobj(responseText);
+     
+            document.getElementById('donwants').innerHTML = xhttp.responseText;  
+        }
+        else {
+            document.getElementById('donwants').innerHTML = "Can't Access Site";
+        };  
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
 }
+
+//This function hides the input form
+function hideForm() {
+    
+}
+
+function enterinfo(src) {
+    this.person = src;
+    alert(src);
+    var newDiv = document.createElement("div"); 
+    var newContent = document.createTextNode("Enter Information for " + src); 
+    newDiv.appendChild(newContent); //add the text node to the newly created div. 
+
+    // add the newly created element and its content into the DOM 
+    var currentDiv = document.getElementById("div1"); 
+    document.body.insertBefore(newDiv, currentDiv);
+    
+}
+
+
+        
+        
+ 
+        
+
+
+
+
+
+//This code that I'm going to make
+/*
+ 
+//The following code stores the elements in the html into variables
+var xx = document.getElementById("team"); 
+var button1 = document.getElementById("b1"); 
+var button2 = document.getElementById("b2");
+
+//The following code lets us listen to the buttons and add a listener
+document.getElementById("b2").addEventListener("click", f1, false);
+document.getElementById("b1").addEventListener("click", f2 , false);
+
+//These are the functions mention in the above code
+function f1() {document.getElementById("team").innerHTML="Go Cougars!";};
+function f2() {document.getElementById("team").innerHTML="Go Utes!";};
+
+//This is hardcoded function that you don't have to create a separate function
+button1.addEventListener("click", function () {xx.style.color="red";} , false);
+button2.addEventListener("click", function () {xx.style.color="blue";} , false);
+</script>
+*/
