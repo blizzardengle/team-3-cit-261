@@ -24,7 +24,7 @@
 				</ul>
 			</div>
 			<div class="add-btn">
-				<div id="input-wrapper"><input type="text" id="form-subject" placeholder="Add Class / Subject" onkeyup="showHint(this.value)"><div id="txtHint">Suggestions:</div></div> <div id="save-btn-wrapper" title="Save" onclick="saveCards();" style="display:none;"><i class="fa fa-floppy-o"></i></div><div class="btn-wrapper" title="Add" onclick="addSubject();"><i class="fa fa-plus"></i></div>
+				<div id="input-wrapper"><input type="text" id="form-subject" placeholder="Add Class / Subject" onkeyup="showHint(this.value)" onblur="hideHint();"><div id="txtHint" style="display:none;">Suggestions:</div></div> <div id="save-btn-wrapper" title="Save" onclick="saveCards();" style="display:none;"><i class="fa fa-floppy-o"></i></div><div class="btn-wrapper" title="Add" onclick="addSubject();"><i class="fa fa-plus"></i></div>
 			</div>
 		</div>
 		<div id="content" class="row">

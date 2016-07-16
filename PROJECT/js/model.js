@@ -34,6 +34,7 @@ function printType(num){
 
  function showHint(str)
    {
+	   document.getElementById("txtHint").style.display = "block";
     if (str.length===0)
      { 
       document.getElementById("txtHint").innerHTML="";
@@ -58,6 +59,9 @@ function printType(num){
    xmlhttp.send();
   }
   
+  function hideHint(){
+	  document.getElementById("txtHint").style.display = "none";
+  }
 
 /**
  * Print out the HTML select list for the flash card types
@@ -70,7 +74,7 @@ function printTypeSelect(id){
 }
 
 /**
- * Creat the buttons that will launch our games
+ * Create the buttons that will launch our games
  * @author Christopher Keers
  */
 function genGameLinks(){
@@ -418,6 +422,8 @@ function addTopic(){
  */
 function loadFlashCards(id){
 	var flatObj = storage.open(id);
+	
+	document.getElementById("txtHint").style.display = "none";
 	
 	/**
 	 * If the file loaded deserialize the object, show any records to the

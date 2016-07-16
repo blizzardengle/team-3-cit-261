@@ -28,6 +28,7 @@ body, html {
 }
 #controls {
 	width: 100%;
+	min-height: 100px;
     padding: 20px;
     border-bottom: 2px solid #c4c4c4;
     background-color: rgba(44, 150, 165, 0.25);
@@ -120,6 +121,8 @@ body, html {
 #controls #save-btn-wrapper:hover {
 	background-color: #d6d1cb;
 }
+
+
 #content {
 	padding: 20px;
 }
@@ -455,4 +458,34 @@ p.back {
 
 .invisibleText {
     display:none;
+}
+
+
+@media (max-width: 700px) {
+	#controls {
+		min-height: 150px;
+		text-align: center;
+	}
+	#controls .home-btn {
+		display: block;
+		clear: both;
+	}
+	#controls .back-btn {
+		display: block;
+		clear: both;
+	}
+	#controls .game-btn {
+		display: block;
+		clear: both;
+	}
+	#controls .add-btn {
+		display: block;
+		clear: both;
+	}
+	.flashcard-set {
+		width: 100%;
+	}
+	.flashcard-set textarea {
+		width: 100%;
+	}
 }
