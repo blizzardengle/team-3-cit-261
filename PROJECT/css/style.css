@@ -363,11 +363,66 @@ body, html {
 	opacity: 0;
 }
 
+#memory-board #watch {
+  font-family: 'Lato';
+  font-size: 32px;
+  font-weight: 300;
+  text-align: center;
+}
+
 @media only screen and (max-width: 1000px) {
     #memory-board {
         max-width: 400px;
     }
 }
+
+/*This are the media queries for the small screens*/
+
+@media only screen and (max-width: 750px) {
+    #controls{
+    	display: flex;
+    	flex-direction: column;
+    	padding: 5px 0;
+    }
+
+    .home-btn{
+    	padding: 0 0 0 20px;
+    }
+
+    .term, .definition{
+    	width: 10%;
+    }
+
+    .home-btn, .game-btn, .back-btn, .add-btn{
+    	text-align: left;
+    }
+
+    .add-btn{
+    	margin: 10px 40px;
+    	padding: 5px;
+
+    }
+
+    #txtHint{
+    	display: none;
+    }
+
+	 #game-menu{
+	 	position: relative;
+	 	min-height: 10px;
+	 	width: 100%;
+	 } 
+
+    #game-menu li{
+    	padding: 0;
+    	width: 100%;
+    	margin: 0;
+    	display: block;
+    	clear: both;
+    }
+
+}
+
 
 /*CSS for memory match game ends here*/
 
