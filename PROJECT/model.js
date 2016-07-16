@@ -34,7 +34,6 @@ function printType(num){
 
  function showHint(str)
    {
-	   document.getElementById("txtHint").style.display = "block";
     if (str.length===0)
      { 
       document.getElementById("txtHint").innerHTML="";
@@ -59,9 +58,6 @@ function printType(num){
    xmlhttp.send();
   }
   
-  function hideHint(){
-	  document.getElementById("txtHint").style.display = "none";
-  }
 
 /**
  * Print out the HTML select list for the flash card types
@@ -74,7 +70,7 @@ function printTypeSelect(id){
 }
 
 /**
- * Create the buttons that will launch our games
+ * Creat the buttons that will launch our games
  * @author Christopher Keers
  */
 function genGameLinks(){
@@ -422,8 +418,6 @@ function addTopic(){
  */
 function loadFlashCards(id){
 	var flatObj = storage.open(id);
-	
-	document.getElementById("txtHint").style.display = "none";
 	
 	/**
 	 * If the file loaded deserialize the object, show any records to the
@@ -2402,7 +2396,6 @@ var ready = (function(){
 /**
 * Functions related to the memory match game application start here 
 */
-
 function loadMemoryGame() {
 
     var cards = choosenTopic;
@@ -2415,13 +2408,10 @@ function loadMemoryGame() {
     shuffledCards = shuffleCards(cards);
     
     createNewBoard(size, shuffledCards, cards);
-    //getData("http://caboodletech.com/byui/cit261/PROJECT/watch/index.html");
+    getData("http://cit261.creatingux.com/watch/index.html");
 
 }
 
-/*Tthis function create a new board and also creates the needed cards 
-* in a dynamic fashon
-*/
 function createNewBoard(size, shuffledCards, cards) {
     
     var board = document.createElement("div");
@@ -2441,7 +2431,6 @@ function createNewBoard(size, shuffledCards, cards) {
     result.id = "result";
     watchDiv = document.createElement("div");
     watchDiv.id = "watch";
-    watchDiv.innerHTML = "00:00:00";
 
     board.appendChild(result);
     board.appendChild(watchDiv);
@@ -2467,7 +2456,7 @@ function createNewBoard(size, shuffledCards, cards) {
         	
         	if (timer == null){
 
-        		timer = document.getElementById('watch');
+        		timer = document.getElementById('timer');
     			watch = new Stopwatch(timer);
     		
     		}
@@ -2500,10 +2489,6 @@ function createNewBoard(size, shuffledCards, cards) {
     }
 }
 
-/* This function is the one in chanrge of flipping cards
-* by changing the className of the front face of the card
-
-*/
 function flipCard(card, shuffledCards, cards) {
 	
     var par = document.createElement("div");
@@ -2559,12 +2544,7 @@ function flipCard(card, shuffledCards, cards) {
     }
 }
 
-/* This function checks if the pair of flipped cards match
-* card: is the current card flipped
-* cards: is an ordered array of cards
-* suffledCards: Array of shuffled cards
-* Output: Return true if the pair of cards match and false if they don't 
-*/
+
 function convert(card, cards, shuffledCards, number, number2) {
    	var flippedCards = document.getElementsByClassName("flipped");	
     var term = null;
@@ -2594,11 +2574,7 @@ function convert(card, cards, shuffledCards, number, number2) {
     return valid;
 }
 
-/* This methods shuffles the memory cards 
-* cards: is an array tht contains all the concepts and definitios 
-* in an ordered way
-* Ouput an array of suffled cards
-*/
+
 function shuffleCards(cards) {
     var replacedCard = null;
     var randomNumber = 0;
@@ -2619,13 +2595,6 @@ function shuffleCards(cards) {
     return data;
 }
 
-
-/* This function adds 3 dots to cards who content
-* overflows the card
-* word: is the content of the memory card
-*/
-
-
 function addElipse(word){
 	var white = 0;
 	var sub = null;
@@ -2639,28 +2608,6 @@ function addElipse(word){
 	}
 
 	return sub;
-}
-
-/* This funciton get an ajax request
-* url: is the url of the resource that wants to be accessed through ajax
-*/
-function getData(url){
-     
-  if (window.XMLHttpRequest) {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp = new XMLHttpRequest();
-  } else { // code for IE6, IE5
-    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  
-  xmlhttp.onreadystatechange=function() {
-    
-    if (xmlhttp.readyState===4 && xmlhttp.status===200) {
-      document.getElementById("watch").innerHTML=xmlhttp.responseText;
-    }
-  };
-  xmlhttp.open("GET",url,true);
-  xmlhttp.send();
 }
 
 
@@ -2731,6 +2678,27 @@ function Stopwatch(elem) {
     time = 0;
     update();
   };
+}
+
+
+
+function getData(url){
+     
+  if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp = new XMLHttpRequest();
+  } else { // code for IE6, IE5
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  
+  xmlhttp.onreadystatechange=function() {
+    
+    if (xmlhttp.readyState===4 && xmlhttp.status===200) {
+      document.getElementById("watch").innerHTML=xmlhttp.responseText;
+    }
+  };
+  xmlhttp.open("GET",url,true);
+  xmlhttp.send();
 }
 
 /**
