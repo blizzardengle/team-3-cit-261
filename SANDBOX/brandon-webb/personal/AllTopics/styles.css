@@ -125,6 +125,17 @@ wants {
     display: inline-block;
 }
 
+.localideas {
+    width: 500px;
+    height: 180px;
+    padding-left:0;
+    padding-top:0;
+    padding-bottom:0.4em;
+    padding-right: 0.4em;
+}
+
+
+
 
 
 

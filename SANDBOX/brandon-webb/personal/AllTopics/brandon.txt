@@ -1,1 +1,1 @@
-I would love to have a bike that I can use for the rest of my life that gets me everywhere.
+{"wish1":"Apple Laptop","wish2":"Apple IPad","wish3":"iPhone"}

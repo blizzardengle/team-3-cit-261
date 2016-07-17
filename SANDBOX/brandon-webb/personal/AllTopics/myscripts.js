@@ -108,13 +108,74 @@ function getWishList(url) {
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             
-            //This is the code to make JSON 
-            //var response = mkobj(responseText);
-     
-            document.getElementById('donwants').innerHTML = xhttp.responseText;  
+            switch (url) {
+                case 'Don.txt':
+                var wishes = xhttp.responseText;
+                var obj = JSON.parse(wishes);
+                document.getElementById("donwants").innerHTML =
+                "#1 wish is " + obj.wish1 + "<br>"  +
+                "#2 wish is " + obj.wish2 + "<br>"  +
+                "#2 wish is " + obj.wish3;
+                break;
+            }
+            switch (url) {
+                case 'Tammy.txt':
+                var wishes = xhttp.responseText;
+                var obj = JSON.parse(wishes);
+                document.getElementById("tammywants").innerHTML =
+                "#1 wish is " + obj.wish1 + "<br>"  +
+                "#2 wish is " + obj.wish2 + "<br>"  +
+                "#2 wish is " + obj.wish3;                
+                break;
+            }
+            switch (url) {
+                case 'Brandon.txt':
+                var wishes = xhttp.responseText;
+                var obj = JSON.parse(wishes);
+                document.getElementById("brandonwants").innerHTML =
+                "#1 wish is " + obj.wish1 + "<br>"  +
+                "#2 wish is " + obj.wish2 + "<br>"  +
+                "#2 wish is " + obj.wish3;                
+                break;
+            }
+            switch (url) {
+                case 'Brenton.txt':
+                var wishes = xhttp.responseText;
+                var obj = JSON.parse(wishes);
+                document.getElementById("brentonwants").innerHTML =
+                "#1 wish is " + obj.wish1 + "<br>"  +
+                "#2 wish is " + obj.wish2 + "<br>"  +
+                "#2 wish is " + obj.wish3;               
+                break;
+            }
+            switch (url) {
+                case 'Brittany.txt':
+                var wishes = xhttp.responseText;
+                var obj = JSON.parse(wishes);
+                document.getElementById("brittanywants").innerHTML =
+                "#1 wish is " + obj.wish1 + "<br>"  +
+                "#2 wish is " + obj.wish2 + "<br>"  +
+                "#2 wish is " + obj.wish3;  
+                break;
+            }
+            switch (url) {
+                case 'Bryson.txt':
+                var wishes = xhttp.responseText;
+                var obj = JSON.parse(wishes);
+                document.getElementById("brysonwants").innerHTML =
+                "#1 wish is " + obj.wish1 + "<br>"  +
+                "#2 wish is " + obj.wish2 + "<br>"  +
+                "#2 wish is " + obj.wish3;  
+                break;
+            }
         }
-        else {
-            document.getElementById('donwants').innerHTML = "Can't Access Site";
+        else { //This is a neat piece of code that remove it when it's not hovered over
+            document.getElementById('donwants').innerHTML = "";
+            document.getElementById('tammywants').innerHTML = "";
+            document.getElementById('brandonwants').innerHTML = "";
+            document.getElementById('brentonwants').innerHTML = "";
+            document.getElementById('brittanywants').innerHTML = "";
+            document.getElementById('brysonwants').innerHTML = "";
         };  
     };
     xhttp.open("GET", url, true);
@@ -123,22 +184,58 @@ function getWishList(url) {
 
 //This function hides the input form
 function hideForm() {
-    
+    document.getElementById("form").style.display = "none";
+}
+function showForm() {
+    document.getElementById("form").style.display = "inline";
 }
 
 function enterinfo(src) {
     this.person = src;
-    alert(src);
-    var newDiv = document.createElement("div"); 
-    var newContent = document.createTextNode("Enter Information for " + src); 
+    var newDiv = document.createElement("div");
+    newDiv.setAttribute("id","context");
+    var newContent = document.createTextNode("Enter Information for " + person + 
+                                             ". (You can enter a bunch of things and ideas \n\
+                                             this will be save on your local computer)."); 
+    
     newDiv.appendChild(newContent); //add the text node to the newly created div. 
-
+    
     // add the newly created element and its content into the DOM 
     var currentDiv = document.getElementById("div1"); 
     document.body.insertBefore(newDiv, currentDiv);
     
+    var input = document.createElement("textarea");
+    input.type = "text";
+    input.className = "css-class-name";
+    input.id = src + "ideas";
+    input.className = "localideas";
+    newDiv.appendChild(input);
+    
+    var saveButton = document.createElement("BUTTON");  
+    saveButton.type = "reset";
+    saveButton.setAttribute("onclick","save(src)");
+    var text = document.createTextNode("SAVE");
+    saveButton.appendChild(text);
+    newDiv.appendChild(saveButton);
 }
 
+function save(src) { //This function saves the value entered above to local storage
+	var fieldValue = document.getElementById('textfield').value;
+        if (fieldValue===''||fieldValue===null) {
+            alert("Please enter something");
+        } else {
+	localStorage.setItem('value1', fieldValue);
+        load();
+         }
+}
+function load() { //This function loads whatevers in storage at the value
+	var storedValue = localStorage.getItem('value1');
+	if (storedValue!==null) {
+		document.getElementById('result').innerHTML = storedValue;
+	} else {
+            alert("There is nothing in storage!");
+        }
+}	
 
         
         
