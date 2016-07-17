@@ -6,116 +6,42 @@
 <script type="text/javascript" src="myscripts.js"></script> <!--This references my javascript file-->
 <title>Christmas Application</title>
 </head>
+<body onload="checkStorage(); getUserList(); hideApp(); hideForm()"> <!--This loads my main functions-->
+<span id="storage_status"></span> <!--Informs user if this application won't work-->
 
-
-
-<body onload="checkStorage(); getUserList(); hideApp(); hideForm()">
-<span id="storage_status"></span>
-
-<div id="header">
-    
-    
-</div>
-
-
+<div id="header"></div> <!--This is just my header div-->
 <h1 class="appname">Christmas Time, Are You Thinking Ahead</h1>
 
-<div id="appspace">
+<div id="appspace"> <!--Main appspace div that hides and unhides-->
     <p>
         Click on a picture of each person to see what they want for Christmas
     </p>
-<img id="family_members" alt="Don" class="picture" src="Don.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt)">
-<p id="donwants" class="wants"></p>
-<img id="family_members" alt="Tammy" class="picture" src="Tammy.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
-<p id="tammywants" class="wants"></p>
-<img id="family_members" alt="Brandon" class="picture" src="Brandon.png" width="100" height="100" onmouseover="showinfo(this.alt)">
-<p id="brandonwants" class="wants"></p>
-<img id="family_members" alt="Brenton" class="picture" src="Brenton.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
-<p id="brentonwants" class="wants"></p>
-<img id="family_members" alt="Brittany" class="picture" src="Brittany.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
-<p id="brittanywants" class="wants"></p>
-<img id="family_members" alt="Bryson" class="picture" src="Bryson.png" width="100" height="100" onmouseover="showinfo(this.alt)" >
-<p id="brysonwants" class="wants"></p>
+<!--The following are each of my family members and the functions associated with them-->
 
+<img id="family_members" alt="Don" class="picture" src="Don.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt); load(this.alt)">
+<p id="donwants" class="wants"></p>
+<img id="family_members" alt="Tammy" class="picture" src="Tammy.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt); load(this.alt)">
+<p id="tammywants" class="wants"></p>
+<img id="family_members" alt="Brandon" class="picture" src="Brandon.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt); load(this.alt)">
+<p id="brandonwants" class="wants"></p>
+<img id="family_members" alt="Brenton" class="picture" src="Brenton.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt); load(this.alt)">
+<p id="brentonwants" class="wants"></p>
+<img id="family_members" alt="Brittany" class="picture" src="Brittany.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt); load(this.alt)">
+<p id="brittanywants" class="wants"></p>
+<img id="family_members" alt="Bryson" class="picture" src="Bryson.png" width="100" height="100" onmouseover="showinfo(this.alt)" onclick="hideApp(); enterinfo(this.alt); load(this.alt)">
+<p id="brysonwants" class="wants"></p>
 </div>
+
 <br>
+
+<!--Div for the start buttons and future menu buttons-->
 <div id="buttons">
 <input id="start" type="button" value="START" onclick="getUserList(); showApp()"/>
 </div>
 
-<div id="form">
-    
-    hello
-</div>
+<!--This is for the form-->
+<div id="form"></div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-<p class="family_member">Hello</p>
-<h2>JSON Object Creation in Java Script</h2>
-<p>Test</p>
-<div id="users"></div>
-<div id="div1"><p>LINEAR</p><div id="Person1" onmouseover="showinfo()"></div></div>
-<div id="div2">EASE<div id="Person2"></div></div>
-<div id="div3">EASE-IN<div id="Person3"></div></div>
-<div id="div4">EASE-OUT<div id="Person4"></div></div>
-<div id="div5">EASE-IN-OUT<div id="Person5"></div></div>
--->
-
-<!--Deprecated Scripts-->
-<script>   
-/*
-    var person1 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
-var obj1 = JSON.parse(person1);
-document.getElementById("Person1").innerHTML =
-"Name: " + obj1.name + " Nickname " + obj1.nickname + " Email: " + obj1.email;
-
-var person2 = '{"name":"Brenton","nickname":"MormonMonkey","email":"brentonmarcuswebb@gmail.com"}';
-var obj2 = JSON.parse(person2);
-document.getElementById("Person2").innerHTML =
-"Name: " + obj2.name + " Nickname " + obj2.nickname + " Email: " + obj2.email;
-
-var person3 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
-var obj3 = JSON.parse(person3);
-document.getElementById("Person3").innerHTML =
-"Name: " + obj3.name + " Nickname " + obj3.nickname + " Email: " + obj3.email;
-
-var person4 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
-var obj4 = JSON.parse(person4);
-document.getElementById("Person4").innerHTML =
-"Name: " + obj4.name + " Nickname " + obj4.nickname + " Email: " + obj4.email;
-
-var person5 = '{"name":"Brandon Webb","nickname":"Blaxican","email":"brandonmwebb@gmail.com"}';
-var obj5 = JSON.parse(person5);
-document.getElementById("Person5").innerHTML =
-"Name: " + obj5.name + " Nickname " + obj5.nickname + " Email: " + obj5.email;
-
-function showinfo(){
-    
-}
-*/
-</script>
 
 </body>
 </html>

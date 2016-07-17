@@ -11,6 +11,7 @@ function checkStorage() {
     }
 }
 
+//This gets teh user list from the server using an AJAX request
 function getUserList() {
         var filename = "objects.txt";
         var xhttp = new XMLHttpRequest();
@@ -24,19 +25,6 @@ function getUserList() {
         };
         xhttp.open("GET", filename, true);
         xhttp.send();
-}
-	
-function createUserList(users) {
-        var list = JSON.parse(users);
-        
-        
-        /*for(var i = 0; i < list.length; i++) {	//loop through the list
-            var option = document.createElement("option");
-            option.value = users[i];
-            var text = document.createTextNode(users[i]);
-            option.appendChild(text);
-            document.getElementById("users").appendChild(option);
-        }*/
 }
 
 //This function hides the application part when intially starting application
@@ -182,14 +170,17 @@ function getWishList(url) {
     xhttp.send();
 }
 
-//This function hides the input form
+//This function hides the form part of the application
 function hideForm() {
     document.getElementById("form").style.display = "none";
 }
+
+//This functions display the form part of the application
 function showForm() {
     document.getElementById("form").style.display = "inline";
 }
 
+//This function creates a new div dynamically and then creates a text area dynamically. This is my bread and butter
 function enterinfo(src) {
     this.person = src;
     var newDiv = document.createElement("div");
@@ -213,29 +204,47 @@ function enterinfo(src) {
     
     var saveButton = document.createElement("BUTTON");  
     saveButton.type = "reset";
+    saveButton.id = "button";
     saveButton.setAttribute("onclick","save(src)");
     var text = document.createTextNode("SAVE");
     saveButton.appendChild(text);
     newDiv.appendChild(saveButton);
 }
 
+//This function saves what is enter in the textarea and then goes back to the homepage by going to the beginning function
 function save(src) { //This function saves the value entered above to local storage
-	var fieldValue = document.getElementById('textfield').value;
+	var fieldValue = document.getElementById(src + "ideas").value;
         if (fieldValue===''||fieldValue===null) {
             alert("Please enter something");
         } else {
-	localStorage.setItem('value1', fieldValue);
-        load();
+	localStorage.setItem(src, fieldValue);
+        
+        //This piece of code was grabbed from
+        //http://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+        var myNode = document.getElementById("context");
+            while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+            myNode.remove();
+            beginning();
+            }
          }
 }
-function load() { //This function loads whatevers in storage at the value
-	var storedValue = localStorage.getItem('value1');
+
+//This function loads into the text area whatever is stored in storage
+function load(src) { //This function loads whatevers in storage at the value
+	var storedValue = localStorage.getItem(src);
 	if (storedValue!==null) {
-		document.getElementById('result').innerHTML = storedValue;
+		document.getElementById(src + "ideas").innerHTML = storedValue;
 	} else {
             alert("There is nothing in storage!");
         }
-}	
+}
+
+//This function takes you back to the beginning of the application
+function beginning() {
+    getUserList(); 
+    showApp();
+}
 
         
         
@@ -246,24 +255,3 @@ function load() { //This function loads whatevers in storage at the value
 
 
 
-//This code that I'm going to make
-/*
- 
-//The following code stores the elements in the html into variables
-var xx = document.getElementById("team"); 
-var button1 = document.getElementById("b1"); 
-var button2 = document.getElementById("b2");
-
-//The following code lets us listen to the buttons and add a listener
-document.getElementById("b2").addEventListener("click", f1, false);
-document.getElementById("b1").addEventListener("click", f2 , false);
-
-//These are the functions mention in the above code
-function f1() {document.getElementById("team").innerHTML="Go Cougars!";};
-function f2() {document.getElementById("team").innerHTML="Go Utes!";};
-
-//This is hardcoded function that you don't have to create a separate function
-button1.addEventListener("click", function () {xx.style.color="red";} , false);
-button2.addEventListener("click", function () {xx.style.color="blue";} , false);
-</script>
-*/
